@@ -4,7 +4,7 @@ Mandrill
 Multi-user web front-end for managing a Munki repository. If you're here because of MailChimp, my apologies but this isn't the Mandrill you're looking for. /wavehand
 
 
-Mandrill is a [NodeJS](http://nodejs.org/) web application writing using the [Meteor](https://www.meteor.com/) framework. It supports one database engine: [MongoDB](http://www.mongodb.com/). No there will not be support for other engines, but fear not, [mandrillctl](https://github.com/wollardj/mandrillctl) will install and secure MongoDB for you. If you already have MongoDB running on your server via homebrew, you should probably remove that installation first, or use an alternate server.
+Mandrill is a [NodeJS](http://nodejs.org/) web application written using the [Meteor](https://www.meteor.com/) framework. It supports one database engine: [MongoDB](http://www.mongodb.com/). There are no plans to support other engines, but fear not, [mandrillctl](https://github.com/wollardj/mandrillctl) will install and secure MongoDB for you. If you already have MongoDB running on your server via homebrew, you should probably remove that installation first, or use an alternate server.
 
 ![mandrill git-log](https://f.cloud.github.com/assets/2027935/2168353/05ff8e08-953a-11e3-9db0-c2b913db89e7.png)
 
