@@ -4,7 +4,7 @@ Mandrill
 Multi-user web front-end for managing a Munki repository. If you're here because of MailChimp, my apologies but this isn't the Mandrill you're looking for. /wavehand
 
 
-Mandrill is a [NodeJS](http://nodejs.org/) web application writting using the [Meteor](https://www.meteor.com/) framework. It supports one database engine: [MongoDB](http://www.mongodb.com/). No there will not be support for other engines, but fear not, [mandrillctl](https://github.com/wollardj/mandrillctl) will install and secure MongoDB for you. If you already have MongoDB running on your server via homebrew, you should probably remove that intallation first, or use an alternate server.
+Mandrill is a [NodeJS](http://nodejs.org/) web application writing using the [Meteor](https://www.meteor.com/) framework. It supports one database engine: [MongoDB](http://www.mongodb.com/). No there will not be support for other engines, but fear not, [mandrillctl](https://github.com/wollardj/mandrillctl) will install and secure MongoDB for you. If you already have MongoDB running on your server via homebrew, you should probably remove that installation first, or use an alternate server.
 
 ## Installation Prerequisites
 You'll need to install
@@ -13,7 +13,7 @@ You'll need to install
  * [munkitools](http://munkibuilds.org/) _but only if you plan to run `makecatalogs` from your browser_
 
 ## Installing `mandrillctl`
-Instsallation kicks off with the installation of the commandline tool for Mandrill, `mandrillctl`. Since you're here, you've already got npm and node installed, so all you need to do is...
+Installation kicks off with the installation of the command line tool for Mandrill, `mandrillctl`. Since you're here, you've already got npm and node installed, so all you need to do is...
 
 
 	sudo npm install -g mandrillctl
@@ -38,7 +38,7 @@ The `-g` means it's installing mandrillctl globally instead of within your home 
 	sudo mandrillctl --set-http-port 3001
 	
 	# If you want to use Google's OAuth, this needs to be set to
-	# a publically resolvable FQDN. If you don't plan to use OAuth,
+	# a publicly resolvable FQDN. If you don't plan to use OAuth,
 	# what you do with this value is pretty much up to you.
 	sudo mandrillctl --set-http-host http://mandrill.example.com
 
