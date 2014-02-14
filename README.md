@@ -9,6 +9,7 @@ Mandrill is a [NodeJS](http://nodejs.org/) web application writing using the [Me
 ## Installation Prerequisites
 You'll need to install
 
+ * OS X client or server _it might work on other platforms sans `makecatalogs` integration, but I'm focusing on darwin for the foreseeable future_
  * [NodeJS with NPM](http://nodejs.org/download/) _(both are in the Universal link for the Mac OS X Installer .pkg)_.
  * [munkitools](http://munkibuilds.org/) _but only if you plan to run `makecatalogs` from your browser_
 
