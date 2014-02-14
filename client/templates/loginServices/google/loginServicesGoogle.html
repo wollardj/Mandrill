@@ -1,0 +1,66 @@
+<template name="loginServicesGoogle">
+
+	{{#if loginServiceIsConfigured 'google'}}
+		<p class="lead">
+			This service is configured using the following Client ID
+		</p>
+		<pre class="pre-scrollable">{{clientId}}</pre>
+
+		<hr />
+
+		<button type="button" class="btn btn-xs btn-danger pull-right" id="purge-google">
+			<i class="glyphicon glyphicon-trash"></i> Purge This Connection
+		</button>
+	{{/if}}
+
+	{{#unless loginServiceIsConfigured 'google'}}
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-10">
+			<p>
+				First, you'll need to get a Google Client ID. Follow these steps:
+				<ol>
+					<li>
+						Visit <a href="https://cloud.google.com/console" target="_google_api">https://cloud.google.com/console</a>
+					</li>
+					<li>
+						If necessary, "Create Project"
+					</li>
+					<li>
+						Click "APIs &amp; auth" and "Credentials" on the left, then "Create new client ID"
+					</li>
+					<li>
+						Choose "Web application" as the Application type
+					</li>
+					<li>
+						Set Authorized Javascript origins to <code>{{absoluteUrl}}</code>.
+					</li>
+					<li>
+						Set Authorized redirect URI to <code>{{absoluteUrl}}_oauth/google?close</code>
+					</li>
+				</ol>
+				Now, copy over the details.
+			</p>
+		</div>
+	</div>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label for="google_clientId" class="col-sm-2 control-label">Client ID</label>
+			<div class="col-sm-10">
+				<input type="text" id="google_clientId" class="form-control" value="{{clientId}}" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="google_secret" class="col-sm-2 control-label">Client secret</label>
+			<div class="col-sm-10">
+				<input type="text" id="google_secret" class="form-control" placeholder="Once saved, secrets won't be displayed here." />
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-primary">Save Configuration</button>
+			</div>
+		</div>
+	</form>
+	{{/unless}}
+
+</template>

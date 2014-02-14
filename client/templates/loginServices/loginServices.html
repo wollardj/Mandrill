@@ -1,0 +1,54 @@
+<template name="loginServices">
+	<div class="mandrill-header pad-bottom">
+		<h2>Login Services</h2>
+	</div>
+
+	<!-- tab bar -->
+	<ul class="nav nav-tabs" id="login-services-tabs">
+		<li class="active">
+			<a href="#local_accounts" data-toggle="tab">
+				<i class="glyphicon glyphicon-user"></i>
+				Local
+				<i class="glyphicon glyphicon-ok-circle text-success"></i>
+			</a>
+		</li>
+		<li>
+			<a href="#github_accounts" data-toggle="tab">
+				<img src="https://github.com/favicon.ico" height="16px" />
+				GitHub
+				{{#if loginServiceIsConfigured 'github'}}<i class="glyphicon glyphicon-ok-circle text-success"></i>{{/if}}
+			</a>
+		</li>
+		<li>
+			<a href="#google_accounts" data-toggle="tab">
+				<img src="http://www.google.com/favicon.ico" height="16px" />
+				Google
+				{{#if loginServiceIsConfigured 'google'}}<i class="glyphicon glyphicon-ok-circle text-success"></i>{{/if}}
+			</a>
+		</li>
+	</ul>
+
+
+	<!-- tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane fade in active" id="local_accounts">
+			<div class="jumbotron">
+				<p class="lead text-center">
+					Support for configuring the local account system will hopefully be coming soon.
+					<br />For now, it's on and only an admin can add new accounts.
+				</p>
+			</div>
+		</div>
+
+
+		<div class="tab-pane fade" id="github_accounts">
+			{{> loginServicesGithub}}
+		</div>
+		
+		<div class="tab-pane fade" id="google_accounts">
+			{{> loginServicesGoogle}}
+		</div>
+	</div>
+
+	<!-- /tab panes -->
+</template>

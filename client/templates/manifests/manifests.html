@@ -1,0 +1,69 @@
+<template name="manifests">
+	<div class="mandrill-header">
+		<h2>Manifests</h2>
+		<button id="newManifest" class="btn btn-default btn-sm pull-right">
+			<i class="glyphicon glyphicon-plus-sign"></i>
+			New Manifest
+		</button>
+	</div>
+
+	<div class="borderless-container">
+
+		<div class="paging-toolbar">
+			<div class="navbar navbar-default">
+				<form class="navbar-form navbar-left" id="searchForm" role="search">
+					<div class="form-group">
+						<input type="text" id="manifest-search" class="form-control navbar-left" placeholder="Search" />
+					</div>
+				</form>
+				{{#isolate}}
+				{{paginationLinks "navbar-right"}}
+				{{/isolate}}
+			</div>
+		</div>
+
+		{{#isolate}}
+		<div id="newManifestForm" class="newManifestForm newManifestFormClosed">
+			<form class="form-inline" id="manifestNameForm">
+				<div class="form-group col-sm-12">
+					<div class="input-group">
+						<span class="input-group-addon">{{basePath}}manifests/</span>
+						<input type="text" class="form-control" id="manifestName" placeholder="path/to/new/manifest" />
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-primary">Add</button>
+						</span>
+					</div>
+				</div>
+			</form>
+		</div>
+		<table class="table table-striped paging-table">
+			<thead>
+				<tr>
+					<th>
+						Relative Path
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each manifests}}
+				<tr>
+					<td>
+						<a href="{{pathFor 'manifests'}}">
+						{{#if err}}
+							<span class="text-danger"><strong>
+						{{/if}}
+						{{relativePath}}
+						{{#if err}}
+							<span class="pull-right">{{err}}</span>
+							</strong></span>
+						{{/if}}
+						</a>
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		{{/isolate}}
+
+	</div>
+</template>

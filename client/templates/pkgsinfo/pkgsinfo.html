@@ -1,0 +1,68 @@
+<template name="pkgsinfo">
+	<div class="mandrill-header">
+		<h2>Pkgsinfo</h2>
+		<button id="newPkginfo" class="btn btn-default btn-sm pull-right">
+			<i class="glyphicon glyphicon-plus-sign"></i>
+			New Pkginfo
+		</button>
+	</div>
+
+
+	<div class="borderless-container">
+
+		<div class="paging-toolbar">
+			<div class="navbar navbar-default">
+				<form class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<input type="text" id="pkgsinfo-search" class="form-control navbar-left" placeholder="Search" />
+					</div>
+				</form>
+				{{paginationLinks "navbar-right"}}
+			</div>
+		</div>
+
+		<div id="newPkginfoForm" class="newPkginfoForm newPkginfoFormClosed">
+			<form class="form-inline" id="pkginfoNameForm">
+				<div class="form-group col-sm-12">
+					<div class="input-group">
+						<span class="input-group-addon">{{basePath}}pkgsinfo/</span>
+						<input type="text" class="form-control" id="pkginfoName" placeholder="path/to/new/pkginfo" />
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-primary">Add</button>
+						</span>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<table class="table table-striped table-condensed table-hover paging-table">
+			<thead>
+				<tr>
+					<th>Display Name</th>
+					<th>Name</th>
+					<th>Version</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each pkgsinfo}}
+				<tr class="pkgsinfo-item-row">
+				{{#if err}}
+					<td colspan="3" class="text-danger">
+						<strong>
+							{{relativePath}}
+							<span class="pull-right">{{err}}</span>
+						</strong>
+					</td>
+				{{/if}}
+				{{#unless err}}
+					<td>{{dom.display_name}}</td>
+					<td>{{dom.name}}</td>
+					<td>{{dom.version}}</td>
+				{{/unless}}
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+
+	</div>
+</template>

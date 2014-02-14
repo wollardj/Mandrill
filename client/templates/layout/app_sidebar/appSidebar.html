@@ -1,0 +1,156 @@
+<template name="appSidebar">
+	<div id="appSidebar">
+		<ul class="sidebar-nav">
+			<li class="sidebar-nav-header">
+				Meta
+				<i class="glyphicon glyphicon-user pull-right"></i>
+			</li>
+			<li>
+				<div class="btn-group">
+					<button class="btn btn-sm btn-link dropdown-toggle"
+						data-toggle="dropdown">
+						{{loggedInUserDisplayName}} <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="{{pathFor 'me'}}" class="small">
+								<i class="glyphicon glyphicon-user"></i>
+								My Account
+							</a>
+						</li>
+						<li>
+							<a href="#logout" id="logout" class="small">
+								<i class="glyphicon glyphicon-log-out"></i>
+								Logout
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+
+			{{#if isAdmin}}
+			<li class="sidebar-nav-header">
+				Admin
+				<i class="pull-right glyphicon glyphicon-cog"></i>
+			</li>
+			<li {{#if currentRouteIs "accounts"}}class="active"{{/if}}{{#if currentRouteIs "accounts-access"}}class="active"{{/if}}>
+				<a href="{{pathFor 'accounts' null}}">
+					<i class="glyphicon glyphicon-user"></i>
+					Accounts
+				</a>
+			</li>
+			<li {{#if currentRouteIs "login-services"}}class="active"{{/if}}>
+				<a href="{{pathFor 'login-services'}}">
+					<i class="glyphicon glyphicon-log-in"></i>
+					Login Services
+				</a>
+			</li>
+			<li {{#if currentRouteIs "mandrill-settings"}}class="active"{{/if}}>
+				<a href="{{pathFor 'mandrill-settings'}}">
+					<i class="glyphicon glyphicon-cog"></i>
+					Mandrill Settings
+				</a>
+			</li>
+			{{/if}}
+
+
+			<li class="sidebar-nav-header">
+				Repo Items
+				<i class="pull-right glyphicon glyphicon-cloud"></i>
+			</li>
+			<li {{#if currentRouteIs "manifests"}}class="active"{{/if}}>
+				<a href="{{pathFor 'manifests' null}}">
+					<i class="glyphicon glyphicon-list-alt"></i>
+					Manifests
+					{{#if manifestErrorsCount}}
+					<span class="label label-danger pull-right">
+						{{manifestErrorsCount}}
+					</span>
+					{{/if}}
+					<span class="badge pull-right">{{manifestsCount}}</span>
+				</a>
+			</li>
+			<li {{#if currentRouteIs "pkgsinfo"}}class="active"{{/if}}>
+				<a href="{{pathFor 'pkgsinfo' null}}">
+					<i class="glyphicon glyphicon-save"></i>
+					Pkgsinfo
+					{{#if installsErrorsCount}}
+					<span class="label label-danger pull-right">
+						{{installsErrorsCount}}
+					</span>
+					{{/if}}
+					<span class="badge pull-right">{{installsCount}}</span>
+				</a>
+			</li>
+			<li {{#if currentRouteIs "catalogs"}}class="active"{{/if}}
+				{{#if currentRouteIs "edit-condition"}}class="active"{{/if}}>
+				<a href="{{pathFor 'catalogs' null}}">
+					<i class="glyphicon glyphicon-book"></i>
+					Catalogs
+					{{#if catalogsErrorsCount}}
+					<span class="label label-danger pull-right">
+						{{catalogsErrorsCount}}
+					</span>
+					{{/if}}
+					<span class="badge pull-right">{{catalogsCount}}</span>
+				</a>
+			</li>
+
+			{{#if makeCatalogsIsEnabled}}
+			<li class="sidebar-nav-header">
+				Munki Tools
+			</li>
+			<li>
+				{{#if runningMakeCatalogs}}
+				{{> bubble-loader}}
+				{{/if}}
+				{{#unless runningMakeCatalogs}}
+				<button id="makecatalogs" class="btn btn-default btn-xs btn-block">
+					Run `{{makecatalogsCommand}}`
+				</button>
+				{{/unless}}
+			</li>
+			{{/if}}
+
+
+			{{#if otherTools}}
+			<li class="sidebar-nav-header">
+				Other Web Tools
+				<i class="pull-right glyphicon glyphicon-wrench"></i>
+			</li>
+				{{#if isAdmin}}
+				<li>
+					<a href="{{pathFor 'othertools'}}">[ Edit ]</a>
+				</li>
+				{{/if}}
+			{{#each otherTools}}
+			<li>
+				<a href="{{linkUrl}}" target="{{_id}}">
+					<i class="glyphicon glyphicon-new-window"></i>
+					{{displayText}}
+				</a>
+			</li>
+			{{/each}}
+			{{/if}}
+
+			{{#unless otherTools}}
+				{{#if isAdmin}}
+					<li class="sidebar-nav-header">
+						Other Web Tools
+						<i class="pull-right glyphicon glyphicon-wrench"></i>
+					</li>
+					<li>
+						<a href="{{pathFor 'othertools'}}">[ Edit ]</a>
+					</li>
+				{{/if}}
+			{{/unless}}
+		</ul>
+
+	</div>
+
+	<a href="{{pathFor 'home'}}" id="mandrill_logo">
+		<i class="glyphicon glyphicon-home"></i>
+		Mandrill v{{mandrillVersion}}
+	</a>
+</template>

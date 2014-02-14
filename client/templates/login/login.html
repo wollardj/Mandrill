@@ -1,0 +1,50 @@
+<template name="login">
+	<div class="login-body">
+		{{#if loggingIn}}
+			<div class="mandrill-header">
+				<div class="bubble-loader">
+					<div class="1"></div>
+					<div class="2"></div>
+					<div class="3"></div>
+					<div class="4"></div>
+					<div class="5"></div>
+				</div>
+			</div>
+		{{/if}}
+
+		{{#unless loggingIn}}
+		<form class="form-login" role="form">
+			<h2>Mandrill <small>v{{mandrillVersion}}</small></h2>
+			<input type="text" class="form-control" placeholder="Username" required autofocus id="login_username" />
+			<input type="password" class="form-control" placeholder="Password" id="login_password" required />
+			<br />
+			<button type="submit" class="btn btn-primary btn-block">Sign in</button>
+
+			{{#if loginServicesOAuthIsAvailable}}
+				<div class="login-other-services">
+					<p class="small text-center">~ or login using another service ~</p>
+
+					<p class="text-center">
+
+						{{#if loginServiceIsConfigured 'github'}}
+						<button id="login-with-github" type="button" class="btn btn-sm btn-default">
+							<img src="https://github.com/favicon.ico" height="16px" />
+							GitHub
+						</button>
+						{{/if}}
+
+						{{#if loginServiceIsConfigured 'google'}}
+						<button id="login-with-google" type="button" class="btn btn-sm btn-default">
+							<img src="http://www.google.com/favicon.ico" height="16px" />
+							Google
+						</button>
+						{{/if}}
+					</p>
+
+				</div>
+
+			{{/if}}
+		</form>
+		{{/unless}}
+	</div>
+</template>

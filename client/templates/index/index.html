@@ -1,0 +1,51 @@
+<template name="index">
+	<div class="mandrill-header text-center">
+		<h1>Mandrill {{mandrillVersion}}</h1>
+	</div>
+
+	<h4>&nbsp;</h4>
+
+
+	<!-- Server Stats -->
+
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Server Performance
+				</div>
+				<div class="panel-body">
+					<table class="table table-condensed">
+						<thead>
+							<tr><th colspan="2" class="text-center">{{platform}}</th></tr>
+						</thead>
+						<tbody>
+							<tr><th>Uptime</th><td>{{uptime}}</td></tr>
+							<tr><th>15 min Load Avg.</th><td>{{loadAverage}}</td></tr>
+							<tr><th>Memory</th><td>{{memoryStats}}</td></tr>
+							<tr><th>CPU</th><td>{{cpuName}}</td></tr>
+							<tr><th>CPU Cores</th><td>{{numberOfCpus}}</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Server Networking
+				</div>
+				<div class="panel-body">
+					<table class="table table-condensed">
+						<thead>
+							<tr><th colspan="2" class="text-center">{{hostname}}</th></tr>
+						</thead>
+						<tbody>
+							{{networkInfo}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

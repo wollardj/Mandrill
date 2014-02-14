@@ -1,0 +1,51 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "iron-router": {},
+      "bootstrap-3": {},
+      "npm": {},
+      "ace-embed": {},
+      "moment": {},
+      "logger": {},
+      "i18n": {}
+    },
+    "packages": {
+      "iron-router": {
+        "git": "https://github.com/EventedMind/iron-router.git",
+        "tag": "v0.6.2",
+        "commit": "ce56e58b45624dce992490f3a1c10f10d3948bae"
+      },
+      "bootstrap-3": {
+        "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
+        "tag": "v3.1.0-1",
+        "commit": "329dccb08bfc18c635676dea600ac9953162cda9"
+      },
+      "npm": {
+        "git": "https://github.com/arunoda/meteor-npm.git",
+        "tag": "v0.2.6",
+        "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "ace-embed": {
+        "git": "https://github.com/stuartfenton/meteor-ace-embed.git",
+        "tag": "v0.0.4",
+        "commit": "027b0e1b0d06111b51a713f04a8b8750fdcbd289"
+      },
+      "moment": {
+        "git": "https://github.com/acreeger/meteor-moment.git",
+        "tag": "v2.5.1",
+        "commit": "8c9bc5d3fc96705057737cb9743d555417f6e551"
+      },
+      "logger": {
+        "git": "https://github.com/jerico-dev/meteor-logger.git",
+        "tag": "v0.1.2",
+        "commit": "8811ff33e4787d7c564e030ff3afaa3d7c4981fc"
+      },
+      "i18n": {
+        "git": "https://github.com/jerico-dev/meteor-i18n.git",
+        "tag": "v0.1.2",
+        "commit": "e24f4ad9242741984dfa3985be4ed2c3bc34f9d5"
+      }
+    }
+  }
+}

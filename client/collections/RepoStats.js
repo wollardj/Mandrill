@@ -1,0 +1,1 @@
+RepoStats = new Meteor.Collection('repoStats');
