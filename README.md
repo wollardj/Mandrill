@@ -6,12 +6,13 @@ Multi-user web front-end for managing a Munki repository. If you're here because
 
 Mandrill is a [NodeJS](http://nodejs.org/) web application writing using the [Meteor](https://www.meteor.com/) framework. It supports one database engine: [MongoDB](http://www.mongodb.com/). No there will not be support for other engines, but fear not, [mandrillctl](https://github.com/wollardj/mandrillctl) will install and secure MongoDB for you. If you already have MongoDB running on your server via homebrew, you should probably remove that installation first, or use an alternate server.
 
-## Installation Prerequisites
-You'll need to install
+![mandrill git-log](https://f.cloud.github.com/assets/2027935/2168353/05ff8e08-953a-11e3-9db0-c2b913db89e7.png)
 
- * OS X client or server _it might work on other platforms sans `makecatalogs` integration, but I'm focusing on darwin for the foreseeable future_
- * [NodeJS with NPM](http://nodejs.org/download/) _(both are in the Universal link for the Mac OS X Installer .pkg)_.
- * [munkitools](http://munkibuilds.org/) _but only if you plan to run `makecatalogs` from your browser_
+## Installation Prerequisites
+
+ * **OS X client or server** _it might work on other platforms sans `makecatalogs` integration, but I'm focusing on darwin for the foreseeable future_
+ * **[NodeJS with NPM](http://nodejs.org/download/)** _(both tools are in the 'Universal' link for the Mac OS X Installer .pkg)_.
+ * **[munkitools](http://munkibuilds.org/)** _but only if you plan to run `makecatalogs` from your browser_
 
 ## Installing `mandrillctl`
 Installation kicks off with the installation of the command line tool for Mandrill, `mandrillctl`. Since you're here, you've already got npm and node installed, so all you need to do is...
