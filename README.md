@@ -50,3 +50,7 @@ That's it! Using the example values above, you should now be able to open your b
 
 ### Initial Login
 Like any good web app, the default username and password are `admin` and `admin`. _I hope it's obvious that you should change this password immediately._
+
+
+### Questions?
+Ask away: [https://groups.google.com/d/forum/mandrill-dev](https://groups.google.com/d/forum/mandrill-dev)
