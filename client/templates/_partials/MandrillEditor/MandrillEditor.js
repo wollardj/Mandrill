@@ -117,12 +117,6 @@ Template.MandrillEditor.setDocumentBody = function(someText) {
 
 
 /* --- guts - don't override! --- */
-
-Deps.autorun(function() {
-	var body = Template.MandrillEditor.documentBody();
-	Template.MandrillEditor.setDocumentBody(body, true);
-});
-
 Template.MandrillEditor.rendered = function() {
 	var editor = Template.MandrillEditor.ace(),
 		commands = [];
