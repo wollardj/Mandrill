@@ -16,6 +16,8 @@ Template.MandrillEditor.backLinkTarget = function() {
 
 
 // Don't override this. Set the 'workingOnDocument' session variable instead.
+// This triggers the bubble loader to display when things are happening to the
+// document, such as a 'save' action.
 Template.MandrillEditor.workingOnDocument = function() {
 	return Session.get('workingOnDocument');
 };
@@ -76,10 +78,34 @@ Template.MandrillEditor.ace = function() {
 };
 
 
+
+
 Template.MandrillEditor.setDocumentBody = function(someText) {
-	var editor = Template.MandrillEditor.ace();
-	if (editor) {
-		editor.setValue(someText);
+	var editor = Template.MandrillEditor.ace(),
+		currentValue = editor ? editor.session.getValue() : '',
+		UndoManager = require('ace/undomanager').UndoManager;
+
+	someText += ''; // make sure this is a string.
+
+	// Ignore update requests during a save.
+	if (Session.equals('workingOnDocument', true) === true) {
+		return;
+	}
+
+	// If the user has made no changes, let the update happen.
+	if (editor && editor.session.getUndoManager().dirtyCounter === 0) {
+		editor.session.setValue(someText);
+	}
+	else if (editor && someText) {
+
+		if (currentValue !== someText &&
+			confirm('A newer version of this document is available. ' +
+				'Load it now?') === true) {
+			
+			console.log('The user opted to accept the update');
+			editor.session.setValue(someText);
+			editor.session.setUndoManager( new UndoManager() );
+		}
 	}
 };
 
@@ -91,6 +117,11 @@ Template.MandrillEditor.setDocumentBody = function(someText) {
 
 
 /* --- guts - don't override! --- */
+
+Deps.autorun(function() {
+	var body = Template.MandrillEditor.documentBody();
+	Template.MandrillEditor.setDocumentBody(body, true);
+});
 
 Template.MandrillEditor.rendered = function() {
 	var editor = Template.MandrillEditor.ace(),

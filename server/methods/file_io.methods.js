@@ -8,6 +8,7 @@ Meteor.methods({
 	// If path doesn't exist, it will be created.
 	'filePutContents': function(path, body) {
 		var mvResults,
+			repoPath = GitBroker.git().repoPath,
 			atomic;
 
 
@@ -17,6 +18,16 @@ Meteor.methods({
 			throw new Meteor.Error(417, 'Expected a file path.');
 		}
 		
+		// try to update the record if possible.
+		if (path.indexOf('/manifests/') >= 0) {
+			MunkiManifests.upsert({'path': path}, {'$set': {'raw': body}});
+		}
+		else if (path.indexOf('/pkgsinfo/') >= 0) {
+			MunkiPkgsinfo.upsert({'path': path}, {'$set': {'raw': body}});
+		}
+
+
+		// write the file atomically
 		atomic = shell.tempdir() + '/' + path.split('/').reverse()[0];
 		body.to(atomic);
 		if (shell.error() !== null) {
@@ -35,15 +46,17 @@ Meteor.methods({
 			throw new Meteor.Error(500, mvResults.output);
 		}
 
-		if (/^\?\?/.test(GitBroker.status(path)[0]) === true) {
-			GitBroker.add(path);
-			GitBroker.commit(this.userId, path,
-				'[Mandrill] Importing previously untracked file "' +
-				GitBroker.relativePathForFile(path) + '"');
-		}
-		else {
-			GitBroker.commit(this.userId, path, '[Mandrill] Modified "' +
-				GitBroker.relativePathForFile(path) + '"');
+		if (GitBroker.gitIsEnabled() === true) {
+			if (/^\?\?/.test(GitBroker.status(path)[0]) === true) {
+				GitBroker.add(path);
+				GitBroker.commit(this.userId, path,
+					'[Mandrill] Importing previously untracked file "' +
+					GitBroker.relativePathForFile(path) + '"');
+			}
+			else {
+				GitBroker.commit(this.userId, path, '[Mandrill] Modified "' +
+					GitBroker.relativePathForFile(path) + '"');
+			}
 		}
 
 		return {
