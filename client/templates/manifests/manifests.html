@@ -36,7 +36,7 @@
 				</div>
 			</form>
 		</div>
-		<table class="table table-striped paging-table">
+		<table class="table table-condensed table-hover table-striped paging-table">
 			<thead>
 				<tr>
 					<th>
@@ -46,7 +46,7 @@
 			</thead>
 			<tbody>
 				{{#each manifests}}
-				<tr>
+				<tr class="manifest-item-row">
 					<td>
 						<a href="{{pathFor 'manifests'}}">
 						{{#if err}}

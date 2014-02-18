@@ -73,6 +73,22 @@ Template.manifests.events({
 	},
 
 
+
+
+	'click tr.manifest-item-row': function() {
+		if (this.urlName) {
+			Router.go('manifests', {urlName: this.urlName});
+		}
+		else {
+			Mandrill.show.error(new Meteor.Error('-1',
+				'Couldn\'t figure out which manifest file represents "' +
+				this.dom.name + '"'));
+		}
+	},
+
+
+
+
 	'submit #manifestNameForm': function(event) {
 		event.stopPropagation();
 		event.preventDefault();

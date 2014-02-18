@@ -1,3 +1,8 @@
+tr.manifest-item-row:hover {
+	cursor: pointer;
+}
+
+
 div.newManifestForm {
 	height: 40px;
 	overflow: hidden;

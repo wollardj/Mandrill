@@ -122,7 +122,7 @@ Template.pkgsinfo.events({
 	},
 
 
-	// Display the new manifest form
+	// Display the new pkginfo form
 	'click #newPkginfo': function(event) {
 		event.preventDefault();
 		event.stopPropagation();
@@ -136,7 +136,7 @@ Template.pkgsinfo.events({
 	},
 
 
-	// Hide the new manifest form if the user presses the esc key
+	// Hide the new pkginfo form if the user presses the esc key
 	'keyup #pkginfoName': function(event) {
 		if (event.which === 27) {
 			$('#newPkginfoForm').addClass('newPkginfoFormClosed');
