@@ -119,6 +119,12 @@ div.mandrill-error {
 	left: 200px;
 	right: 0;
 	box-shadow: 1px 0 5px #000;
+	-webkit-transition: box-shadow 250ms;
+	     -o-transition: box-shadow 250ms;
+	   -moz-transition: box-shadow 250ms;
+	    -ms-transition: box-shadow 250ms;
+	-kthtml-transition: box-shadow 250ms;
+	        transition: box-shadow 250ms;
 }
 
 
