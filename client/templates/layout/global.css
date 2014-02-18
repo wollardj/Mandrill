@@ -33,7 +33,7 @@ div.borderless-container .navbar {
 
 
 div.mandrill-error {
-	position: absolute;
+	position: fixed;
 	width: 400px;
 	top: 50px;
 	left: 50%;
