@@ -129,14 +129,14 @@ div.mandrill-error {
 	768px
 */
 @media (min-width: 768px) {
-	.paging-toolbar.affix + table.paging-table {
+	.paging-toolbar.affix ~ table.paging-table {
 		margin-top: 76px;
 	}
 }
 
 
 @media (max-width: 767px) {
-	.paging-toolbar.affix + table.paging-table {
+	.paging-toolbar.affix ~ table.paging-table {
 		margin-top: 146px;
 	}
 }
