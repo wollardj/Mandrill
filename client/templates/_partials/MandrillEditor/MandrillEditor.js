@@ -92,6 +92,10 @@ Template.MandrillEditor.setDocumentBody = function(someText) {
 		return;
 	}
 
+	Template.gitLogs.loadLogsForPath(
+		Template.MandrillEditor.documentPath()
+	);
+
 	// If the user has made no changes, let the update happen.
 	if (editor && editor.session.getUndoManager().dirtyCounter === 0) {
 		editor.session.setValue(someText);
@@ -134,8 +138,6 @@ Template.MandrillEditor.rendered = function() {
 				bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
 				exec: function(editor) {
 					Template.MandrillEditor.saveHook(editor.getValue());
-					// trigger an update of the locally-cached git logs
-					Template.gitLogs.created();
 				}
 			},
 			{

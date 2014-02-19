@@ -1,8 +1,13 @@
-Template.gitLogs.created = function() {
-	GitLogs.remove({});
+Template.gitLogs.loadLogsForPath = function(aPath) {
+	if (!aPath) {
+		return;
+	}
+
 	Meteor.call('git-log',
-		Template.MandrillEditor.documentPath(),
+		aPath,
 		function(err, data) {
+			GitLogs.remove({});
+			Session.set('loadingGitLogs', false);
 			if (err) {
 				Mandrill.show.error(err);
 			}
@@ -12,8 +17,9 @@ Template.gitLogs.created = function() {
 				}
 			}
 		}
-	);
+	);	
 };
+
 
 Template.gitLogs.gitLogs = function() {
 	return GitLogs.find().fetch();
