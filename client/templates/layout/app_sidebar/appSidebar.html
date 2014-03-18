@@ -34,19 +34,19 @@
 				Admin
 				<i class="pull-right glyphicon glyphicon-cog"></i>
 			</li>
-			<li {{#if currentRouteIs "accounts"}}class="active"{{/if}}{{#if currentRouteIs "accounts-access"}}class="active"{{/if}}>
-				<a href="{{pathFor 'accounts' null}}">
+			<li {{routeIsActive "accounts"}} {{routeIsActive "accounts-access"}}>
+				<a href="{{pathFor 'accounts'}}">
 					<i class="glyphicon glyphicon-user"></i>
 					Accounts
 				</a>
 			</li>
-			<li {{#if currentRouteIs "login-services"}}class="active"{{/if}}>
+			<li {{routeIsActive "login-services"}}>
 				<a href="{{pathFor 'login-services'}}">
 					<i class="glyphicon glyphicon-log-in"></i>
 					Login Services
 				</a>
 			</li>
-			<li {{#if currentRouteIs "mandrill-settings"}}class="active"{{/if}}>
+			<li {{routeIsActive "mandrill-settings"}}>
 				<a href="{{pathFor 'mandrill-settings'}}">
 					<i class="glyphicon glyphicon-cog"></i>
 					Mandrill Settings
@@ -59,8 +59,8 @@
 				Repo Items
 				<i class="pull-right glyphicon glyphicon-cloud"></i>
 			</li>
-			<li {{#if currentRouteIs "manifests"}}class="active"{{/if}}>
-				<a href="{{pathFor 'manifests' null}}">
+			<li {{routeIsActive "manifests"}}>
+				<a href="{{pathFor 'manifests'}}">
 					<i class="glyphicon glyphicon-list-alt"></i>
 					Manifests
 					{{#if manifestErrorsCount}}
@@ -71,8 +71,8 @@
 					<span class="badge pull-right">{{manifestsCount}}</span>
 				</a>
 			</li>
-			<li {{#if currentRouteIs "pkgsinfo"}}class="active"{{/if}}>
-				<a href="{{pathFor 'pkgsinfo' null}}">
+			<li {{routeIsActive "pkgsinfo"}}>
+				<a href="{{pathFor 'pkgsinfo'}}">
 					<i class="glyphicon glyphicon-save"></i>
 					Pkgsinfo
 					{{#if installsErrorsCount}}
@@ -83,9 +83,8 @@
 					<span class="badge pull-right">{{installsCount}}</span>
 				</a>
 			</li>
-			<li {{#if currentRouteIs "catalogs"}}class="active"{{/if}}
-				{{#if currentRouteIs "edit-condition"}}class="active"{{/if}}>
-				<a href="{{pathFor 'catalogs' null}}">
+			<li {{routeIsActive "catalogs"}} {{routeIsActive "edit-condition"}}>
+				<a href="{{pathFor 'catalogs'}}">
 					<i class="glyphicon glyphicon-book"></i>
 					Catalogs
 					{{#if catalogsErrorsCount}}
@@ -103,7 +102,7 @@
 			</li>
 			<li>
 				{{#if runningMakeCatalogs}}
-				{{> bubble-loader}}
+				{{> bubbleLoader}}
 				{{/if}}
 				{{#unless runningMakeCatalogs}}
 				<button id="makecatalogs" class="btn btn-default btn-xs btn-block">

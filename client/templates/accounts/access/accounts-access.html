@@ -50,7 +50,7 @@
 								<span class="input-group-addon">^{{munkiRepoPath}}</span>
 								<input type="text" class="form-control" data-access-pattern="true" placeholder="(pkgsinfo|manifests|catalogs)" value="{{pattern}}" />
 								<span class="input-group-addon">
-									<input type="checkbox" data-toggle-readonly="true" data-toggle="tooltip" title="Read-only access" {{#if readonly}}checked="checked"{{/if}}/>
+									<input type="checkbox" data-toggle-readonly="true" data-toggle="tooltip" title="Read-only access" {{readOnlyIsChecked}}/>
 								</span>
 							</div>
 						</div>
@@ -65,4 +65,5 @@
 			{{/each}}
 		</tbody>
 	</table>
+	</form>
 </template>

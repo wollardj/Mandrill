@@ -30,10 +30,10 @@
 					</div>
 					<div class="panel-footer text-center">
 						{{#unless changingPassword}}
-						<button type="submit" {{#unless formIsReady}}disabled{{/unless}} id="changePasswordSubmit" class="btn btn-primary form-control">Change your password</button>
+						<button type="submit" {{formIsDisabled}} id="changePasswordSubmit" class="btn btn-primary form-control">Change your password</button>
 						{{/unless}}
 						{{#if changingPassword}}
-							{{> bubble-loader}}
+							{{> bubbleLoader}}
 						{{/if}}
 					</div>
 				</div>

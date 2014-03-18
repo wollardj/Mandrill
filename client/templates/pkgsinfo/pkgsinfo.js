@@ -46,7 +46,33 @@ Template.pkgsinfo.basePath = function() {
 		return settings.munkiRepoPath;
 	}
 	return '/';
-}
+};
+
+
+
+
+Template.pkgsinfo.catalogLabels = function() {
+	var catalogs = this.dom.catalogs || [],
+		labels = '';
+
+	for(var i = 0; i < catalogs.length; i++) {
+		labels += '<span class="label ';
+		if (/^prod/.test(catalogs[i]) === true) {
+			labels += 'label-success';
+		}
+		else if (/^(dev|test)/.test(catalogs[i]) === true) {
+			labels += 'label-warning';
+		}
+		else if (/^(problem|broke|issue)/.test(catalogs[i]) === true) {
+			labels += 'label-danger';
+		}
+		else {
+			labels += 'label-info';
+		}
+		labels += '">' + catalogs[i] + '</span> ';
+	}
+	return new Handlebars.SafeString(labels);
+};
 
 
 
@@ -58,9 +84,7 @@ Template.pkgsinfo.events({
 
 
 	'keyup #pkgsinfo-search': function() {
-		var oldQuery = Router.current().params.q ?
-				Router.current().params.q :
-				'',
+		var oldQuery = Router.current().params.q || '',
 			query = $('#pkgsinfo-search').val();
 
 		// A little clearTimeout/setTimeout magic to only submit
@@ -74,6 +98,24 @@ Template.pkgsinfo.events({
 				Router.go('pkgsinfo');
 			}
 		}, 250);
+	},
+
+
+	'change #catalogFilter': function(event) {
+		var query = Router.current().params.q || '',
+			params = {},
+			catalog = $(event.target).val();
+
+		if (query !== '') {
+			params.q = query;
+		}
+
+		if (catalog !== 'all') {
+			params.c = catalog;
+		}
+
+		Router.go('pkgsinfo', {}, {'query': params});
+
 	},
 
 

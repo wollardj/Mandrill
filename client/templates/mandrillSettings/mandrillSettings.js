@@ -11,6 +11,21 @@ Template.mandrillSettings.munkiRepoPathClass = function() {
 };
 
 
+Template.mandrillSettings.makecatalogsIsChecked = function() {
+	return this.settings.makeCatalogsIsEnabled === true ? 'checked' : '';
+};
+
+
+Template.mandrillSettings.makecatalogsDisableSanityIsChecked = function() {
+	return this.settings.makeCatalogsSanityIsDisabled === true ? 'checked' : '';
+};
+
+
+Template.mandrillSettings.gitIsChecked = function() {
+	return this.settings.gitIsEnabled === true ? 'checked' : ''
+};
+
+
 Template.mandrillSettings.munkiRepoPathFeedbackIcon = function() {
 	var settings = Router.current().getData().settings;
 	if (settings.munkiRepoPathIsValid === true) {

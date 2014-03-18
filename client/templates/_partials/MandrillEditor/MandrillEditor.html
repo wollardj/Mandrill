@@ -6,19 +6,15 @@
 			{{editorMenu}}
 			{{#if workingOnDocument}}
 			<span class="navbar-text navbar-right" style="position: absolute; top: -30px; right: 15px;">
-				{{> bubble-loader}}
+				{{> bubbleLoader}}
 			</span>
 			{{/if}}
 		</div>
 
 		<p class="editor-title">{{documentTitle}}</p>
 
-		{{#constant}}
 		<div id="aceEditor">{{documentBody}}</div>
-		{{/constant}}
 
 	</div>
-{{#isolate}}
 {{> gitLogs}}
-{{/isolate}}
 </template>

@@ -19,7 +19,7 @@
 			<div class="form-group">
 				<div class="col-sm-9 col-sm-offset-3">
 					{{#if runningMakeCatalogs}}
-						{{> bubble-loader}}
+						{{> bubbleLoader}}
 					{{/if}}
 					{{#unless runningMakeCatalogs}}
 					<button id="makecatalogs" class="btn btn-default">
@@ -31,7 +31,7 @@
 			<div class="form-group">
 				<div class="col-sm-9 col-sm-offset-3">
 					<label>
-						<input type="checkbox" value="" id="makeCatalogsIsEnabled" {{#if settings.makeCatalogsIsEnabled}}checked=true{{/if}}>
+						<input type="checkbox" value="" id="makeCatalogsIsEnabled" {{makecatalogsIsChecked}}>
 						Allow anyone to run `makecatalogs`.
 					</label>
 				</div>
@@ -39,7 +39,7 @@
 			<div class="form-group">
 				<div class="col-sm-9 col-sm-offset-3">
 					<label>
-						<input type="checkbox" value="" id="makeCatalogsSanityIsDisabled" {{#if settings.makeCatalogsSanityIsDisabled}}checked=true{{/if}}>
+						<input type="checkbox" value="" id="makeCatalogsSanityIsDisabled" {{makeCatalogsDisableSanityIsChecked}}>
 						Disable sanity checks (`makecatalogs -f`).
 					</label>
 				</div>
@@ -50,7 +50,7 @@
 			<div class="form-group">
 				<div class="col-sm-9 col-sm-offset-3">
 					<label>
-						<input type="checkbox" value="" id="gitIsEnabled" {{#if settings.gitIsEnabled}}checked=true{{/if}}>
+						<input type="checkbox" value="" id="gitIsEnabled" {{gitIsChecked}}>
 						Enable git.
 					</label>
 				</div>

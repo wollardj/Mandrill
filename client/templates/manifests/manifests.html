@@ -50,13 +50,18 @@
 					<td>
 						<a href="{{pathFor 'manifests'}}">
 						{{#if err}}
-							<span class="text-danger"><strong>
+							<span class="text-danger">
+								<strong>
+									{{relativePath}}
+									<span class="pull-right">
+										{{err}}
+									</span>
+								</strong>
+							</span>
 						{{/if}}
-						{{relativePath}}
-						{{#if err}}
-							<span class="pull-right">{{err}}</span>
-							</strong></span>
-						{{/if}}
+						{{#unless err}}
+							{{relativePath}}
+						{{/unless}}
 						</a>
 					</td>
 				</tr>

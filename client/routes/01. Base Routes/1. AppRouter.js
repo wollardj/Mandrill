@@ -5,7 +5,7 @@
 	login page as making sure non-admins cannot see admin-only routes.
  */
 AppRouter = RouteController.extend({
-	before: function () {
+	onBeforeAction: function (pause) {
 		
 		var user = Meteor.user(),
 			isLoggedIn = user !== null,
@@ -23,7 +23,7 @@ AppRouter = RouteController.extend({
 			// we'll redirect them to the 'home' route.
 			if (isAdmin === false && this.adminOnly === true) {
 				this.redirect('home');
-				this.stop();
+				pause();
 			}
 		}
 
@@ -31,7 +31,7 @@ AppRouter = RouteController.extend({
 		// This won't change the URL.
 		else {
 			this.render('login');
-			this.stop();
+			pause();
 		}
 	},
 

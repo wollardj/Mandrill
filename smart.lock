@@ -2,24 +2,19 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "iron-router": {},
       "bootstrap-3": {},
       "npm": {},
       "ace-embed": {},
       "moment": {},
       "logger": {},
-      "i18n": {}
+      "i18n": {},
+      "blaze-layout": {}
     },
     "packages": {
-      "iron-router": {
-        "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.6.2",
-        "commit": "ce56e58b45624dce992490f3a1c10f10d3948bae"
-      },
       "bootstrap-3": {
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
-        "tag": "v3.1.0-1",
-        "commit": "329dccb08bfc18c635676dea600ac9953162cda9"
+        "tag": "v3.1.1-1",
+        "commit": "63dd38968828bb8963636df93e9a1c45e2dfe67e"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
@@ -45,6 +40,11 @@
         "git": "https://github.com/jerico-dev/meteor-i18n.git",
         "tag": "v0.1.2",
         "commit": "e24f4ad9242741984dfa3985be4ed2c3bc34f9d5"
+      },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "tag": "v0.2.1",
+        "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
       }
     }
   }

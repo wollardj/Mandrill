@@ -83,15 +83,20 @@
 						<i class="glyphicon glyphicon-asterisk"></i>
 					</a>
 
-					<a href="#" data-toggle="tooltip" 
-						{{#if isBanned}}
-							title="Un-ban this account." class="btn btn-primary ban-user active">
-						{{/if}}
-						{{#unless isBanned}}
-							title="Ban this account." class="btn btn-default ban-user">
-						{{/unless}}
+					{{#if isBanned}}
+					<a href="#" data-toggle="tooltip"
+							title="Un-ban this account."
+							class="btn btn-primary ban-user active">
 						<i class="glyphicon glyphicon-ban-circle"></i>
 					</a>
+					{{/if}}
+					{{#unless isBanned}}
+					<a href="#" data-toggle="tooltip"
+							title="Ban this account."
+							class="btn btn-default ban-user">
+						<i class="glyphicon glyphicon-ban-circle"></i>
+					</a>
+					{{/unless}}
 				</div>
 				{{/unless}}
 			</td>

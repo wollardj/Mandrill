@@ -16,6 +16,14 @@
 					<div class="form-group">
 						<input type="text" id="pkgsinfo-search" class="form-control navbar-left" placeholder="Search" />
 					</div>
+					<div class="form-group">
+						<select id="catalogFilter" class="form-control">
+							<option>all</option>
+							<option>production</option>
+							<option>testing</option>
+							<option>dev</option>
+						</select>
+					</div>
 				</form>
 				{{paginationLinks "navbar-right"}}
 			</div>
@@ -40,6 +48,7 @@
 				<tr>
 					<th>Display Name</th>
 					<th>Name</th>
+					<th>Catalog(s)</th>
 					<th>Version</th>
 				</tr>
 			</thead>
@@ -57,6 +66,7 @@
 				{{#unless err}}
 					<td>{{dom.display_name}}</td>
 					<td>{{dom.name}}</td>
+					<td>{{catalogLabels}}</td>
 					<td>{{dom.version}}</td>
 				{{/unless}}
 				</tr>

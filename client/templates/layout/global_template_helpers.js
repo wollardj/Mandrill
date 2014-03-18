@@ -50,13 +50,6 @@ Meteor.startup(function() {
 	});
 
 
-	Handlebars.registerHelper('currentRouteIs', function(param) {
-		var routerName = Router.current().route.name;
-		return param === routerName;
-	});
-
-
-
 	Handlebars.registerHelper('mandrillVersion', function () {
 		return Mandrill.version;
 	});

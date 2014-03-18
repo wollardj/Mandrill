@@ -1,32 +1,26 @@
+<head>
+	<title>Mandrill</title>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+
 <template name="appLayout">
-
-<html>
-	<head>
-		<title>Mandrill</title>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-		<link rel="icon" href="favicon.ico" type="image/x-icon">
-	</head>
-	<body>
-
-		{{#if currentUser}}
-		{{> appSidebar}}
-		<div id="appContent">
-			<div class="row">
-				<div class="col-xs-12">{{yield}}</div>
-			</div>
-			<hr />
-			<p class="small text-muted text-center">
-				Mandrill v{{mandrillVersion}}, on Meteor v{{meteorVersion}}
-			</p>
+	{{#if currentUser}}
+	{{> appSidebar}}
+	<div id="appContent">
+		<div class="row">
+			<div class="col-xs-12">{{> yield}}</div>
 		</div>
-		{{/if}}
+		<hr />
+		<p class="small text-muted text-center">
+			Mandrill v{{mandrillVersion}}, on Meteor v{{meteorVersion}}
+		</p>
+	</div>
+	{{/if}}
 
-		{{#unless currentUser}}
-		{{yield}}
-		{{/unless}}
-
-	</body>
-</html>
+	{{#unless currentUser}}
+	{{> yield}}
+	{{/unless}}
 </template>

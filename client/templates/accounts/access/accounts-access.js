@@ -14,6 +14,14 @@ Template['accounts-access'].munkiRepoPath = function() {
 
 
 
+Template['accounts-access'].readOnlyIsChecked = function() {
+	if (this.readonly === true) {
+		return 'checked';
+	}
+};
+
+
+
 Template['accounts-access'].events({
 
 	// Add a new pattern, as long as it's not empty

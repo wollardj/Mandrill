@@ -49,8 +49,7 @@
 					<a href="{{pathFor 'catalogs'}}">{{itemCount}}</a></td>
 				<td>
 						{{#if fetchingManifestCount}}
-							<!--{{referring_manifests_count}}-->
-							{{> bubble-loader}}
+							{{> bubbleLoader}}
 						{{/if}}
 						{{#unless fetchingManifestCount}}
 						<a href="{{manifestsSearchLink}}" class="btn btn-default btn-xs">

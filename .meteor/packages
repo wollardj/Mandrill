@@ -5,7 +5,6 @@
 
 standard-app-packages
 preserve-inputs
-iron-router
 npm
 accounts-github
 accounts-google
@@ -16,3 +15,7 @@ ace-embed
 moment
 logger
 i18n
+blaze-layout
+coffeescript
+stylus
+iron-router

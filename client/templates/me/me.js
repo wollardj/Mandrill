@@ -10,8 +10,8 @@ Template.me.destroyed = function() {
 };
 
 
-Template.me.formIsReady = function() {
-	return Session.get('changePasswordFormIsReady');
+Template.me.formIsDisabled = function() {
+	return Session.get('changePasswordFormIsReady') !== true ? 'disabled' : '';
 };
 
 

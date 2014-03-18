@@ -21,7 +21,8 @@ PkgsinfoRouter = AppRouter.extend({
 					'urlName': 1,
 					'dom.name': 1,
 					'dom.version': 1,
-					'dom.display_name': 1
+					'dom.display_name': 1,
+					'dom.catalogs': 1
 				}
 			};
 
