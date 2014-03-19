@@ -6,7 +6,7 @@ Template.pkgsinfoEditor.created = function() {
 
 	Template.MandrillEditor.saveHook = function(docText) {
 		Session.set('workingOnDocument', true);
-		var data = Router.current().getData();
+		var data = Router.current().data();
 		Meteor.call('filePutContents', data.path, docText, function(err) {
 			Session.set('workingOnDocument', false);
 			if (err) {
@@ -16,7 +16,7 @@ Template.pkgsinfoEditor.created = function() {
 	};
 
 	Template.MandrillEditor.deleteHook = function() {
-		var data = Router.current().getData();
+		var data = Router.current().data();
 		// First, we'll find out if the pkgsinfo file refers to an
 		// installer_item_location. If it does, we'll ask the user if that
 		// file should be removed as well before deleting the plist.
@@ -47,12 +47,14 @@ Template.pkgsinfoEditor.created = function() {
 
 
 	Template.MandrillEditor.documentPath = function() {
-		return Router.current().getData().path;
+		var data = Router.current().data();
+		if (data && data.path)
+			return data.path
 	};
 
 	Template.MandrillEditor.documentTitle = function() {
 		var settings = MandrillSettings.findOne();
-		if (settings.munkiRepoPath) {
+		if (settings && settings.munkiRepoPath && this.path) {
 			return this.path.replace(settings.munkiRepoPath + 'pkgsinfo/', '');
 		}
 		else if (this.path) {
@@ -63,7 +65,9 @@ Template.pkgsinfoEditor.created = function() {
 
 
 	Template.MandrillEditor.documentBody = function() {
-		return Router.current().getData().raw;
+		var data = Router.current().data();
+		if (data && data.raw)
+			return data.raw;
 	};
 
 

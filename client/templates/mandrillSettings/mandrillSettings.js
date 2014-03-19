@@ -1,7 +1,7 @@
 Session.setDefault('runningMakeCatalogs', false);
 
 Template.mandrillSettings.munkiRepoPathClass = function() {
-	var settings = Router.current().getData().settings;
+	var settings = Router.current().data().settings;
 	if (settings.munkiRepoPathIsValid === true) {
 		return 'has-success';
 	}
@@ -27,7 +27,7 @@ Template.mandrillSettings.gitIsChecked = function() {
 
 
 Template.mandrillSettings.munkiRepoPathFeedbackIcon = function() {
-	var settings = Router.current().getData().settings;
+	var settings = Router.current().data().settings;
 	if (settings.munkiRepoPathIsValid === true) {
 		return 'ok';
 	}

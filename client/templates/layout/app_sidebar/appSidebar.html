@@ -34,19 +34,19 @@
 				Admin
 				<i class="pull-right glyphicon glyphicon-cog"></i>
 			</li>
-			<li {{routeIsActive "accounts"}} {{routeIsActive "accounts-access"}}>
+			<li class="{{routeIsActive "accounts"}} {{routeIsActive "accounts-access"}}">
 				<a href="{{pathFor 'accounts'}}">
 					<i class="glyphicon glyphicon-user"></i>
 					Accounts
 				</a>
 			</li>
-			<li {{routeIsActive "login-services"}}>
+			<li class="{{routeIsActive "login-services"}}">
 				<a href="{{pathFor 'login-services'}}">
 					<i class="glyphicon glyphicon-log-in"></i>
 					Login Services
 				</a>
 			</li>
-			<li {{routeIsActive "mandrill-settings"}}>
+			<li class="{{routeIsActive "mandrill-settings"}}">
 				<a href="{{pathFor 'mandrill-settings'}}">
 					<i class="glyphicon glyphicon-cog"></i>
 					Mandrill Settings
@@ -59,7 +59,7 @@
 				Repo Items
 				<i class="pull-right glyphicon glyphicon-cloud"></i>
 			</li>
-			<li {{routeIsActive "manifests"}}>
+			<li class="{{routeIsActive "manifests"}}">
 				<a href="{{pathFor 'manifests'}}">
 					<i class="glyphicon glyphicon-list-alt"></i>
 					Manifests
@@ -71,7 +71,7 @@
 					<span class="badge pull-right">{{manifestsCount}}</span>
 				</a>
 			</li>
-			<li {{routeIsActive "pkgsinfo"}}>
+			<li class="{{routeIsActive "pkgsinfo"}}">
 				<a href="{{pathFor 'pkgsinfo'}}">
 					<i class="glyphicon glyphicon-save"></i>
 					Pkgsinfo
@@ -83,7 +83,7 @@
 					<span class="badge pull-right">{{installsCount}}</span>
 				</a>
 			</li>
-			<li {{routeIsActive "catalogs"}} {{routeIsActive "edit-condition"}}>
+			<li class="{{routeIsActive "catalogs"}} {{routeIsActive "edit-condition"}}">
 				<a href="{{pathFor 'catalogs'}}">
 					<i class="glyphicon glyphicon-book"></i>
 					Catalogs

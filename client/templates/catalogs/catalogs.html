@@ -34,7 +34,7 @@
 						<span class="text-danger">{{urlName}}</span>
 					{{/if}}
 					{{#unless err}}
-					<a href="{{pathFor 'catalogs'}}">
+					<a href="{{pathFor 'catalogs' urlName=urlName}}">
 						{{urlName}}
 					</a>
 					{{/unless}}
@@ -46,7 +46,7 @@
 				{{/if}}
 				{{#unless err}}
 				<td>
-					<a href="{{pathFor 'catalogs'}}">{{itemCount}}</a></td>
+					<a href="{{pathFor 'catalogs' urlName=urlName}}">{{itemCount}}</a></td>
 				<td>
 						{{#if fetchingManifestCount}}
 							{{> bubbleLoader}}

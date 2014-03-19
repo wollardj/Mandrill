@@ -2,14 +2,11 @@
 	<div class="modal fade bs-modal-lg" id="gitLogsModal" tabindex="-1" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
-				{{#isolate}}
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Git Logs <span class="badge">{{numberOfLogs}}</span></h4>
 				</div>
-				{{/isolate}}
 				<div class="modal-body">
-					{{#isolate}}
 					<table class="table table-condensed table-striped">
 						<thead>
 							<tr>
@@ -38,7 +35,6 @@
 						{{/each}}
 						</tbody>
 					</table>
-					{{/isolate}}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

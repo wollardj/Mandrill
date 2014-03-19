@@ -1,0 +1,161 @@
+@import 'globalVars.styl'
+
+.row
+	margin 0
+
+
+.tab-pane
+	padding-top 15px
+
+
+.modal
+	z-index 10000
+
+.modal-dialog
+	width 80%
+
+
+div.borderless-container
+	margin 0 -15px -15px -15px
+
+	.navbar
+		border-radius 0
+		margin-left 0
+		margin-right 0
+		padding-left 15px
+		padding-right 15px
+
+
+
+div.mandrill-error
+	position fixed
+	width 400px
+	top 50px
+	left 50%
+	margin-left -200px
+	z-index 10000
+	box-shadow 5px 10px 14px rgba(0, 0, 0, 0.45)
+
+
+#appContent
+	margin-left 200px
+
+
+
+.mandrill-header
+	text-align center
+	box-shadow inset 10px -5px 10px -7px #000
+	margin 0 -15px 0 -15px
+	padding 15px
+
+	background header_bg_color
+
+	button
+		position absolute
+		top 30px
+		right 25px
+
+	h1, h2, h3, h4, h5, h6
+		color #fff
+		text-shadow 0 -1px 0 #777
+		display inline-block
+
+
+/*
+	Meant for use with .mandrill-header to provide a little space between the
+	bottom of the header and the body content.
+ */
+.pad-bottom
+	margin-bottom 20px
+
+
+
+
+.navbar .pager
+	margin 10px 0
+
+
+
+
+
+
+
+/* "sticky" paging toolbar */
+/* affixed navbars */
+
+.paging-toolbar.affix-top
+	position static
+
+
+.paging-toolbar.affix .navbar
+	background-color rgba(250, 250, 250, 0.93)
+	margin 0
+
+.paging-toolbar.affix
+	position fixed
+	top 0
+	left 200px
+	right 0
+	box-shadow 1px 0 5px #000
+	transition box-shadow 250ms
+
+
+/*
+	Make sure the table doesn't jump around when the navbar
+	goes from 'static' to 'fixed'. Also make sure we're
+	taking into account that the navbar will collapse under
+	768px
+*/
+@media (min-width 768px)
+	.paging-toolbar.affix ~ table.paging-table
+		margin-top 76px
+
+
+@media (max-width 767px)
+	.paging-toolbar.affix ~ table.paging-table
+		margin-top 146px
+
+/* /"sticky" paging toolbar */
+
+
+
+
+
+
+
+/* bubble loader animation */
+/* A comment on browser-specific prefixes "You had ONE JOB, W3." */
+
+.bubble-loader
+	display inline-block
+	margin-top 25px
+	margin-bottom 11px
+
+.bubble-loader div
+	animation bubble 1100ms forwards infinite
+	background #fff
+	border-radius 50%
+	box-shadow 0 0 8px #aaa
+	display inline-block
+	height 10px
+	margin 6px
+	transform scale(0, 0)
+	width 10px
+
+.bubble-loader div:nth-child(2),
+.bubble-loader div:nth-child(4)
+	animation-delay 125ms
+
+.bubble-loader div:nth-child(1)
+.bubble-loader div:nth-child(5)
+	animation-delay 250ms
+
+@keyframes bubble
+	0% {transform scale(0, 0);}
+	12% {transform scale(1.5, 1.5);}
+	23% {transform scale(0.5, 0.5);}
+	34% {transform scale(1.2, 1.2);}
+	45% {transform scale(1, 1);}
+	85% {transform scale(0, 0);}
+
+/* end bubble loader animation */

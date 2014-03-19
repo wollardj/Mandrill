@@ -9,7 +9,7 @@ Template.manifestEditor.created = function() {
 	};
 
 	Template.MandrillEditor.saveHook = function(docText) {
-		var data = Router.current().getData();
+		var data = Router.current().data();
 		Session.set('workingOnDocument', true);
 		Meteor.call(
 			'filePutContents',
@@ -24,7 +24,7 @@ Template.manifestEditor.created = function() {
 
 
 	Template.MandrillEditor.documentPath = function() {
-		return Router.current().getData().path;
+		return Router.current().data().path;
 	};
 
 
@@ -41,7 +41,7 @@ Template.manifestEditor.created = function() {
 
 
 	Template.MandrillEditor.deleteHook = function(_id, docText) {
-		var data = Router.current().getData();
+		var data = Router.current().data();
 		Meteor.call('unlinkManifest', data.path, function(err, data) {
 			if (err) {
 				Mandrill.show.error(err);
@@ -51,7 +51,7 @@ Template.manifestEditor.created = function() {
 
 
 	Template.MandrillEditor.documentBody = function() {
-		var data = Router.current().getData();
+		var data = Router.current().data();
 		return data.raw;
 	};
 

@@ -10,7 +10,7 @@ Template.appSidebar.rendered = ->
 Template.appSidebar.routeIsActive = (aRoute) ->
 	routerName = Router.current().route.name
 	if routerName? and routerName is aRoute
-		'class="active"'
+		'active'
 	else
 		''
 

@@ -69,34 +69,22 @@
 			<td>
 				{{#unless isCurrentUser}}
 				<div class="btn-group btn-group-xs" style="width: 75px">
-					{{#if isLoggedIn}}
-						<a href="#" data-toggle="tooltip" title="Log user out" class="btn btn-primary logout">
-							<i class="glyphicon glyphicon-log-out"></i>
-						</a>
-					{{/if}}
-					{{#unless isLoggedIn}}
-						<a href="#" data-toggle="tooltip" title="User is not logged in" class="btn btn-default">
-							<i class="glyphicon glyphicon-log-out text-muted"></i>
-						</a>
-					{{/unless}}
-					<a href="#" data-toggle="tooltip" title="Reset {{username}}'s local password" class="btn btn-default reset-password">
+					<button type="button"
+							title="Log user out"
+							class="btn btn-default logout {{#unless isLoggedIn}}disabled{{/unless}}">
+						<i class="glyphicon glyphicon-log-out"></i>
+					</button>
+					<button type="button"
+							title="Reset {{username}}'s local password"
+							class="btn btn-default reset-password">
 						<i class="glyphicon glyphicon-asterisk"></i>
-					</a>
+					</button>
 
-					{{#if isBanned}}
-					<a href="#" data-toggle="tooltip"
-							title="Un-ban this account."
-							class="btn btn-primary ban-user active">
+					<button type="button"
+							title="{{#if isBanned}}Un-ban this account.{{/if}}{{#unless isBanned}}Ban this account.{{/unless}}"
+							class="btn {{#unless isBanned}}btn-default{{/unless}} ban-user {{#if isBanned}}active btn-danger{{/if}}">
 						<i class="glyphicon glyphicon-ban-circle"></i>
-					</a>
-					{{/if}}
-					{{#unless isBanned}}
-					<a href="#" data-toggle="tooltip"
-							title="Ban this account."
-							class="btn btn-default ban-user">
-						<i class="glyphicon glyphicon-ban-circle"></i>
-					</a>
-					{{/unless}}
+					</button>
 				</div>
 				{{/unless}}
 			</td>
