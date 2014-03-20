@@ -1,6 +1,5 @@
-Template.me.created = ->
-	Session.setDefault 'changePasswordFormIsReady', false
-	Session.setDefault 'changingPassword', false
+Session.setDefault 'changePasswordFormIsReady', false
+Session.setDefault 'changingPassword', false
 
 
 Template.me.destroyed = ->
@@ -9,8 +8,10 @@ Template.me.destroyed = ->
 
 
 Template.me.formIsDisabled = ->
-	if Session.get 'changePasswordFormIsReady' isnt true
+	if Session.get('changePasswordFormIsReady') isnt true
 		'disabled'
+	else
+		''
 
 
 Template.me.changingPassword = ->

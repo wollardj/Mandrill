@@ -12,61 +12,6 @@ MandrillEditorMenu = {
 	_map: null,
 	_editor: null,
 
-	'menu': function() {
-		var output = '';
-		if (!MandrillEditorMenu._map) {
-			throw new Meteor.Error(500,
-				'MandrillEditorMenu.prepareMap() must be called before ' +
-				'MandrillEditorMenu.menu()');
-		}
-
-		output += '<ul class="nav navbar-nav">';
-		output += MandrillEditorMenu._processItems(MandrillEditorMenu._map);
-		output += '</ul>';
-		return output;
-	},
-
-
-	'_processItems': function(items) {
-		var output = '';
-		for(var i = 0; i < items.length; i++) {
-			if (items[i].submenus) {
-				output += '<li class="dropdown">' +
-						'<a href="#" class="dropdown-toggle ' +
-							'MandrillEditor-menu" data-toggle="dropdown">' +
-							items[i].title +
-						'</a>'	+
-						'<ul class="dropdown-menu">' +
-						MandrillEditorMenu._processItems(items[i].submenus) +
-						'</ul></li>';
-			}
-			else {
-				output += MandrillEditorMenu._processItem(items[i]);
-			}
-		}
-		return output;
-	},
-
-
-	'_processItem': function(item) {
-		var output = '';
-		if (item.submenus) {
-			output += MandrillEditorMenu._processItems(item.submenus);
-		}
-		else if (item.command) {
-			output += '<li>' + '<a href="#" ' +
-					'class="MandrillEditor-menu-command" data-menu-command="' +
-					item.command.name + '">' +
-					'<span class="pull-right text-muted">' +
-					MandrillEditorMenu._htmlKeyBinding(item.command) +
-					'</span>' + item.title + '</a></li>';
-		}
-		else {
-			output += '<li class="divider"></li>';
-		}
-		return output;
-	},
-
 
 	// Returns the HTML encoded symbols that represent the keybindings for
 	// a given ace command.

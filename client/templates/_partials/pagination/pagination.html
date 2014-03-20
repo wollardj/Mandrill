@@ -1,0 +1,21 @@
+<template name="pagination">
+<ul class="pager">
+	<li class="{{firstIsDisabled}}">
+		<a href="{{firstLink}}">First</a>
+	</li>
+	<li class="{{firstIsDisabled}}">
+		<a href="{{prevLink}}">Prev</a>
+	</li>
+	<li class="text-muted">
+		&nbsp;
+		{{rangeStart}} - {{rangeEnd}} of {{rangeTotal}}
+		&nbsp;
+	</li>
+	<li class="{{lastIsDisabled}}">
+		<a href="{{nextLink}}">Next</a>
+	</li>
+	<li class="{{lastIsDisabled}}">
+		<a href="{{lastLink}}">Last</a>
+	</li>
+</ul>
+</template>

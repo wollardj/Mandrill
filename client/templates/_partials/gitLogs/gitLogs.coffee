@@ -11,8 +11,12 @@ Template.gitLogs.loadLogs = ->
 				GitLogs.insert log for log in data
 
 
-Template.gitLogs.loadLogsForPath = (aPath)->
-	''
+Template.gitLogs.filePath = ->
+	doc Session.get 'activeDocument'
+	if doc? and doc.path?
+		doc.path
+	else
+		''
 
 
 Template.gitLogs.gitLogs = ->

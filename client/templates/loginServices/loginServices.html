@@ -6,13 +6,6 @@
 	<!-- tab bar -->
 	<ul class="nav nav-tabs" id="login-services-tabs">
 		<li class="active">
-			<a href="#local_accounts" data-toggle="tab">
-				<i class="glyphicon glyphicon-user"></i>
-				Local
-				<i class="glyphicon glyphicon-ok-circle text-success"></i>
-			</a>
-		</li>
-		<li>
 			<a href="#github_accounts" data-toggle="tab">
 				<img src="https://github.com/favicon.ico" height="16px" />
 				GitHub
@@ -31,17 +24,7 @@
 
 	<!-- tab panes -->
 	<div class="tab-content">
-		<div class="tab-pane fade in active" id="local_accounts">
-			<div class="jumbotron">
-				<p class="lead text-center">
-					Support for configuring the local account system will hopefully be coming soon.
-					<br />For now, it's on and only an admin can add new accounts.
-				</p>
-			</div>
-		</div>
-
-
-		<div class="tab-pane fade" id="github_accounts">
+		<div class="tab-pane fade in active" id="github_accounts">
 			{{> loginServicesGithub}}
 		</div>
 		
