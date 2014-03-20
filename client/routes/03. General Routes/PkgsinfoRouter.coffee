@@ -4,6 +4,7 @@
 	onBeforeAction: ->
 		query = {}
 		perPage = 25
+		useRegex = this.params.urlName?
 		opts = {
 			'sort': {
 				'err': -1,
@@ -32,17 +33,16 @@
 			#// Change the template to render if it looks like the user
 			#// is trying to edit a specific pkgsinfo item.
 			this.template = 'pkgsinfoEditor'
-		else
-			query = this.params.q
 
-		if this.params.p?
+		else if this.params.p?
+			query = this.params.q
 			opts.skip = this.params.p * perPage
 
-		if this.params.urlName?
-			this.subscribe 'MunkiPkgsinfo', query, opts, false
+		
+		this.subscribe 'MunkiPkgsinfo', query, opts, useRegex
 				.wait()
-		else
-			this.subscribe 'MunkiPkgsinfo', query, opts, true
+
+		if not this.params.urlName?
 			this.subscribe 'PaginatedQueryStats'
 				.wait()
 
@@ -50,7 +50,7 @@
 	data: ->
 
 		if this.params.urlName?
-			MunkiPkgsinfo.findOne()
+			MunkiPkgsinfo.findOne {urlName: this.params.urlName}
 		else
 			stats = PaginatedQueryStats.findOne()
 			{

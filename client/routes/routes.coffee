@@ -9,7 +9,7 @@ Router.map ->
 		path: '/manifests/:urlName?',
 		controller: 'ManifestsRouter'
 	}
-	
+
 	this.route 'pkgsinfo', {
 		path: '/pkgsinfo/:urlName?',
 		controller: 'PkgsinfoRouter'

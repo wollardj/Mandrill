@@ -110,6 +110,7 @@ MandrillEditorMenu = {
 				'aceEditor instance as the only parameter.');
 		}
 
+		MandrillEditorCommands.addToEditor(editor);
 		MandrillEditorMenu._editor = editor;
 		var c = editor.commands.byName;
 
@@ -118,6 +119,7 @@ MandrillEditorMenu = {
 		// just simply won't be displayed (because of Bootstrap3, not
 		// Mandrill)
 		if (!MandrillEditorMenu._map) {
+
 			MandrillEditorMenu._map = [
 				{
 					title: 'File',

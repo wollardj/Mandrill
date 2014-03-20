@@ -21,6 +21,8 @@
 			this.subscribe 'MandrillAccounts'
 				.wait()
 			this.subscribe 'ServerStats'
+				.wait()
+
 
 			#// If this is an admin-only route, but the user isn't an admin,
 			#// we'll redirect them to the 'home' route.

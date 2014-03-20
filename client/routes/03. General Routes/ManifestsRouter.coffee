@@ -11,7 +11,8 @@
 			limit: perPage,
 			fields: {path: 1, err: 1, urlName: 1}
 		}
-		
+
+
 		if this.params.urlName?
 			query = {urlName: this.params.urlName}
 
@@ -27,26 +28,26 @@
 		if this.params.p?
 			opts.skip = this.params.p * perPage
 
-		if this.params.urlName?
-			this.subscribe 'MunkiManifests', query, opts, useRegexp
-				.wait()
-		else
-			this.subscribe 'MunkiManifests', query, opts, useRegexp
+		this.subscribe 'MunkiManifests', query, opts, useRegexp
+			.wait()
+
+		if not this.params.urlName?
 			this.subscribe 'PaginatedQueryStats'
-				.wait();
+				.wait()
 
 	data: ->
 		if this.params.urlName?
-			MunkiManifests.findOne()
+			MunkiManifests.findOne({urlName: this.params.urlName})
 
-		stats = PaginatedQueryStats.findOne()
-		total = if stats? and stats.total? then stats.total else 0
+		else
+			stats = PaginatedQueryStats.findOne()
+			total = if stats? and stats.total? then stats.total else 0
 
-		{
-			manifests: MunkiManifests.find {}, {
-					sort: {err: -1, urlName: 1}
-				}
-				.fetch(),
-			unlimitedTotal: total
-		}
+			{
+				manifests: MunkiManifests.find {}, {
+						sort: {err: -1, urlName: 1}
+					}
+					.fetch(),
+				unlimitedTotal: total
+			}
 }

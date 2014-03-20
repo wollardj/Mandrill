@@ -53,7 +53,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{#each pkgsinfo}}
+			{{#each pkgsinfo}}
 				<tr class="pkgsinfo-item-row">
 				{{#if err}}
 					<td colspan="3" class="text-danger">
@@ -64,13 +64,13 @@
 					</td>
 				{{/if}}
 				{{#unless err}}
-					<td>{{dom.display_name}}</td>
-					<td>{{dom.name}}</td>
+					<td>{{this.dom.display_name}}</td>
+					<td>{{this.dom.name}}</td>
 					<td>{{catalogLabels}}</td>
-					<td>{{dom.version}}</td>
+					<td>{{this.dom.version}}</td>
 				{{/unless}}
 				</tr>
-				{{/each}}
+			{{/each}}
 			</tbody>
 		</table>
 

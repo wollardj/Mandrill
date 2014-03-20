@@ -1,6 +1,7 @@
-Template.gitLogs.loadLogsForPath = (aPath)->
-	if aPath?
-		Meteor.call 'git-log', aPath, (err, data)->
+Template.gitLogs.loadLogs = ->
+	doc = Session.get 'activeDocument'
+	if doc? and doc.path? and doc.path isnt ''
+		Meteor.call 'git-log', doc.path, (err, data)->
 			GitLogs.remove {}
 			Session.set 'loadingGitLogs', false
 			if err?
@@ -10,9 +11,13 @@ Template.gitLogs.loadLogsForPath = (aPath)->
 				GitLogs.insert log for log in data
 
 
+Template.gitLogs.loadLogsForPath = (aPath)->
+	''
+
+
 Template.gitLogs.gitLogs = ->
 	GitLogs.find().fetch()
 
 
 Template.gitLogs.numberOfLogs = ->
-	return GitLogs.find().count()
+	GitLogs.find().count()
