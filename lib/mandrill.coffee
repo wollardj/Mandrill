@@ -36,7 +36,7 @@
 			#// auto-dismiss after 10 seconds
 			window.setTimeout ->
 				$('#' + id).alert 'close'
-			10000
+			, 10000
 
 
 		success: (title, message)->
@@ -58,7 +58,7 @@
 			#// auto-dismiss after 10 seconds
 			window.setTimeout ->
 				$('#' + id).alert 'close'
-			10000
+			, 10000
 	}
 
 
