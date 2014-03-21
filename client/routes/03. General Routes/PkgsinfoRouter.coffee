@@ -3,8 +3,10 @@
 
 	onBeforeAction: ->
 		query = {}
+		userQuery = {}
 		perPage = 25
-		useRegex = this.params.urlName?
+		selectedCatalogs = Session.get 'listOfSelectedCatalogs'
+		catalogs = Session.get 'listOfCatalogs'
 		opts = {
 			'sort': {
 				'err': -1,
@@ -23,23 +25,43 @@
 				'dom.catalogs': 1
 			}
 		}
-
+		
 
 		if this.params.urlName?
 			query = {urlName: this.params.urlName}
 			opts.limit = 1
-			opts.fields.raw = 1
-
+			opts.fields.raw = 1	
 			#// Change the template to render if it looks like the user
 			#// is trying to edit a specific pkgsinfo item.
 			this.template = 'pkgsinfoEditor'
 
-		else if this.params.p?
-			query = this.params.q
-			opts.skip = this.params.p * perPage
+		else
+			if this.params.p?
+				opts.skip = this.params.p * perPage
 
+			if this.params.q?
+				userQuery.$or = []
+				try
+					new RegExp(this.params.q)
+					re = {'$regex': this.params.q, '$options': 'i'}
+					userQuery.$or.push {raw: re}
+					userQuery.$or.push {urlName: re}
+				catch e
+					userQuery.$or.push {raw: this.params.q}
+					userQuery.$or.push {urlName: this.params.q}
+
+			if selectedCatalogs? and catalogs? and selectedCatalogs.length isnt catalogs.length
+				query.$and = if not query.$and then [] else query.$and
+				query.$and.push {'dom.catalogs': {'$in': selectedCatalogs}}
+
+			if userQuery.$or?
+				query.$and = if not query.$and then [] else query.$and
+				query.$and.push userQuery
+
+
+		console.log query
 		
-		this.subscribe 'MunkiPkgsinfo', query, opts, useRegex
+		this.subscribe 'MunkiPkgsinfo', query, opts
 				.wait()
 
 		if not this.params.urlName?

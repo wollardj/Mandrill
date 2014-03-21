@@ -1,3 +1,8 @@
+Template.pkgsinfo.created = ->
+	Session.setDefault 'listOfCatalogs', []
+	Session.setDefault 'listOfSelectedCatalogs', []
+
+
 Template.pkgsinfo.rendered = ->
 	headerBottom = $('.mandrill-header').outerHeight()
 	$('.paging-toolbar').affix {
@@ -44,9 +49,41 @@ Template.pkgsinfo.basePath = ->
 
 
 
+Template.pkgsinfo.isCatalogSelected = ->
+	selectedCatalogs = Session.get 'listOfSelectedCatalogs'
+	if selectedCatalogs.indexOf(this.toString()) > -1
+		'check'
+	else
+		'unchecked'
 
-Template.pkgsinfo.catalogLabels = ->
-	catalogs = this.dom.catalogs or []
+
+
+Template.pkgsinfo.catalogBtnState = ->
+	catalogs = Session.get 'listOfCatalogs'
+	selectedCatalogs = Session.get 'listOfSelectedCatalogs'
+	if catalogs.length isnt selectedCatalogs.length
+		'primary'
+	else
+		'default'
+
+
+
+Template.pkgsinfo.liveCatalogs = ->
+	Meteor.call 'listCatalogs', (err, data) ->
+		if err?
+			Mandrill.show.error err
+		else
+			Session.set 'listOfCatalogs', data
+
+			# pre-select all catalogs
+			if Session.get('listOfSelectedCatalogs').length is 0
+				Session.set 'listOfSelectedCatalogs', data
+	Session.get 'listOfCatalogs'
+
+
+
+Template.pkgsinfo.catalogLabels = (catalogs)->
+	catalogs = catalogs or this.dom.catalogs or []
 	labels = ''
 
 	for catalog in catalogs
@@ -152,4 +189,19 @@ Template.pkgsinfo.events {
 		if event.which is 27
 			$('#newPkginfoForm').addClass 'newPkginfoFormClosed'
 			$('#pkginfoName').blur()
+
+
+
+	'click [data-filter="catalogs"]': (event) ->
+		event.stopPropagation()
+		event.preventDefault()
+		search = this.toString()
+		catalogs = Session.get 'listOfSelectedCatalogs'
+
+		idx = catalogs.indexOf search
+		if idx is -1
+			catalogs.push search
+		else
+			catalogs.splice idx, 1
+		Session.set 'listOfSelectedCatalogs', catalogs
 }

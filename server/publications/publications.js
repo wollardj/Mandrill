@@ -53,24 +53,11 @@ Meteor.publish('MunkiManifests', function(query, opts, tryRegexp) {
 });
 
 
-Meteor.publish('MunkiPkgsinfo', function(query, opts, tryRegexp) {
-	var queryObj,
-		filter;
-	
-	if (query && tryRegexp === true) {
-		try {
-			queryObj = new RegExp(query, 'i');
-		}
-		catch(e) {
-			queryObj = query;
-		}
-		query = {'$or': [
-			{raw: queryObj},
-			{urlName: queryObj}
-		]};
-	}
+Meteor.publish('MunkiPkgsinfo', function(query, opts) {
+	var filter;
 
 	filter = Mandrill.user.accessPatternsFilter(this.userId, query);
+
 	PaginatedQueryStats.upsert({}, {
 		total: MunkiPkgsinfo.find(filter, opts).count()
 	});

@@ -21,31 +21,6 @@ Meteor.methods({
 
 
 	/*
-		Returns an array of catalog names. This can be a different list
-		than what's found in the `MunkiCatalogs` collection if modifications
-		have been made to a pkginfo file but makecatalogs has not yet been
-		executed.
-	 */
-	'listCatalogs': function() {
-		var catalogs = [],
-			pkgs = MunkiPkgsinfo.find({}, {'fields': {'catalogs': 1}}).fetch();
-
-		for(var i = 0; i < pkgs.length; i++) {
-			if (!pkgs[i].catalogs) {
-				continue;
-			}
-			for(var j = 0; j < pkgs[i].catalogs.length; j++) {
-				if (catalogs.indexOf(pkgs[i].catalogs[j]) === -1) {
-					catalogs.push(pkgs[i].catalgs[j]);
-				}
-			}
-		}
-		return catalogs;
-	},
-
-
-
-	/*
 		Returns `true` if the pkginfo file with a matching urlName refers to
 		an installer_item_location file, provided that file exists. If the
 		pkginfo is missing that attribute, or if it's present but the target
