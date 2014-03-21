@@ -1,3 +1,5 @@
+@import "../globalVars.styl"
+
 #appSidebar
 	position fixed
 	font-size 9pt
@@ -25,7 +27,7 @@
 			text-shadow 0 -1px 0 #555
 
 			background #1e5799 /* Old browsers */
-			background linear-gradient(135deg,  #1e5799 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%) /* W3C */
+			background header_bg_color
 
 			a
 				color #eee !important
@@ -34,6 +36,9 @@
 					color #444
 					text-shadow none
 					box-shadow inset 1px 0px 3px #111
+				&:hover
+					background header_bg_color_hover
+					text-decoration none
 
 		li
 			button.btn-block
@@ -57,7 +62,7 @@
 					text-shadow 0 0 0 rgba(0,0,0,0)
 					margin -1px 0 0 0
 
-			a:hover
+			&:not(.active) a:hover
 				background-color rgb(59, 60, 54)
 				color lightblue
 				text-decoration none
