@@ -13,31 +13,42 @@ div.login-body
 	padding 0
 
 	h2
-		font-family 'Lato'
+		color #ddd
+		font-family 'Lato', 'Helvetica'
 		font-weight 300
 
-
-div.login-other-services
-	background-color rgba(0, 0, 0, 0.1)
-	padding 15px
-	margin 15px 0 0 0
-	border-top 1px solid #444
-	border-bottom 1px solid #aaa
-	box-shadow 0 7px 10px -7px rgba(255,255,255, 0.5)
+		img
+			width 32px
+			height 32px
+			vertical-align text-bottom
 
 
+	.login-other-services
+		background-color rgba(0, 0, 0, 0.1)
+		padding 15px
+		margin 15px 0 0 0
+		border-top 1px solid #444
+		border-bottom 1px solid #aaa
+		box-shadow 0 7px 10px -7px rgba(255,255,255, 0.5)
 
-form.form-login
-	max-width 330px
-	padding 15px
-	margin 10% auto 0 auto
 
-	input[type="text"]
-		margin-bottom -1px
-		border-bottom-left-radius 0px
-		border-bottom-right-radius 0px
 
-	input[type="password"]
-		margin-top -1px
-		border-top-left-radius 0px
-		border-top-right-radius 0px
+	.form-login
+		width 300px
+		height 300px
+		margin auto
+		position absolute
+		top 0
+		right 0
+		left 0
+		bottom 0
+
+		input[type="text"]
+			margin-bottom -1px
+			border-bottom-left-radius 0px
+			border-bottom-right-radius 0px
+
+		input[type="password"]
+			margin-top -1px
+			border-top-left-radius 0px
+			border-top-right-radius 0px
