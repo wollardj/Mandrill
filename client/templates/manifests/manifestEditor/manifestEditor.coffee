@@ -1,8 +1,3 @@
-Template.manifestEditor.created = ->
-	console.log 'manifestEditor has been created'
-
-
-
 Template.manifestEditor.backLinkTarget = ->
 	return Router.url 'manifests'
 

@@ -82,7 +82,6 @@ Template.MandrillEditor.documentBody = ->
 			if answer is yes
 				editor.session.setValue doc.body
 		else
-			console.log hasLocalChanges, doc.body, currentBody
 			editor.session.setValue doc.body
 
 	else if doc? and doc.body?
@@ -154,7 +153,6 @@ Template.MandrillEditor.rendered = ->
 Template.MandrillEditor.created = ->
 	#// Make sure the height of the editor always matches the available
 	#// height when the window is resized.
-	console.log 'MandrillEditor has been created.'
 	$(window).on 'resize', Template.MandrillEditor.resize
 
 
@@ -226,20 +224,3 @@ Template.MandrillEditor.events {
 			target.addClass 'open'
 			target.find('a.dropdown-toggle').focus()
 }
-
-
-
-#/* --- menu building functions --- */
-
-
-Template.MandrillEditor.editorMenu = ->
-	editor = Template.MandrillEditor.ace()
-	Session.get 'aceIsReady'
-	if editor?
-		console.log 'generating the menu'
-		MandrillEditorMenu.prepareMap editor
-		new Handlebars.SafeString(
-			MandrillEditorMenu.menu()
-		)
-	else
-		console.log 'ace is not ready for us yet'

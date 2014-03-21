@@ -10,7 +10,6 @@ class @MandrillEditorCommands
 	@openWinFunc: (url)->
 		->
 			@u = url
-			console.log @u
 			window.open(@u, @u).focus()
 
 	@addToEditor: (editor)->

@@ -1,5 +1,4 @@
 Template.MandrillEditorMenu.menuItems = ->
-	console.log MandrillEditorMenu
 	Session.get 'aceIsReady'
 	editor = Template.MandrillEditor.ace()
 	if editor?
