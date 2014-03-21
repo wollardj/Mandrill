@@ -58,8 +58,6 @@
 				query.$and = if not query.$and then [] else query.$and
 				query.$and.push userQuery
 
-
-		console.log query
 		
 		this.subscribe 'MunkiPkgsinfo', query, opts
 				.wait()
