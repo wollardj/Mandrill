@@ -1,0 +1,85 @@
+.elastic
+	transform scale(0)
+	opacity 0
+
+.elastic-in
+	animation anim-elastic-in 250ms linear
+	transform scale(1)
+	opacity 1
+
+.elastic-out
+	animation anim-elastic-out 250ms linear
+	transform scale(0)
+	opacity 0
+	
+
+
+@keyframes anim-elastic-in
+	0%
+		transform scale(0)
+		opacity 0
+	60%
+		transform scale(1.1)
+		opacity 0.6
+	80%
+		transform scale(0.9)
+		opacity 0.8
+	100%
+		transform scale(1)
+		opacity 1
+
+
+@keyframes anim-elastic-out
+	0%
+		transform scale(1)
+		opacity 1
+	20%
+		transform scale(0.9)
+		opacity 0.8
+	40%
+		transform scale(1.1)
+		opacity 0.6
+	100%
+		transform scale(0)
+		opacity 0
+
+
+
+
+
+/* bubble loader animation */
+/* A comment on browser-specific prefixes "You had ONE JOB, W3." */
+
+.bubble-loader
+	display inline-block
+	margin-top 25px
+	margin-bottom 11px
+
+.bubble-loader div
+	animation bubble 1100ms forwards infinite
+	background #fff
+	border-radius 50%
+	box-shadow 0 0 8px #aaa
+	display inline-block
+	height 10px
+	margin 6px
+	transform scale(0, 0)
+	width 10px
+
+.bubble-loader div:nth-child(2),
+.bubble-loader div:nth-child(4)
+	animation-delay 125ms
+
+.bubble-loader div:nth-child(1)
+.bubble-loader div:nth-child(5)
+	animation-delay 250ms
+
+@keyframes bubble
+	0% {transform scale(0, 0);}
+	12% {transform scale(1.5, 1.5);}
+	23% {transform scale(0.5, 0.5);}
+	34% {transform scale(1.2, 1.2);}
+	45% {transform scale(1, 1);}
+	85% {transform scale(0, 0);}
+
+/* end bubble loader animation */

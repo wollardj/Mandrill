@@ -2,14 +2,13 @@ Session.setDefault 'statusDialogMomentTimer', null
 
 Template.serverStatusDialog._momentInterval = null
 
-Template.serverStatusDialog.isConnected = ->
+Template.serverStatusDialog.watchConnectionStatus = ->
 
 	status = Meteor.status()
 
 	if status? and status.status? and status.status is 'connected'
 		if Template.serverStatusDialog._momentInterval?
 			Meteor.clearInterval Template.serverStatusDialog._momentInterval
-		true
 	else
 		if Template.serverStatusDialog._momentInterval?
 			Meteor.clearInterval Template.serverStatusDialog._momentInterval
@@ -17,7 +16,7 @@ Template.serverStatusDialog.isConnected = ->
 		Template.serverStatusDialog._momentInterval = Meteor.setInterval ->
 			Session.set 'statusDialogMomentTimer', new Date()
 		, 1000
-		false
+	''
 
 
 Template.serverStatusDialog.className = ->
@@ -25,9 +24,10 @@ Template.serverStatusDialog.className = ->
 	dialog = $('#meteor_connection_status_dialog')
 
 	if status? and status.status? and status.status is 'connected'
-		dialog.removeClass('fade-in').addClass('fade-out')
+		if dialog.hasClass('elastic-in') is true
+			dialog.removeClass('elastic-in').addClass('elastic-out')
 	else
-		dialog.removeClass('fade-out').addClass('fade-in')
+		dialog.removeClass('elastic-out').addClass('elastic-in')
 
 	''
 

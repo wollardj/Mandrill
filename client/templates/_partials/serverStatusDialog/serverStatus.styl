@@ -11,47 +11,4 @@ div.mandrill-warning
 	min-height 75px
 	padding 5px
 	z-index 10000
-	transform scale(0)
-	opacity 0
 	box-shadow 5px 10px 14px rgba(0, 0, 0, 0.45)
-
-div.mandrill-warning.fade-in
-	animation fade-in-and-scale 250ms linear
-	transform scale(1)
-	opacity 1
-
-div.mandrill-warning.fade-out
-	animation fade-out-and-scale 250ms linear
-	transform scale(0)
-	opacity 0
-	
-
-
-@keyframes fade-in-and-scale
-	0%
-		transform scale(0)
-		opacity 0
-	60%
-		transform scale(1.1)
-		opacity 0.6
-	80%
-		transform scale(0.9)
-		opacity 0.8
-	100%
-		transform scale(1)
-		opacity 1
-
-
-@keyframes fade-out-and-scale
-	0%
-		transform scale(1)
-		opacity 1
-	20%
-		transform scale(0.9)
-		opacity 0.8
-	40%
-		transform scale(1.1)
-		opacity 0.6
-	100%
-		transform scale(0)
-		opacity 0
