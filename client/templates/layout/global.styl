@@ -112,13 +112,11 @@ p.app-footer
 	taking into account that the navbar will collapse under
 	768px
 */
-@media (min-width 768px)
-	.paging-toolbar.affix ~ table.paging-table
+.paging-toolbar.affix ~ table.paging-table
+	@media screen and (min-width: 768px)
 		margin-top 76px
 
-
-@media (max-width 767px)
-	.paging-toolbar.affix ~ table.paging-table
+	@media screen and (max-width: 767px)	
 		margin-top 146px
 
 /* /"sticky" paging toolbar */
