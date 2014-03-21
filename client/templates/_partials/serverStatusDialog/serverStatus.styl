@@ -1,7 +1,4 @@
-div.mandrill-warning
-	color #8a6d3b
-	background-color rgba(252, 248, 227, 0.95)
-	border solid 2px #faebcc
+.mandrill-dialog
 	border-radius 4px
 	position fixed
 	width 400px
@@ -9,6 +6,17 @@ div.mandrill-warning
 	left 50%
 	margin-left -200px
 	min-height 75px
-	padding 5px
+	padding 10px
 	z-index 10000
 	box-shadow 5px 10px 14px rgba(0, 0, 0, 0.45)
+
+
+	button.close
+		right 0
+		top 0
+
+
+.mandrill-dialog.mandrill-warning
+	color #8a6d3b
+	background-color rgba(252, 248, 227, 0.95)
+	border solid 2px #faebcc

@@ -1,7 +1,7 @@
 <template name="serverStatusDialog">
 	{{watchConnectionStatus}}
 	<div id="meteor_connection_status_dialog"
-		class="mandrill-warning text-center small elastic {{className}}">
+		class="mandrill-dialog mandrill-warning text-center small elastic {{className}}">
 		{{#if title}}<h4>{{title}}</h4>{{/if}}
 		{{body}}
 		{{#if isWaiting}}

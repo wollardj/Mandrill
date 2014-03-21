@@ -21,7 +21,7 @@
 			d = new Date()
 			id = 'mandrill-error_' + d.getTime()
 
-			dom = $('<div id="' + id + '" class="mandrill-error alert ' +
+			dom = $('<div id="' + id + '" class="mandrill-dialog alert ' +
 					'alert-danger alert-dismissable fade in">' +
 					'<button type="button" class="close" ' +
 						'data-dismiss="alert" aria-hidden="true">&times;' +
@@ -33,9 +33,12 @@
 
 			$('body').append dom
 
-			#// auto-dismiss after 10 seconds
+			# auto-dismiss after 10 seconds
 			window.setTimeout ->
-				$('#' + id).alert 'close'
+				$('#' + id).removeClass('elastic-in').addClass('elastic-out')
+				window.setTimeout ->
+					$('#' + id).alert 'close'
+				, 250
 			, 10000
 
 
@@ -44,8 +47,8 @@
 			id = 'mandrill-success_' + d.getTime()
 
 			$('body').append('<div id="' + id +
-				'" class="mandrill-error alert alert-success ' +
-					'alert-dismissable fade in">' +
+				'" class="mandrill-dialog alert alert-success ' +
+					'alert-dismissable elastic elastic-in">' +
 				'<button type="button" class="close" ' +
 					'data-dismiss="alert" aria-hidden="true">' +
 					'&times;' +
@@ -55,9 +58,12 @@
 				'</div>'
 			)
 
-			#// auto-dismiss after 10 seconds
+			# auto-dismiss after 10 seconds
 			window.setTimeout ->
-				$('#' + id).alert 'close'
+				$('#' + id).removeClass('elastic-in').addClass('elastic-out')
+				window.setTimeout ->
+					$('#' + id).alert 'close'
+				, 250
 			, 10000
 	}
 
