@@ -1,0 +1,12 @@
+<template name="serverStatusDialog">
+	{{isConnected}}
+	<div id="meteor_connection_status_dialog"
+		class="mandrill-warning text-center small {{className}}">
+		{{#if title}}<h4>{{title}}</h4>{{/if}}
+		{{body}}
+		{{#if isWaiting}}
+			<br />
+			<a href="#" id="meteorRetryNowButton">Retry Now</a>
+		{{/if}}
+	</div>
+</template>
