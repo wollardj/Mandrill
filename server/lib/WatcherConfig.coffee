@@ -1,0 +1,59 @@
+#
+# Options which when passed to an instance of watchr, define
+# how watchr operates. See https://github.com/bevry/watchr
+# It needs the paths array to be set manually though. Setting
+# them here in this file would require even more calls to
+# Meteor.bindEnvironment when we could just do it in the main
+# fiber.
+#
+@WatcherConfig = {
+	paths: []
+	ignoreHiddenFiles: true
+
+
+	# We're going to wrap all of these calls to Meteor.bindEnvironment
+	# since we expect that they'll likely be called now, and again
+	# after the current fiber has exited.
+	listeners: {
+		log: Meteor.bindEnvironment (logLevel)->
+			if logLevel isnt 'debug'
+				console.log 'a log message occured:', arguments
+		, (e)->
+			throw e
+
+		error: (err)->
+			# This function seems to get null passed to it quite a bit
+			if err?
+				console.error 'an error occured:', arguments
+
+
+		watching: (err, watcherInstance)->
+
+			if err?
+				console.error 'Could not setup watchr for ' +
+					watcherInstance.path, err
+
+			else
+				console.log 'Watching for changes in ' +
+					watcherInstance.path
+
+				# watchr has finished adding its watcher for this path,
+				# so now we can harvest that information and start
+				# putting stuff in the database.
+				WatcherConfig.paths = WatchHandler.watcherPaths watcherInstance
+				for path in WatcherConfig.paths
+					WatchHandler.processFile path
+
+
+		# When a file is updated, created, or deleted, this method
+		# gets called.
+		change: Meteor.bindEnvironment (type, path)->
+			if type isnt 'delete'
+				WatchHandler.processFile path
+
+			else
+				WatchHandler.deleteFile path
+		, (e)->
+			throw e
+	}
+}
