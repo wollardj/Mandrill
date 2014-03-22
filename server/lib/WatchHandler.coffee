@@ -72,79 +72,72 @@ shell = Meteor.require 'shelljs'
 	# }
 	#
 	processFile: Meteor.bindEnvironment (path)->
-		CurrentWatcherPath.withValue path, ->
-			# Skip non-regular files.
-			if shell.test('-f', path) is false
-				return
+		if shell.test('-f', path) is false
+			return
 
-			fs.readFile path, {encoding: 'utf8'},
-				Meteor.bindEnvironment (err, data)->
-					parsedData = null
-					parseError = null
-					urlName = ''
-					basePath = ''
-					mongoDocument = {}
-					path = CurrentWatcherPath.get()
-					repoType = WatchHandler.repoTypeForPath path
+		contents = shell.cat path
+		parsedData = null
+		parseError = null
+		urlName = ''
+		basePath = ''
+		mongoDocument = {}
+		repoType = WatchHandler.repoTypeForPath path
 
 
-					# deal with any errors from fs.readFile()
+		# deal with any errors from fs.readFile()
+		if err?
+			parseError = 'Unable to read file ' + path
+
+		else
+			# Attempt to parse the plist file
+			try
+				parsedData = plist.parse contents
+			catch e
+				parseError = e.toString()
+
+
+		# we'll add a url 'safe'-ish value to be used by the
+		# router for better linking
+		basePath = WatchHandler.repoPath + repoType + '/'
+		urlName = path.replace basePath, ''
+			.replace /\//g, '_'
+
+		mongoDocument = {
+			path: path
+			dom: parsedData
+			raw: contents
+			urlName: urlName
+		}
+
+		if parseError?
+			mongoDocument.err = parseError
+
+
+		# For the uninitiated, 'upsert' does just what it
+		# sounds like it should. If it finds a matching
+		# document or documents, it/they are updated. If not,
+		# the information is inserted as a new document.
+
+		# Inserting a manifest
+		if repoType is 'manifests'
+			MunkiManifests.upsert {path: path}, mongoDocument,
+				(err)->
 					if err?
-						parseError = 'Unable to read file ' + path
+						console.error err
 
-					else
-						# Attempt to parse the plist file
-						try
-							parsedData = plist.parse fs.readFileSync(path)
-						catch e
-							parseError = e.toString()
+		# Inserting a pkgsinfo
+		else if repoType is 'pkgsinfo'
+			MunkiPkgsinfo.upsert {path: path}, mongoDocument,
+				(err)->
+					if err?
+						console.error err
 
-
-					# we'll add a url 'safe'-ish value to be used by the
-					# router for better linking
-					basePath = WatchHandler.repoPath + repoType + '/'
-					urlName = path.replace basePath, ''
-						.replace /\//g, '_'
-
-					mongoDocument = {
-						path: path
-						dom: parsedData
-						raw: data
-						urlName: urlName
-					}
-
-					if parseError?
-						mongoDocument.err = parseError
-
-
-					# For the uninitiated, 'upsert' does just what it
-					# sounds like it should. If it finds a matching
-					# document or documents, it/they are updated. If not,
-					# the information is inserted as a new document.
-
-					# Inserting a manifest
-					if repoType is 'manifests'
-						MunkiManifests.upsert {path: path}, mongoDocument,
-							(err)->
-								if err?
-									console.error err
-
-					# Inserting a pkgsinfo
-					else if repoType is 'pkgsinfo'
-						MunkiPkgsinfo.upsert {path: path}, mongoDocument,
-							(err)->
-								if err?
-									console.error err
-
-					# Inserting a catalog
-					else if repoType is 'catalogs'
-						MunkiCatalogs.upsert {path: path}, mongoDocument,
-							(err)->
-								if err?
-									console.error err
-
-				, (e)->
-					throw e
+		# Inserting a catalog
+		else if repoType is 'catalogs'
+			MunkiCatalogs.upsert {path: path}, mongoDocument,
+				(err)->
+					if err?
+						console.error err
 	, (e)->
 		throw e
 
