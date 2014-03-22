@@ -109,6 +109,10 @@ Template.mandrillSettings.events {
 
 		Meteor.call 'updateWatchr'
 
+		# https://github.com/wollardj/Mandrill/issues/7
+		if settings? and settings.gitIsEnabled is true
+			Meteor.call 'git-init'
+
 
 	'click #makecatalogs': (event)->
 		event.stopPropagation()
