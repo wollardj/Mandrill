@@ -49,45 +49,41 @@ Template.accountsAccess.events {
 	'change input[data-toggle-readonly]': (event)->
 		$tgt = $(event.target)
 		val = $tgt.is(':checked')
-		data = Router.current().data().user
-		existingPatterns = data.mandrill.accessPatterns
+		user = Router.current().data().user
+		existingPatterns = []
+		if user? and user.mandrill? and user.mandrill.accessPatterns?
+			existingPatterns = user.mandrill.accessPatterns
 
-		for doc, key in existingPatterns
-			do (key, doc) ->
-				if doc.pattern is this.pattern
-					existingPatterns[key].readonly = val
+		for own key, doc of existingPatterns
+			if doc.pattern is this.pattern
+				existingPatterns[key].readonly = val
 
-		Meteor.users.update(data._id,{'$unset':
-			{'mandrill.accessPatterns': ''}
-		})
-		Meteor.users.update(data._id, {'$set':
+		Meteor.users.update user._id, {'$set':
 			{'mandrill.accessPatterns': existingPatterns}
-		})
+		}
 
 
 
 	'change input[data-access-pattern]': (event)->
-		$tgt = $(event.target)
-		pattNew = $tgt.val()
-		data = Router.current().data().user
-		existingPatterns = data.mandrill.accessPatterns
+		input = $(event.target)
+		pattNew = input.val()
+		user = Router.current().data().user
+		existingPatterns = []
+		if user? and user.mandrill? and user.mandrill.accessPatterns?
+			existingPatterns = user.mandrill.accessPatterns
 
-		while pattNew[0] is '/' and pattNew.length > 0
+		while pattNew.indexOf('/') is 0 and pattNew.length > 0
 			pattNew = pattNew.substring 1
 
-		$tgt.val pattNew
+		input.val pattNew
 
-		for doc, key in existingPatterns
-			do (key, doc) ->
-				if doc.pattern is this.pattern
-					existingPatterns[key] = pattNew
+		for own key, doc of existingPatterns
+			if doc.pattern is this.pattern
+				existingPatterns[key].pattern = pattNew
 
-		Meteor.users.update(data._id, {'$unset':
-			{'mandrill.accessPatterns': ''}
-		})
-		Meteor.users.update(data._id, {'$set':
+		Meteor.users.update user._id, {'$set':
 			{'mandrill.accessPatterns': existingPatterns}
-		})
+		}
 
 
 
@@ -95,9 +91,9 @@ Template.accountsAccess.events {
 		event.stopPropagation()
 		event.preventDefault()
 
-		data = Router.current().data().user
+		user = Router.current().data().user
 
-		Meteor.users.update data._id, {
+		Meteor.users.update user._id, {
 			'$pull': {
 				'mandrill.accessPatterns': {
 					pattern: this.pattern,

@@ -23,30 +23,27 @@ Template.me.events {
 
 
 
-	#/// ---- password change form ---- ///
+	# ---- password change form ----
 	'submit #changePasswordForm': (event)->
 		event.stopPropagation()
 		event.preventDefault()
-		if Session.get 'changePasswordFormIsReady' is true
+
+		if Session.get('changePasswordFormIsReady') is true
 			Session.set 'changingPassword', true
 
 			currentField    = $('#currentPassword')
 			newField        = $('#newPassword')
 			verifyField     = $('#verifyPassword')
 
-			Accounts.changePassword(
-				currentField.val()
-				newField.val()
-				(err)->
-					Session.set 'changingPassword', false
-					if err?
-						Mandrill.show.error err
-					else
-						Mandrill.show.success(
-							'',
-							'Password Successfully Changed!'
-						)
-			)
+			Accounts.changePassword currentField.val(), newField.val(), (err)->
+				Session.set 'changingPassword', false
+				if err?
+					Mandrill.show.error err
+				else
+					Mandrill.show.success(
+						'',
+						'Password Successfully Changed!'
+					)
 
 			currentField.val ''
 			newField.val ''
@@ -61,20 +58,19 @@ Template.me.events {
 		currentIsEmpty = currentField.val() is ''
 		newIsEmpty     = newField.val() is ''
 		passwordsMatch  = newField.val() is verifyField.val()
-		formIsReady    = newIsEmpty is false and
-								currentIsEmpty is false and
-								passwordsMatch is true
-
-		Session.set 'changePasswordFormIsReady', formIsReady
-
+		
+		Session.set 'changePasswordFormIsReady', newIsEmpty is false and
+			currentIsEmpty is false and
+			passwordsMatch is true
 
 
 
 
-	#/// ---- Name change form ---- ///
+
+	# ---- Name change form ----
 
 
-	'change #changeFullName': (event)->
+	'keyup #changeFullName': (event)->
 		Meteor.users.update(
 			{_id: Meteor.userId()},
 			{'$set': {

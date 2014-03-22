@@ -21,11 +21,13 @@ class @MandrillEditorCommands
 			{
 				name: 'save'
 				bindKey: {win: 'Ctrl-S', mac: 'Command-S'}
+				disabledWhenReadOnly: true
 				exec: (editor)->
 					Template.MandrillEditor.saveHook editor.getValue()
 			}
 			{
 				name: 'remove'
+				disabledWhenReadOnly: true
 				exec: (editor)->
 					answer = confirm 'Really delete this file?'
 					if answer is yes
@@ -67,12 +69,14 @@ class @MandrillEditorCommands
 			}
 			{
 				name: 'htmlEncode'
+				disabledWhenReadOnly: true
 				bindKey: {win: 'Crtl-Shift-,', mac: 'Command-Shift-,'}
 				exec: (editor)->
 					Mandrill.util.ace.selection.htmlEncode editor
 			}
 			{
 				name: 'htmlDecode'
+				disabledWhenReadOnly: true
 				bindKey: {win: 'Crtl-Shift-.', mac: 'Command-Shift-.'}
 				exec: (editor)->
 					Mandrill.util.ace.selection.htmlDecodeeditor

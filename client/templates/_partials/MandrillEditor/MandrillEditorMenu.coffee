@@ -19,6 +19,32 @@ Template.MandrillEditorMenu.cmdKeyBinding = ->
 		''
 
 
+Template.MandrillEditorMenu.isReadOnly = ->
+	doc = Session.get 'activeDocument'
+	uid = Meteor.userId()
+
+	if uid? and doc? and doc.path?	
+		not Mandrill.user.canModifyPath(uid, doc.path, false)
+	else
+		true
+
+
+Template.MandrillEditorMenu.disabledWhenReadOnly = ->
+	editor = Template.MandrillEditor.ace()
+	doc = Session.get 'activeDocument'
+	uid = Meteor.userId()
+	readOnly = true
+
+
+	if uid? and doc? and doc.path?
+		readOnly = not Mandrill.user.canModifyPath(uid, doc.path, false)
+
+
+	if readOnly is true and this.command.disabledWhenReadOnly is true
+		'disabled'
+	else
+		''
+
 
 
 
@@ -38,7 +64,7 @@ class MandrillEditorMenu
 	# a given ace command.
 	@_htmlKeyBinding: (command)->
 		if not @_editor? or not @_editor.commands?
-			return ''
+			@_editor = Template.MandrillEditor.ace()
 
 		platform = @_editor.commands.platform
 		bindKey = if command? and command.bindKey? then command.bindKey

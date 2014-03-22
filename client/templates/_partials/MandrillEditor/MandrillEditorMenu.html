@@ -13,7 +13,7 @@
 				<li class="divider"></li>
 				{{/unless}}
 				{{#if command}}
-				<li>
+				<li class="{{disabledWhenReadOnly}}">
 					<a	href="#"
 						class="MandrillEditor-menu-command"
 						data-menu-command="{{this.command.name}}">
@@ -29,5 +29,10 @@
 			</ul>
 		</li>
 		{{/each}}
+		{{#if isReadOnly}}
+		<li>
+			<span class="navbar-text label label-danger">Read Only</span>
+		</li>
+		{{/if}}
 	</ul>
 </template>

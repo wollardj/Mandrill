@@ -73,7 +73,14 @@ Template.MandrillEditor.documentBody = ->
 	editor = Template.MandrillEditor.ace()
 	hasLocalChanges = if editor? then editor.session.getUndoManager().dirtyCounter > 0 else false
 	currentBody = if editor? then editor.session.getValue() else ''
-	
+	readOnly = true
+
+	if doc? and doc.path?
+		readOnly = not Mandrill.user.canModifyPath(Meteor.userId(), doc.path, false)
+
+	if editor?
+		editor.setReadOnly readOnly
+
 	if editor? and doc? and doc.body?
 		if hasLocalChanges is false
 			editor.session.setValue doc.body

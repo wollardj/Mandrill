@@ -22,7 +22,7 @@
 			id = 'mandrill-error_' + d.getTime()
 
 			dom = $('<div id="' + id + '" class="mandrill-dialog alert ' +
-					'alert-danger alert-dismissable fade in">' +
+					'alert-danger alert-dismissable elastic elastic-in">' +
 					'<button type="button" class="close" ' +
 						'data-dismiss="alert" aria-hidden="true">&times;' +
 					'</button>' +
@@ -45,6 +45,9 @@
 		success: (title, message)->
 			d = new Date()
 			id = 'mandrill-success_' + d.getTime()
+			realTitle = '&nbsp;'
+			if title? and title isnt ''
+				realTitle = title
 
 			$('body').append('<div id="' + id +
 				'" class="mandrill-dialog alert alert-success ' +
@@ -53,7 +56,7 @@
 					'data-dismiss="alert" aria-hidden="true">' +
 					'&times;' +
 				'</button>' +
-				(if title isnt '' then '<h4>' + title + '</h4>') +
+				'<h4>' + realTitle + '</h4>' +
 				'<p>' + message + '</p>' +
 				'</div>'
 			)
@@ -79,7 +82,7 @@
 		escapeShellArg: (arg)->
 			ret = ''
 
-			#// make sure arg is a string
+			# make sure arg is a string
 			arg += ''
 			ret = arg.replace(/[^\\]"/g, (m)->
 				m.slice(0, 1) + '\\"'
@@ -100,13 +103,13 @@
 
 
 		htmlSpecialChars: (target, quoteStyle, charset, doubleEncode)->
-			#// From: http://phpjs.org/functions
+			# From: http://phpjs.org/functions
 
 			optTemp = 0
 			noquotes = false
 			quoteStyle = quoteStyle or 2
 
-			#// Put this first to avoid double-encoding
+			# Put this first to avoid double-encoding
 			if doubleEncode isnt false
 				target = target.toString().replace /&/g, '&amp;'
 
@@ -126,12 +129,12 @@
 			if quoteStyle is 0
 				noquotes = true
 
-			#// Allow for a single target or an array of target flags
+			# Allow for a single target or an array of target flags
 			if typeof quoteStyle isnt 'number'
 				quoteStyle = [].concat quoteStyle
 				for own key, value of quoteStyle
-					#// Resolve target input to bitwise e.g. 'ENT_IGNORE'
-					#// becomes 4
+					# Resolve target input to bitwise e.g. 'ENT_IGNORE'
+					# becomes 4
 					if OPTS[value] is 0
 						noquotes = true
 					else if OPTS[value]?
@@ -148,7 +151,7 @@
 
 
 		htmlSpecialCharsDecode: (string, quoteStyle)->
-			#// From: http://phpjs.org/functions
+			# From: http://phpjs.org/functions
 			optTemp = 0
 			i = 0
 			noquotes = false
@@ -169,12 +172,12 @@
 			if quoteStyle is 0
 				noquotes = true
 
-			#// Allow for a single string or an array of string flags
+			# Allow for a single string or an array of string flags
 			if typeof quoteStyle isnt 'number'
 				quoteStyle = [].concat quoteStyle
 				for own key, value of quoteStyle
-					#// Resolve string input to bitwise e.g.
-					#// 'PATHINFO_EXTENSION' becomes 4
+					# Resolve string input to bitwise e.g.
+					# 'PATHINFO_EXTENSION' becomes 4
 					if OPTS[value] is 0
 						noquotes = true
 					else if OPTS[value]
@@ -182,14 +185,14 @@
 				quoteStyle = optTemp
 
 			if quoteStyle & OPTS.ENT_HTML_QUOTE_SINGLE
-				#// PHP doesn't currently escape if more than one 0,
-				#// but it should
+				# PHP doesn't currently escape if more than one 0,
+				# but it should
 				string = string.replace /&#0*39;/g, '\''
 
 			if not noquotes
 				string = string.replace /&quot;/g, '"'
 
-			#// Put this in last place to avoid escape being double-decoded
+			# Put this in last place to avoid escape being double-decoded
 			string.replace /&amp;/g, '&'
 
 
@@ -202,8 +205,8 @@
 					)
 					editor.getSession().getDocument()
 						.replace(range, decoded)
-					#// This is kind of hacky - gets the editor to keep
-					#// the selected text selected after mutation
+					# This is kind of hacky - gets the editor to keep
+					# the selected text selected after mutation
 					editor.find decoded
 
 
@@ -214,8 +217,8 @@
 					)
 					editor.getSession().getDocument()
 						.replace(range, encoded)
-					#// This is kind of hacky - gets the editor to keep
-					#// the selected text selected after mutation
+					# This is kind of hacky - gets the editor to keep
+					# the selected text selected after mutation
 					editor.find(encoded)
 			}
 		}
@@ -225,9 +228,9 @@
 
 	user: {
 
-		#// If the user is banned, this method will log that user out and
-		#// return true. If not, it will simply return false, as in
-		#// 'not banned'
+		# If the user is banned, this method will log that user out and
+		# return true. If not, it will simply return false, as in
+		# 'not banned'
 		isBanned: (userObject)->
 			if userObject? and userObject.mandrill? and userObject.mandrill.isBanned is true
 				Meteor.users.update(
@@ -240,8 +243,8 @@
 
 
 
-		#// makes sure the logged in user is an admin, _and_ that the
-		#// admin isn't banned.
+		# makes sure the logged in user is an admin, _and_ that the
+		# admin isn't banned.
 		isAdmin: (userId)->
 			if userId?
 				user = Meteor.users.findOne(userId)
@@ -251,8 +254,8 @@
 				false
 
 
-		#// makes sure there is a logged in user, _and_ that the user
-		#// isn't banned.
+		# makes sure there is a logged in user, _and_ that the user
+		# isn't banned.
 		isValid: (userId)->
 			if userId?
 				user = Meteor.users.findOne(userId)
@@ -261,11 +264,11 @@
 				false
 
 
-		#// evaluates the accessPatterns for a given user and returns a
-		#// mongo filter. This uses the 'path' attribute for the filter
-		#// field. If query is passed, it is expected to be a normal
-		#// mongo query which will be applied to, and returned with, the
-		#// filter query from this function
+		# evaluates the accessPatterns for a given user and returns a
+		# mongo filter. This uses the 'path' attribute for the filter
+		# field. If query is passed, it is expected to be a normal
+		# mongo query which will be applied to, and returned with, the
+		# filter query from this function
 		accessPatternsFilter: (userId, query)->
 			user = Meteor.users.findOne userId, {fields: {
 					'mandrill.isAdmin': 1,
@@ -282,15 +285,15 @@
 				repoPath = settings.munkiRepoPath
 			patterns = user.mandrill.accessPatterns or []
 			
-			if user.mandrill.isAdmin is true
-				#// admin means all access
+			if Mandrill.user.isAdmin(userId) is true
+				# admin means all access
 				if query?
 					return query
 				else
 					return {}
 
 			if patterns.length is 0
-				#// no patterns means no access
+				# no patterns means no access
 				return {'path': false}
 
 			for patt in patterns
@@ -305,28 +308,32 @@
 
 
 		canModifyPath: (userId, aPath, throwError)->
-			user = Meteor.users.findOne(userId, {fields: {
+			user = Meteor.users.findOne userId, {fields: {
 				'mandrill.isAdmin': 1,
 				'mandrill.accessPatterns': 1
-			}})
+			}}
 			settings = MandrillSettings.findOne()
-			repoPath = if settings? then settings.munkiRepoPath else '/'
+			repoPath = '/'
+			if settings? and settings.munkiRepoPath?
+				repoPath = settings.munkiRepoPath
 
-			#// No user = no access
-			if not user or not userId
+			# No user = no access
+			if not user? or not userId?
 				if throwError is true
-					throw new Meteor.Error(403, 'You can\'t do that without logging in.')
+					throw new Meteor.Error 403,
+						'You can\'t do that without logging in.'
 				else
 					return false
 
-			#// admin = all access
-			if user.mandrill.isAdmin is true
+			# admin = all access
+			if Mandrill.user.isAdmin(userId) is true
 				return true
 
-			#// we've got a non-admin user, so we'll need to look at their
-			#// access patterns.
-			patterns = user.mandrill.accessPatterns or []
-			repoPath = if repoPath? then repoPath else '/'
+			# we've got a non-admin user, so we'll need to look at their
+			# access patterns.
+			patterns = []
+			if user? and user.mandrill? and user.mandrill.accessPatterns?
+				patterns = user.mandrill.accessPatterns
 
 			for patt in patterns
 				expr = '^' + repoPath + patt.pattern
@@ -334,7 +341,8 @@
 					return true
 
 			if throwError is true
-				throw new Meteor.Error(403, 'Sorry, that path is read-only for your account.')
+				throw new Meteor.Error 403,
+					'Sorry, that path is read-only for your account.'
 			return false
 	}
 }

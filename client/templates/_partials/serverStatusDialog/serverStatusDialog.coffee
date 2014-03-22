@@ -58,7 +58,7 @@ Template.serverStatusDialog.body = ->
 	now = Session.get 'statusDialogMomentTimer'
 	if status? and status.status?
 		if status.status is 'connecting'
-			'...'
+			new Handlebars.SafeString '<span class="glyphicon glyphicon-time"></span>'
 		else if status.status is 'offline'
 			'offline'
 		else if status.status is 'waiting'
