@@ -142,6 +142,12 @@ Meteor.methods {
 				
 				MunkiManifests.remove {path: pkgsinfoPath}
 
+			# The file probably isn't under revision control
+			else if gitResults.code is 128
+				shell.rm pkgsinfoPath
+				if shell.error()?
+					throw new Meteor.Error 500, shell.error()
+				MunkiPkgsinfo.remove {path: pkgsinfoPath}
 			else
 				throw new Meteor.Error gitResults.code, gitResults.output
 

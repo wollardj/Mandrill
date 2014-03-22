@@ -69,6 +69,12 @@ Meteor.methods {
 					relativePath + '"')
 				MunkiManifests.remove {path: manifestPath}
 
+			# the file probably isn't under revision control
+			else if gitResults.code is 128
+				shell.rm manifestPath
+				if shell.error()?
+					throw new Meteor.Error 500, shell.error()
+				MunkiManifests.remove {path: manifestPath}
 			else
 				throw new Meteor.Error gitResults.code, gitResults.output
 
