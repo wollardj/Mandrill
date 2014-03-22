@@ -29,8 +29,22 @@ Template.MandrillEditorMenu.isReadOnly = ->
 		true
 
 
+Template.MandrillEditorMenu.hideWhenReadOnly = ->
+	doc = Session.get 'activeDocument'
+	uid = Meteor.userId()
+	readOnly = true
+
+	if uid? and doc? and doc.path?
+		readOnly = not Mandrill.user.canModifyPath(uid, doc.path, false)
+
+
+	if readOnly is true and this.hideWhenReadOnly is true
+		true
+	else
+		false
+
+
 Template.MandrillEditorMenu.disabledWhenReadOnly = ->
-	editor = Template.MandrillEditor.ace()
 	doc = Session.get 'activeDocument'
 	uid = Meteor.userId()
 	readOnly = true
@@ -133,6 +147,7 @@ class MandrillEditorMenu
 				}
 				{
 					title: 'Edit'
+					hideWhenReadOnly: true
 					submenus: [
 						{title: 'Undo', command: c.undo}
 						{title: 'Redo', command: c.redo}
@@ -164,6 +179,7 @@ class MandrillEditorMenu
 				}
 				{
 					title: 'Selection'
+					hideWhenReadOnly: true
 					submenus: [
 						{title: 'Encode', command: c.htmlEncode}
 						{title: 'Decode', command: c.htmlDecode}
