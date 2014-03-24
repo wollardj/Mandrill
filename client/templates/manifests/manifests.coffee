@@ -84,17 +84,18 @@ Template.manifests.events {
 		
 		if settings.munkiRepoPath?
 			Meteor.call(
-				'createManifest',
-				settings.munkiRepoPath + 'manifests/' +
-					$('#manifestName').val(),
+				'createManifest'
+				settings.munkiRepoPath + 'manifests/' + $('#manifestName').val()
 				(err, data)->
 					if err?
 						Mandrill.show.error err
 					else
+						$('#newManifestForm').addClass 'newManifestFormClosed'
+						$('#manifestName').blur()
 						Router.go(
-							'manifests',
-							{},
-							{query: {q: data.urlName}}
+							'manifests'
+							{urlName: data.urlName}
+							
 						)
 			)
 		else

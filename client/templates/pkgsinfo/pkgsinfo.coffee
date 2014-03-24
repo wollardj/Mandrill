@@ -155,18 +155,15 @@ Template.pkgsinfo.events {
 		
 		if settings? and settings.munkiRepoPath?
 			Meteor.call(
-				'createPkginfo',
-				settings.munkiRepoPath + 'pkgsinfo/' +
-					$('#pkginfoName').val(),
+				'createPkginfo'
+				settings.munkiRepoPath + 'pkgsinfo/' + $('#pkginfoName').val()
 				(err, data)->
 					if err?
 						Mandrill.show.error err
 					else
-						Router.go(
-							'pkgsinfo',
-							{},
-							{query: {q: data.urlName}}
-						)
+						$('#newPkginfoForm').addClass 'newPkginfoFormClosed'
+						$('#pkginfoName').blur()
+						Router.go 'pkgsinfo', {urlName: data.urlName}
 			)
 		else
 			Mandrill.show.error(new Meteor.Error(500,
