@@ -23,35 +23,25 @@ Meteor.publish 'MandrillSettings', ->
 		[]
 
 
-Meteor.publish 'MunkiManifests', (query, opts, tryRegexp)->
+Meteor.publish 'MunkiManifests', (query, opts)->
 
-	if query? amd tryRegexp is true
-		try
-			queryObj = new RegExp query, 'i'
-		catch e
-			queryObj = query
-
-		query = {'$or': [
-			{raw: queryObj},
-			{urlName: queryObj}
-		]}
-	
 	filter = Mandrill.user.accessPatternsFilter this.userId, query
+	results = MunkiManifests.find filter, opts
 	PaginatedQueryStats.upsert {}, {
 		total: MunkiManifests.find(filter, opts).count()
 	}
-	
-	MunkiManifests.find filter, opts
+	results
 
 
 
 Meteor.publish 'MunkiPkgsinfo', (query, opts)->
 
 	filter = Mandrill.user.accessPatternsFilter this.userId, query
+	results = MunkiPkgsinfo.find filter, opts
 	PaginatedQueryStats.upsert {}, {
 		total: MunkiPkgsinfo.find(filter, opts).count()
 	}
-	MunkiPkgsinfo.find filter, opts
+	results
 
 
 Meteor.publish 'MunkiCatalogs', ->

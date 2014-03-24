@@ -7,9 +7,16 @@
 		perPage = 25
 		useRegexp = true
 		opts = {
-			sort: {err: -1, path: 1},
-			limit: perPage,
-			fields: {path: 1, err: 1, urlName: 1}
+			sort: {
+				err: -1
+				path: 1
+			}
+			limit: perPage
+			fields: {
+				path: 1
+				err: 1
+				urlName: 1
+			}
 		}
 
 
@@ -23,12 +30,24 @@
 			useRegexp = false
 			this.template = 'manifestEditor'
 		else
-			query = this.params.q
-		
-		if this.params.p?
-			opts.skip = this.params.p * perPage
 
-		this.subscribe 'MunkiManifests', query, opts, useRegexp
+			if this.params.p?
+				opts.skip = this.params.p * perPage
+
+			if this.params.q?
+				query.$or = []
+				try
+					new RegExp(this.params.q)
+					re = {'$regex': this.params.q, '$options': 'i'}
+					query.$or.push {raw: re}
+					query.$or.push {urlName: re}
+				catch e
+					query.$or.push {raw: this.params.q}
+					query.$or.push {urlName: this.params.q}
+
+
+
+		this.subscribe 'MunkiManifests', query, opts
 			.wait()
 
 		if not this.params.urlName?
