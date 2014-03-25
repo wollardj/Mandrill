@@ -30,7 +30,7 @@ Meteor.methods {
 			# strip out any keys that start with "_"
 			# (example: pkginfo _metadata)
 			for own key, val of pkginfo.dom
-				if key.indexOf('_') is 1
+				if key.indexOf('_') is 0
 					delete pkginfo.dom[key]
 
 			# simple sanity checking
