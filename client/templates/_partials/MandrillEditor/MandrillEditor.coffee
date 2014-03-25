@@ -49,9 +49,9 @@ Template.MandrillEditor.setDocument = (doc) ->
 #// Override to set the title of the document being edited.
 Template.MandrillEditor.documentTitle = ->
 	doc = Session.get 'activeDocument'
-	settings = MandrillSettings.findOne()
-	if settings? and settings.munkiRepoPath? and doc? and doc.path
-		doc.path.replace(settings.munkiRepoPath, '')
+	repoPath = MandrillSettings.get 'munkiRepoPath'
+	if repoPath? and doc? and doc.path
+		doc.path.replace repoPath, ''
 	else
 		'??'
 

@@ -274,15 +274,13 @@
 					'mandrill.isAdmin': 1,
 					'mandrill.accessPatterns': 1
 				}}
-			settings = MandrillSettings.findOne()
+			repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+			
 			filter = {'$or':[]}
 
 			if not user or not userId
 				return {'path': false}
 
-			repoPath = "/"
-			if settings? and settings.munkiRepoPath?
-				repoPath = settings.munkiRepoPath
 			patterns = user.mandrill.accessPatterns or []
 			
 			if Mandrill.user.isAdmin(userId) is true
@@ -312,11 +310,8 @@
 				'mandrill.isAdmin': 1,
 				'mandrill.accessPatterns': 1
 			}}
-			settings = MandrillSettings.findOne()
-			repoPath = '/'
-			if settings? and settings.munkiRepoPath?
-				repoPath = settings.munkiRepoPath
-
+			repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+			
 			# No user = no access
 			if not user? or not userId?
 				if throwError is true

@@ -97,8 +97,7 @@ Template.appSidebar.catalogsErrorsCount = ->
 
 
 Template.appSidebar.makeCatalogsIsEnabled = ->
-	settings = MandrillSettings.findOne()
-	settings? and settings.makeCatalogsIsEnabled is true
+	MandrillSettings.get 'makeCatalogsIsEnabled', false
 
 
 
@@ -117,8 +116,8 @@ Template.appSidebar.runningMakeCatalogs = ->
 
 
 Template.appSidebar.makecatalogsCommand = ->
-	settings = MandrillSettings.findOne()
-	if settings? and settings.makeCatalogsSanityIsDisabled is true
+	insane = MandrillSettings.get 'makeCatalogsSanityIsDisabled', false
+	if insane is true
 		'makecatalogs -f'
 	else
 		'makecatalogs'
@@ -141,4 +140,12 @@ Template.appSidebar.events {
 			Session.set 'runningMakeCatalogs', false
 			if err?
 				Mandrill.show.error(err)
+			else
+				Mandrill.show.success 'Processed ' + data.logs.length + ' files',
+					' Found ' + data.errors.length + ' warnings or errors.' +
+					' Open your browser console to view the output.'
+				for log in data.logs
+					console.log log
+				for error in data.errors
+					console.warn error
 }

@@ -15,11 +15,8 @@ class @GitBroker
 
 
 	@relativePathForFile: Meteor.bindEnvironment (aFile)->
-		settings = MandrillSettings.findOne()
-		if settings? and settings.munkiRepoPath?
-			aFile.replace settings.munkiRepoPath, ''
-		else
-			aFile
+		repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+		aFile.replace repoPath, ''
 	, (e)->
 		throw e
 
@@ -39,8 +36,7 @@ class @GitBroker
 
 
 	@gitIsEnabled: Meteor.bindEnvironment ->
-		settings = MandrillSettings.findOne()
-		settings? and settings.gitIsEnabled? and settings.gitIsEnabled is true
+		MandrillSettings.get 'gitIsEnabled', false
 	, (e)->
 		throw e
 

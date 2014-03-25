@@ -287,8 +287,8 @@ class MandrillEditorMenu
 
 		# If git is enabled, add the File->History menu option
 		if @_map[0].submenus[0].title isnt 'Git Logs'
-			settings = MandrillSettings.findOne()
-			if settings? and settings.gitIsEnabled is true
+			gitIsEnabled = MandrillSettings.get 'gitIsEnabled', false
+			if gitIsEnabled is true
 				@_map[0].submenus.splice 0, 0, {}
 				@_map[0].submenus.splice 0, 0, {
 					title: 'Git Logs'

@@ -13,11 +13,8 @@ shell = Meteor.require 'shelljs'
 	# Returns one of 'catalog', 'manifest', 'pkgsinfo', pr 'unknown'
 	# depending on which subdirectory within the repo the file is found.
 	repoTypeForPath: Meteor.bindEnvironment (aPath)->
-		settings = MandrillSettings.findOne()
-		repo = ''
-		if settings? and settings.munkiRepoPath?
-			repo = settings.munkiRepoPath
-		
+		repo = MandrillSettings.get 'munkiRepoPath', ''
+				
 		if repo isnt ''
 			WatchHandler.repoPath = repo
 

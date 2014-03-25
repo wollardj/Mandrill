@@ -17,7 +17,7 @@ Meteor.publish 'Paths', ->
 
 
 Meteor.publish 'MandrillSettings', ->
-	if Mandrill.user.isValid(this.userId)
+	if Mandrill.user.isValid(this.userId) is true
 		MandrillSettings.find()
 	else
 		[]

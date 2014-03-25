@@ -25,18 +25,14 @@ Template.manifests.rendered = ->
 
 
 Template.manifests.basePath = ->
-	settings = MandrillSettings.findOne()
-	if settings? and settings.munkiRepoPath?
-		settings.munkiRepoPath
-	else
-		'/'
+	MandrillSettings.get 'munkiRepoPath', '/'
 
 
 
 Template.manifests.relativePath = ->
-	settings = MandrillSettings.findOne()
-	if settings? and settings.munkiRepoPath?
-		this.path.replace settings.munkiRepoPath + 'manifests/', ''
+	repoPath = MandrillSettings.get 'munkiRepoPath'
+	if repoPath?
+		this.path.replace repoPath + 'manifests/', ''
 	else
 		this.path
 
@@ -80,12 +76,12 @@ Template.manifests.events {
 		event.stopPropagation()
 		event.preventDefault()
 
-		settings = MandrillSettings.findOne()
+		repoPath = MandrillSettings.get 'munkiRepoPath'
 		
-		if settings.munkiRepoPath?
+		if repoPath?
 			Meteor.call(
 				'createManifest'
-				settings.munkiRepoPath + 'manifests/' + $('#manifestName').val()
+				repoPath + 'manifests/' + $('#manifestName').val()
 				(err, data)->
 					if err?
 						Mandrill.show.error err

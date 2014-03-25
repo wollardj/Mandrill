@@ -29,23 +29,19 @@ Template.pkgsinfo.rendered = ->
 
 
 Template.pkgsinfo.relativePath = ->
-	settings = MandrillSettings.findOne()
-	if not settings.munkiRepoPath and this.path?
+	repoPath = MandrillSettings.get 'munkiRepoPath'
+	if not repoPath and this.path?
 		this.path
 	
 	else if this.path?
-		this.path.replace settings.munkiRepoPath + 'pkgsinfo/', ''
+		this.path.replace repoPath + 'pkgsinfo/', ''
 	else
 		'??'
 
 
 
 Template.pkgsinfo.basePath = ->
-	settings = MandrillSettings.findOne()
-	if settings? and settings.munkiRepoPath?
-		settings.munkiRepoPath
-	else
-		'/'
+	MandrillSettings.get 'munkiRepoPath', '/'
 
 
 
@@ -151,12 +147,12 @@ Template.pkgsinfo.events {
 		event.stopPropagation()
 		event.preventDefault()
 
-		settings = MandrillSettings.findOne()
+		repoPath = MandrillSettings.get 'munkiRepoPath'
 		
-		if settings? and settings.munkiRepoPath?
+		if repoPath?
 			Meteor.call(
 				'createPkginfo'
-				settings.munkiRepoPath + 'pkgsinfo/' + $('#pkginfoName').val()
+				repoPath + 'pkgsinfo/' + $('#pkginfoName').val()
 				(err, data)->
 					if err?
 						Mandrill.show.error err

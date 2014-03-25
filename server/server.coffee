@@ -63,9 +63,10 @@ Meteor.startup ->
 
 
 	# Setup some default settings
-	if MandrillSettings.find().count() is 0
-		MandrillSettings.insert {
-			'munkiRepoPath': '/Users/Shared/munki_repo/'
-			'gitIsEnabled': false
-			'gitBinaryPath': '/usr/bin/git'
-		}
+	if not MandrillSettings.get('munkiRepoPath')?
+		MandrillSettings.set 'munkiRepoPath', '/Users/Shared/munki_repo/'
+	if not MandrillSettings.get('gitIsEnabled')?
+		MandrillSettings.set 'gitIsEnabled', false
+	if not MandrillSettings.get('gitBinaryPath')?
+		MandrillSettings.get 'gitBinaryPath', '/usr/bin/git'
+	

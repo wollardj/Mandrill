@@ -3,11 +3,7 @@ Template.accountsAccess.rendered = ->
 
 
 Template.accountsAccess.munkiRepoPath = ->
-	settings = MandrillSettings.findOne()
-
-	if settings? and settings.munkiRepoPath?
-		settings.munkiRepoPath
-	else ''
+	MandrillSettings.get 'munkiRepoPath', ''
 
 
 Template.accountsAccess.readOnlyIsChecked = ->

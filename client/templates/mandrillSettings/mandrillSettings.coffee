@@ -37,12 +37,8 @@ Template.mandrillSettings.events {
 		event.stopPropagation()
 		event.preventDefault()
 
-		settings = MandrillSettings.findOne()
 		value = $('#gitIsEnabled').is ':checked'
-
-		MandrillSettings.update {_id: settings._id}, {
-			'$set': {'gitIsEnabled': value}
-		}
+		MandrillSettings.set 'gitIsEnabled', value
 
 		if value is true
 			#// initialize the repo if needed.
@@ -53,22 +49,15 @@ Template.mandrillSettings.events {
 		event.stopPropagation()
 		event.preventDefault()
 
-		settings = MandrillSettings.findOne()
+		MandrillSettings.set 'gitBinaryPath', $('#gitBinaryPath').val()
 
-		MandrillSettings.update {_id: settings._id}, {
-			'$set': {'gitBinaryPath': $('#gitBinaryPath').val()}
-		}
 
 	'change #makeCatalogsIsEnabled': (event)->
 		event.stopPropagation()
 		event.preventDefault()
 
-		settings = MandrillSettings.findOne()
 		value = $('#makeCatalogsIsEnabled').is ':checked'
-
-		MandrillSettings.update {_id: settings._id}, {
-			'$set': {'makeCatalogsIsEnabled': value}
-		}
+		MandrillSettings.set 'makeCatalogsIsEnabled', value
 
 		if value is true
 			#// initialize the repo if needed.
@@ -79,12 +68,8 @@ Template.mandrillSettings.events {
 		event.stopPropagation()
 		event.preventDefault()
 
-		settings = MandrillSettings.findOne()
 		value = $('#makeCatalogsSanityIsDisabled').is ':checked'
-
-		MandrillSettings.update {_id: settings._id}, {
-			'$set': {'makeCatalogsSanityIsDisabled': value}
-		}
+		MandrillSettings.set 'makeCatalogsSanityIsDisabled', value
 
 		if value is true
 			#// initialize the repo if needed.
@@ -95,7 +80,6 @@ Template.mandrillSettings.events {
 		event.stopPropagation()
 		event.preventDefault()
 
-		settings = MandrillSettings.findOne()
 		value = $('#munkiRepoPath').val()
 
 		#// Make sure the path has a trailing '/'
@@ -103,14 +87,12 @@ Template.mandrillSettings.events {
 			value += '/'
 			$('#munkiRepoPath').val value
 
-		MandrillSettings.update {_id: settings._id}, {
-			'$set': {'munkiRepoPath': value}
-		}
+		MandrillSettings.set 'munkiRepoPath', value
 
 		Meteor.call 'updateWatchr'
 
 		# https://github.com/wollardj/Mandrill/issues/7
-		if settings? and settings.gitIsEnabled is true
+		if MandrillSettings.get('gitIsEnabled') is true
 			Meteor.call 'git-init'
 
 
@@ -122,6 +104,14 @@ Template.mandrillSettings.events {
 			Session.set 'runningMakeCatalogs', false
 			if err?
 				Mandrill.show.error err
+			else
+				Mandrill.show.success 'Processed ' + data.logs.length + ' files',
+					' Found ' + data.errors.length + ' warnings or errors.' +
+					' Open your browser console to view the output.'
+				for log in data.logs
+					console.log log
+				for error in data.errors
+					console.warn error
 
 
 	'click #rebuildCaches': (event)->

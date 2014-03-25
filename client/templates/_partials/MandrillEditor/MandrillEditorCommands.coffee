@@ -38,8 +38,8 @@ class @MandrillEditorCommands
 				name: 'gitCommitLogs'
 				bindKey: {win: 'Ctrl-I', mac: 'Command-I'}
 				exec: (editor)->
-					settings = MandrillSettings.findOne()
-					if settings? and settings.gitIsEnabled is false
+					gitIsEnabled = MandrillSettings.get 'gitIsEnabled', false
+					if gitIsEnabled is false
 						alert 'Interaction with git is currently disabled.'
 					else
 						$('#gitLogsModal').modal()

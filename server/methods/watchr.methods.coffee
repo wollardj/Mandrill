@@ -11,7 +11,7 @@ Meteor.methods {
 	# In otherwords, this is a way to purge and refresh the manifests and
 	# other repo data from Mandrill's database.
 	'updateWatchr': (gracefull)->
-		settings = MandrillSettings.findOne()
+		repoPath = MandrillSettings.get 'munkiRepoPath'
 		gracefull = gracefull or false
 
 		if gracefull is false
@@ -30,24 +30,19 @@ Meteor.methods {
 			for watcher in MandrillWatchers
 				watcher.close()
 
-		if not settings.munkiRepoPath?
+		if not repoPath?
 			console.log 'munkiRepoPath was not defined'
 			{}
 		else
 
-			MandrillSettings.update settings._id, {
-				'$set':{
-					munkiRepoPathIsValid: shell.test '-d', settings.munkiRepoPath
-				}
-			}
-
+			MandrillSettings.set 'munkiRepoPathIsValid', shell.test('-d', repoPath)
 
 			WatcherConfig.paths = [
-				settings.munkiRepoPath + 'pkgsinfo/'
-				settings.munkiRepoPath + 'manifests/'
-				settings.munkiRepoPath + 'catalogs/'
+				repoPath + 'pkgsinfo/'
+				repoPath + 'manifests/'
+				repoPath + 'catalogs/'
 			]
 
 			MandrillWatchers = watchr.watch WatcherConfig
-			{repoPath: settings.munkiRepoPath}
+			{repoPath: repoPath}
 }

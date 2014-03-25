@@ -27,11 +27,7 @@ Meteor.methods {
 	#
 	'pkginfoHasInstallerItem': (urlName)->
 		record = MunkiPkgsinfo.findOne({urlName: urlName})
-		settings = MandrillSettings.findOne()
-		location = '/'
-
-		if settings? and settings.munkiRepoPath?
-			location = settings.munkiRepoPath
+		location = MandrillSettings.get 'munkiRepoPath', '/'
 
 		if not record?
 			throw new Meteor.Error(404,
@@ -169,9 +165,8 @@ Meteor.methods {
 	#	and avoid calling this method if that one returns `false`.
 	#
 	'unlinkPkginfoInstallerItem': (pkginfoPath)->
-		settings = MandrillSettings.findOne()
+		location = MandrillSettings.get 'munkiRepoPath', '/'
 		pkginfo = MunkiPkgsinfo.findOne {path: pkginfoPath}
-		location = settings.munkiRepoPath or '/'
 
 		Mandrill.user.canModifyPath this.userId, pkginfoPath, true
 
