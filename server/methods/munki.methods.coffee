@@ -63,17 +63,17 @@ Meteor.methods {
 					if not insane
 						continue
 
-				catalogs.all.push pkginfo.dom
-				for catalogName in pkginfo.dom.catalogs
-					if not catalogName? or catalogName is ''
-						errors.push 'WARNING: Info file ' + pkginfo.path +
-							' has an empty catalog name!'
-						continue
+			catalogs.all.push pkginfo.dom
+			for catalogName in pkginfo.dom.catalogs
+				if not catalogName? or catalogName is ''
+					errors.push 'WARNING: Info file ' + pkginfo.path +
+						' has an empty catalog name!'
+					continue
 
-					if not catalogs[catalogName]?
-						catalogs[catalogName] = []
-					catalogs[catalogName].push pkginfo.dom
-					logs.push 'Adding ' + pkginfo.path + ' to ' + catalogName + '...'
+				if not catalogs[catalogName]?
+					catalogs[catalogName] = []
+				catalogs[catalogName].push pkginfo.dom
+				logs.push 'Adding ' + pkginfo.path + ' to ' + catalogName + '...'
 
 		if errors.length > 0
 			# print errors to the server console so they can be logged.
