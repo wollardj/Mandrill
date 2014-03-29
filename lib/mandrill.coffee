@@ -1,6 +1,6 @@
 @Mandrill = {
 
-	version: '0.7.0-rc0'
+	version: '0.7.0'
 
 	tpl: {
 		activateTooltips: ->
@@ -125,7 +125,7 @@
 				'ENT_QUOTES': 3,
 				'ENT_IGNORE': 4
 			}
-			
+
 			if quoteStyle is 0
 				noquotes = true
 
@@ -275,14 +275,14 @@
 					'mandrill.accessPatterns': 1
 				}}
 			repoPath = MandrillSettings.get 'munkiRepoPath', '/'
-			
+
 			filter = {'$or':[]}
 
 			if not user or not userId
 				return {'path': false}
 
 			patterns = user.mandrill.accessPatterns or []
-			
+
 			if Mandrill.user.isAdmin(userId) is true
 				# admin means all access
 				if query?
@@ -298,10 +298,10 @@
 				filter.$or.push {
 					path: new RegExp('^' + repoPath + patt.pattern)
 				}
-			
+
 			if query?
 				return {'$and':[filter, query]}
-			
+
 			filter
 
 
@@ -311,7 +311,7 @@
 				'mandrill.accessPatterns': 1
 			}}
 			repoPath = MandrillSettings.get 'munkiRepoPath', '/'
-			
+
 			# No user = no access
 			if not user? or not userId?
 				if throwError is true

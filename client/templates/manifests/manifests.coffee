@@ -1,5 +1,4 @@
 Template.manifests.rendered = ->
-	console.log 'manifests has been rendered'
 	headerBottom = $('.mandrill-header').outerHeight()
 	$('.paging-toolbar').affix {
 		offset: { top: headerBottom }
@@ -77,7 +76,7 @@ Template.manifests.events {
 		event.preventDefault()
 
 		repoPath = MandrillSettings.get 'munkiRepoPath'
-		
+
 		if repoPath?
 			Meteor.call(
 				'createManifest'
@@ -91,7 +90,7 @@ Template.manifests.events {
 						Router.go(
 							'manifests'
 							{urlName: data.urlName}
-							
+
 						)
 			)
 		else

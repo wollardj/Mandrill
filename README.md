@@ -10,7 +10,7 @@ Mandrill is a [NodeJS](http://nodejs.org/) web application written using the [Me
 
 ## Installation Prerequisites
 
- * **OS X client or server** _the current focus is on darwin, but support for linux should be a possibility. [Vote for your preferred OS](https://github.com/wollardj/Mandrill/issues/2)._
+ * Host operating systems that have been tested include OS X, OS X Server, Ubuntu Server, and CentOS, but any flavor of Linux or Unix should suffice.
  * **[NodeJS >= v0.10.22 with NPM](http://nodejs.org/download/)** _(both tools are in the 'Universal' link for the Mac OS X Installer .pkg)_.
  * **[munkitools](http://munkibuilds.org/)** _but only if you plan to run `makecatalogs` from your browser_
 
@@ -23,25 +23,20 @@ Installation kicks off with the installation of the command line tool for Mandri
 
 The `-g` means it's installing mandrillctl globally instead of within your home directory. It's also going to drop a symlink in your search path which you probably wouldn't be able to do without running it through `sudo`.
 
-### Installing Mandrill
+### Installing Mandrill On OS X
 `mandrillctl` makes it pretty simple to install MongoDB + Mandrill and have your server running in no time. In general, there are four commands you'll want to run to make this happen:
 
 
 
-	# This step can take a while, but there's plenty to watch while
-	# it downloads and installs everything.
+	# Install mandrill
 	sudo mandrillctl --install
-	
+
 	# Defaults to port 80.
-	# That's probably already in use if you're installing Mandrill
-	# on your existing Munki server.
-	# If you give this command a port that's in use by another process,
-	# it'll let you know.
+	# If you specify a port that's in use by another process,
+	# mandrillctl let you know.
 	sudo mandrillctl --set-http-port 3001
-	
-	# If you want to use Google's OAuth, this needs to be set to
-	# a publicly resolvable FQDN. If you don't plan to use OAuth,
-	# what you do with this value is pretty much up to you.
+
+	# Set your hostname (sub directories aren't supported)
 	sudo mandrillctl --set-http-host http://mandrill.example.com
 
 	# Don't forget to turn on the lights before you go
@@ -51,6 +46,10 @@ That's it! Using the example values above, you should now be able to open your b
 
 ### Initial Login
 Like any good web app, the default username and password are `admin` and `admin`. _I hope it's obvious that you should change this password immediately._
+
+### Installing Mandrill on Linux
+
+See the step through wiki guide for [Ubuntu](https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28Ubuntu%29) or [CentOS](https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28CentOS%29)
 
 
 ### Questions?

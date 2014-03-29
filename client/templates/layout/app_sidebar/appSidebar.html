@@ -60,7 +60,7 @@
 				<i class="pull-right glyphicon glyphicon-cloud"></i>
 			</li>
 			<li class="{{routeIsActive "manifests"}}">
-				<a href="{{pathFor 'manifests'}}">
+				<a href="{{pathFor 'manifests' params='' }}">
 					<i class="glyphicon glyphicon-list-alt"></i>
 					Manifests
 					{{#if manifestErrorsCount}}
@@ -72,7 +72,7 @@
 				</a>
 			</li>
 			<li class="{{routeIsActive "pkgsinfo"}}">
-				<a href="{{pathFor 'pkgsinfo'}}">
+				<a href="{{pathFor 'pkgsinfo' params='' }}">
 					<i class="glyphicon glyphicon-save"></i>
 					Pkgsinfo
 					{{#if installsErrorsCount}}
@@ -84,7 +84,7 @@
 				</a>
 			</li>
 			<li class="{{routeIsActive "catalogs"}} {{routeIsActive "edit-condition"}}">
-				<a href="{{pathFor 'catalogs'}}">
+				<a href="{{pathFor 'catalogs' params='' }}">
 					<i class="glyphicon glyphicon-book"></i>
 					Catalogs
 					{{#if catalogsErrorsCount}}

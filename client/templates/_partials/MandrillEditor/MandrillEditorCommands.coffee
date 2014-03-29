@@ -79,7 +79,7 @@ class @MandrillEditorCommands
 				disabledWhenReadOnly: true
 				bindKey: {win: 'Crtl-Shift-.', mac: 'Command-Shift-.'}
 				exec: (editor)->
-					Mandrill.util.ace.selection.htmlDecodeeditor
+					Mandrill.util.ace.selection.htmlDecode editor
 			}
 			{
 				name: 'helpManifests'

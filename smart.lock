@@ -8,7 +8,8 @@
       "moment": {},
       "logger": {},
       "i18n": {},
-      "blaze-layout": {}
+      "blaze-layout": {},
+      "iron-router": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -43,8 +44,13 @@
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
-        "tag": "v0.2.1",
-        "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
+        "tag": "v0.2.2",
+        "commit": "8bc53798fe5965669ae67c72f91829fcfdceabfd"
+      },
+      "iron-router": {
+        "git": "https://github.com/EventedMind/iron-router.git",
+        "tag": "v0.7.0",
+        "commit": "05f34bc48c4cad9fdaa366c1ddcabe6980232ece"
       }
     }
   }

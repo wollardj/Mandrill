@@ -6,6 +6,7 @@
     "moment": {},
     "logger": {},
     "i18n": {},
-    "blaze-layout": {}
+    "blaze-layout": {},
+    "iron-router": {}
   }
 }
