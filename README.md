@@ -12,7 +12,6 @@ Mandrill is a [NodeJS](http://nodejs.org/) web application written using the [Me
 
  * Host operating systems that have been tested include OS X, OS X Server, Ubuntu Server, and CentOS, but any flavor of Linux or Unix should suffice.
  * **[NodeJS >= v0.10.22 with NPM](http://nodejs.org/download/)** _(both tools are in the 'Universal' link for the Mac OS X Installer .pkg)_.
- * **[munkitools](http://munkibuilds.org/)** _but only if you plan to run `makecatalogs` from your browser_
 
 ## Installing `mandrillctl`
 Installation kicks off with the installation of the command line tool for Mandrill, `mandrillctl`. Since you're here, you've already got npm and node installed, so all you need to do is...
