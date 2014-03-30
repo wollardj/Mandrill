@@ -32,7 +32,7 @@
 
 @MandrillSettings.set = (key, val)->
 	settings = @findOne()
-	if settings._id?
+	if settings? and settings._id?
 		upd = {'$set': {}}
 		upd.$set[key] = val
 		@update settings._id, upd
