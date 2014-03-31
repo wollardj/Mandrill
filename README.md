@@ -50,6 +50,12 @@ Like any good web app, the default username and password are `admin` and `admin`
 
 See the step through wiki guide for [Ubuntu](https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28Ubuntu%29) or [CentOS](https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28CentOS%29)
 
+---
+
+## More about `mandrillctl` on OS X Hosts
+
+_(Linux support is coming)_
+
 ### Updating Mandrill
 Mandrill has a built in command for updating to the current release
 
