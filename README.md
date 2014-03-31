@@ -50,6 +50,43 @@ Like any good web app, the default username and password are `admin` and `admin`
 
 See the step through wiki guide for [Ubuntu](https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28Ubuntu%29) or [CentOS](https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28CentOS%29)
 
+### Updating Mandrill
+Mandrill has a built in command for updating to the current release
+
+	sudo mandrillctl --update
+
+### Additional Mandrill commands
+You can get a list of mandrillctl options by issuing:
+
+	mandrillctl --help
+
+As of version 0.7.1 the following options are available:
+
+    -h, --help                     output usage information
+    -i, --install                  Alias for --update
+    -u, --update                   Installs or updates Mandrill and its
+                                   requirements.
+                                   NOTE: If you need to use a proxy server, set 
+                                   the http_proxy environment variable prior to
+                                   running this command.
+                                   `export http_proxy=http://proxy.server:port/`
+    -f, --force                    Use with -u or -i to bypass prompts
+    -s, --status                   Displays the status of the Mandrill and MongoDB
+                                   server processes.
+    --stop                         Halts the MongoDB and Mandrill servers
+    --start                        Starts the MongoDB and Mandrill servers
+    --restart                      Restarts the MongoDB and Mandrill servers
+    --no-logo                      Don't include the Mandrill logo and version in
+                                   the output
+    --get-http-port                Displays the port on which Mandrill will listen
+    --set-http-port <port>         Sets the port on which Mandrill will
+                                   listen
+    --get-http-host                Displays the host/fqdn for the Mandrill server.
+    --set-http-host <http://fqdn>  Sets the host/fqdn for the
+                                   Mandrill server
+    --uninstall                    Uninstalls Mandrill, MongoDB + databases.
+                                   mandrillctl will not uninstall itself.
+
 
 ### Questions?
 Ask away: [https://groups.google.com/d/forum/mandrill-dev](https://groups.google.com/d/forum/mandrill-dev)
