@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Mandrill by wollardj</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Mandrill</h1>
+        <h2>Multi-user web front-end for managing a Munki repository.</h2>
+        <a href="https://github.com/wollardj/Mandrill" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="mandrill" class="anchor" href="#mandrill"><span class="octicon octicon-link"></span></a>Mandrill</h1>
+
+<p>Multi-user web front-end for managing a Munki repository. If you're here because of MailChimp, my apologies but this isn't the Mandrill you're looking for. /wavehand</p>
+
+<p>Mandrill is a <a href="http://nodejs.org/">NodeJS</a> web application written using the <a href="https://www.meteor.com/">Meteor</a> framework. It supports one database engine: <a href="http://www.mongodb.com/">MongoDB</a>. There are no plans to support other engines, but fear not, <a href="https://github.com/wollardj/mandrillctl">mandrillctl</a> will install and secure MongoDB for you. If you already have MongoDB running on your server via homebrew, you should probably remove that installation first, or use an alternate server.</p>
+
+<p><img src="https://f.cloud.github.com/assets/2027935/2168353/05ff8e08-953a-11e3-9db0-c2b913db89e7.png" alt="mandrill git-log"></p>
+
+<h2>
+<a name="installation-prerequisites" class="anchor" href="#installation-prerequisites"><span class="octicon octicon-link"></span></a>Installation Prerequisites</h2>
+
+<ul>
+<li>Host operating systems that have been tested include OS X, OS X Server, Ubuntu Server, and CentOS, but any flavor of Linux or Unix should suffice.</li>
+<li>
+<strong><a href="http://nodejs.org/download/">NodeJS &gt;= v0.10.22 with NPM</a></strong> <em>(both tools are in the 'Universal' link for the Mac OS X Installer .pkg)</em>.</li>
+</ul><h2>
+<a name="installing-mandrillctl" class="anchor" href="#installing-mandrillctl"><span class="octicon octicon-link"></span></a>Installing <code>mandrillctl</code>
+</h2>
+
+<p>Installation kicks off with the installation of the command line tool for Mandrill, <code>mandrillctl</code>. Since you're here, you've already got npm and node installed, so all you need to do is...</p>
+
+<pre><code>sudo npm install -g mandrillctl
+</code></pre>
+
+<p>The <code>-g</code> means it's installing mandrillctl globally instead of within your home directory. It's also going to drop a symlink in your search path which you probably wouldn't be able to do without running it through <code>sudo</code>.</p>
+
+<h3>
+<a name="installing-mandrill-on-os-x" class="anchor" href="#installing-mandrill-on-os-x"><span class="octicon octicon-link"></span></a>Installing Mandrill On OS X</h3>
+
+<p><code>mandrillctl</code> makes it pretty simple to install MongoDB + Mandrill and have your server running in no time. In general, there are four commands you'll want to run to make this happen:</p>
+
+<pre><code># Install mandrill
+sudo mandrillctl --install
+
+# Defaults to port 80.
+# If you specify a port that's in use by another process,
+# mandrillctl let you know.
+sudo mandrillctl --set-http-port 3001
+
+# Set your hostname (sub directories aren't supported)
+sudo mandrillctl --set-http-host http://mandrill.example.com
+
+# Don't forget to turn on the lights before you go
+sudo mandrillctl --start
+</code></pre>
+
+<p>That's it! Using the example values above, you should now be able to open your browser to <a href="http://mandrill.example.com:3001">http://mandrill.example.com:3001</a> and login!</p>
+
+<h3>
+<a name="initial-login" class="anchor" href="#initial-login"><span class="octicon octicon-link"></span></a>Initial Login</h3>
+
+<p>Like any good web app, the default username and password are <code>admin</code> and <code>admin</code>. <em>I hope it's obvious that you should change this password immediately.</em></p>
+
+<h3>
+<a name="installing-mandrill-on-linux" class="anchor" href="#installing-mandrill-on-linux"><span class="octicon octicon-link"></span></a>Installing Mandrill on Linux</h3>
+
+<p>See the step through wiki guide for <a href="https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28Ubuntu%29">Ubuntu</a> or <a href="https://github.com/wollardj/Mandrill/wiki/Creating-Users-%26-Groups-%28CentOS%29">CentOS</a></p>
+
+<hr><h2>
+<a name="more-about-mandrillctl-on-os-x-hosts" class="anchor" href="#more-about-mandrillctl-on-os-x-hosts"><span class="octicon octicon-link"></span></a>More about <code>mandrillctl</code> on OS X Hosts</h2>
+
+<p><em>(Linux support is coming)</em></p>
+
+<h3>
+<a name="updating-mandrill" class="anchor" href="#updating-mandrill"><span class="octicon octicon-link"></span></a>Updating Mandrill</h3>
+
+<p>Mandrill has a built in command for updating to the current release</p>
+
+<pre><code>sudo mandrillctl --update
+</code></pre>
+
+<h3>
+<a name="additional-mandrill-commands" class="anchor" href="#additional-mandrill-commands"><span class="octicon octicon-link"></span></a>Additional Mandrill commands</h3>
+
+<p>You can get a list of mandrillctl options by issuing:</p>
+
+<pre><code>mandrillctl --help
+</code></pre>
+
+<p>As of version 0.7.1 the following options are available:</p>
+
+<pre><code>-h, --help                     output usage information
+-i, --install                  Alias for --update
+-u, --update                   Installs or updates Mandrill and its
+                               requirements.
+                               NOTE: If you need to use a proxy server, set 
+                               the http_proxy environment variable prior to
+                               running this command.
+                               `export http_proxy=http://proxy.server:port/`
+-f, --force                    Use with -u or -i to bypass prompts
+-s, --status                   Displays the status of the Mandrill and MongoDB
+                               server processes.
+--stop                         Halts the MongoDB and Mandrill servers
+--start                        Starts the MongoDB and Mandrill servers
+--restart                      Restarts the MongoDB and Mandrill servers
+--no-logo                      Don't include the Mandrill logo and version in
+                               the output
+--get-http-port                Displays the port on which Mandrill will listen
+--set-http-port &lt;port&gt;         Sets the port on which Mandrill will
+                               listen
+--get-http-host                Displays the host/fqdn for the Mandrill server.
+--set-http-host &lt;http://fqdn&gt;  Sets the host/fqdn for the
+                               Mandrill server
+--uninstall                    Uninstalls Mandrill, MongoDB + databases.
+                               mandrillctl will not uninstall itself.
+</code></pre>
+
+<h3>
+<a name="questions" class="anchor" href="#questions"><span class="octicon octicon-link"></span></a>Questions?</h3>
+
+<p>Ask away: <a href="https://groups.google.com/d/forum/mandrill-dev">https://groups.google.com/d/forum/mandrill-dev</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/wollardj/Mandrill/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/wollardj/Mandrill/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/wollardj/Mandrill"></a> is maintained by <a href="https://github.com/wollardj">wollardj</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
