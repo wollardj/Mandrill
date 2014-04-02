@@ -1,0 +1,463 @@
+#!/bin/bash
+
+# This is the Mandirll install script
+# To install, plop this in your terminal window:
+#
+# curl https://raw.githubusercontent.com/wollardj/Mandrill/master/install | sh
+#
+# Author: Joe Wollard
+# Lots of inspiration, and code in some areas, comes from the Meteor install
+# script.
+#
+
+# clear the screen
+/usr/bin/clear
+
+PATH="/usr/local/bin:$PATH"
+MONGO=$(which mongo 2>/dev/null)
+NODE=$(which node 2>/dev/null)
+NPM=$(which npm 2>/dev/null)
+PM2=$(which pm2 2>/dev/null)
+METEOR=$(which meteor 2>/dev/null)
+MRT=$(which mrt 2>/dev/null)
+CURL=$(which curl 2>/dev/null)
+GIT=$(which git 2>/dev/null)
+
+
+
+
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+PURPLE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+BLUE=$(tput setaf 6)
+GREY=$(tput setaf 7)
+TEXT_RESET=$(tput sgr0)
+
+logInfo () {
+	echo "${GREEN}$@${TEXT_RESET}"
+}
+
+
+logError () {
+	echo "	${RED}$@${TEXT_RESET}"
+}
+
+
+logWarn () {
+	echo "${YELLOW}$@${TEXT_RESET}"
+}
+
+
+
+# Returns 'y' or 'n' based on the user's response
+promptYN () {
+	while true; do
+		read -p "${MAGENTA}$1 [y/n]${TEXT_RESET} " yn
+		case $yn in
+			[Yy]* ) echo "y"; break;;
+			[Nn]* ) echo "n"; break;;
+			* ) logError "Please answer y or n." 1>&2;;
+		esac
+	done
+}
+
+
+# executes a command and exits on failure
+execOrDie () {
+	echo "${BLUE}$@${TEXT_RESET}"
+	eval "$@"
+	result=$?
+	if [ $result != 0 ]; then
+		logError "Exiting on error $result"
+		exit $result
+	fi
+}
+
+
+# looks for a binary in path and dies if it can't be found.
+# echos the path to the binary otherwise
+findOrDie () {
+	bin=$1
+	p=$(which $bin 2>/dev/null)
+	if [ -z $p ]; then
+		logError "unable to continue without $bin"
+		exit 1
+	else
+		logInfo "found $p" 1>&2
+		echo $p
+	fi
+}
+
+
+
+answer=$(promptYN "This script isn't ready for production use yet. Try it anyway?")
+if [ $answer == 'n' ]; then
+  exit 0
+fi
+
+
+
+
+# If mandrillctl is already installed, just tell it to update and exit
+if [ -x /usr/local/bin/mandrillctl ]; then
+	execOrDie "sudo /usr/local/bin/mandrillctl --update"
+fi
+
+### UNAME
+UNAME=$(uname)
+if [ "$UNAME" != "Linux" -a "$UNAME" != "Darwin" ]; then
+	logError "Sorry, this OS isn't supported."
+	exit 1
+fi
+
+
+### ARCH
+if [ "$UNAME" = "Darwin" ] ; then
+	### OSX ###
+	if [ "i386" != "$(uname -p)" -o "1" != "$(sysctl -n hw.cpu64bit_capable 2>/dev/null || echo 0)" ] ; then
+		# Can't just test uname -m = x86_64, because Snow Leopard can
+    	# return other values.
+    	logError "Only 64-bit Intel processors are supported at this time."
+    	exit 1
+	fi
+	ARCH="x86_64"
+elif [ "$UNAME" = "Linux" ] ; then
+	### Linux ###
+	ARCH=$(uname -m)
+	if [ "$ARCH" != "i686" -a "$ARCH" != "x86_64" ] ; then
+    	logError "Unusable architecture: $ARCH"
+    	logError "Only i686 and x86_64 are supported."
+    	exit 1
+	fi
+fi
+
+
+
+### OS
+OS="unknown"
+if [ "$UNAME" == "Darwin" ]; then
+	### OS X ###
+	OS="osx"
+	PLATFORM="darwin"
+
+elif [ "$UNAME" == "Linux" ]; then
+	### LINUX ###
+	PLATFORM="linux"
+
+	if [ -f "/etc/redhat-release" ]; then
+		if (( `cat /etc/redhat-release | awk {'print $1}'` == CentOS )); then
+			### CENTOS ###
+			OS="centos"
+		else
+			OS="redhat"
+		fi
+	elif [ $(which apt-get) != "" ]; then
+		### UBUNTU ###
+		OS="ubuntu"
+	fi
+fi
+
+
+if [ $OS == "unknown" ]; then
+	logWarn "This script hasn't been tested on this platform!"
+	if [ $(promptYN "Continue anyway?") == "n" ]; then
+		exit 0
+	fi
+fi
+
+
+
+### MONGO
+if [ -z $MONGO ]; then
+	INSTALL_MONGO=$(promptYN "Do you want to install MongoDB?")
+else
+	echo ""
+	INSTALL_MONGO="n"
+fi
+
+
+
+### Permissions
+### The policy here is to make sure everything belongs to the admin
+### group targeted for each OS
+if [ $OS == "osx" ]; then
+	execOrDie "sudo chgrp -R admin /usr/local"
+elif [ $OS == "ubuntu" ]; then
+	execOrDie "sudo chgrp -R adm /usr/local"
+else
+	# CentOS doesn't have a factory-built admin group aside from root
+	execOrDie "sudo chgrp -R root /usr/local"
+fi
+execOrDie "sudo chmod -R g+rwX /usr/local"
+
+
+
+### Users & Groups
+if [ $OS == "osx" ]; then
+	DSEDITGROUP="/usr/sbin/dseditgroup"
+	DSCL="/usr/bin/dscl ."
+	## OS X Group (munki)
+	_GID=$($DSEDITGROUP cat /Groups/munki PrimaryGroupID | sed 's/^[^0-9]*//')
+	if [ $? != 0 ]; then
+		execOrDie "sudo $DSEDITGROUP -o create -n . munki"
+		_GID=$($DSCL cat /Groups/munki PrimaryGroupID | sed 's/^[^0-9]*//')
+	fi
+
+	## OS X USer (_mandrill)
+	$($DSCL . list /Users/_mandrill)
+	if [ $? != 0 ]; then
+		HIGHEST_UID=$($DSCL list /Users PrimaryGroupID | \
+			grep -e '^_' | \
+			sed 's/^_[^0-9]*//' | \
+			sort -n | \
+			tail -n 1)
+		_UID=$(expr $HIGHEST_UID + 1)
+		execOrDie "$DSCL create /Users/_mandrill UniqueID $_UID"
+		execOrDie "$DSCL create /Users/_mandrill UserShell /usr/bin/false"
+		execOrDie "$DSCL create /Users/_mandrill RealName _mandrill"
+		execOrDie "$DSCL create /Users/_mandrill home /var/empty"
+		execOrDie "$DSCL create /Users/_mandrill passwd \\*"
+		execOrDie "$DSCL create /Users/_mandrill PrimaryGroupID $_GID"
+
+		execOrDie "$DSEDITGROUP -o edit -a _mandrill -t user munki"
+		$($DSCL delete /Users/_mandrill PasswordPolicyOptions)
+		$($DSCL delete /Users/_mandrill AuthenticationAuthority)
+		$($DSCL delete /Users/_mandrill ShadowHashData)
+		$($DSCL delete /Users/_mandrill KerberosKeys)
+	fi
+
+## Ubuntu
+elif [ $OS == 'ubuntu' ]; then
+	_GID=$(grep -e "^munki" /etc/group)
+	if [ $? != 0 ]; then
+		execOrDie "sudo /usr/sbin/groupadd --system munki"
+	fi
+
+	_UID=$(id _mandrill 2> /dev/null)
+	if [ $? != 0 ]; then
+		execOrDie "sudo /usr/sbin/adduser --system _mandrill --ingroup munki --force-badname"
+	fi
+
+## CentOS
+elif [ $OS == "centos" ]; then
+	_GID=$(grep -e "^munki" /etc/group)
+	if [ $? != 0 ]; then
+		execOrDie "sudo /usr/sbin/groupadd --system munki"
+	fi
+
+	_UID=$(id _mandrill 2> /dev/null)
+	if [ $? != 0 ]; then
+		execOrDie "sudo /usr/sbin/useradd --system _mandrill -G munki"
+	fi
+fi
+
+
+
+### curl
+### (don't bother checking on OS X - if it's not there, we have bigger problems)
+if [ -z $CURL ]; then
+	echo "Installing curl"
+	if [ $OS == "ubuntu" ]; then
+		execOrDie "sudo apt-get install curl"
+	elif [ $OS == "centos" ]; then
+		execOrDie "sudo yum install curl"
+	else
+		logError "Can't continue without curl"
+		exit 1
+	fi
+fi
+CURL=$(findOrDie curl)
+
+
+
+### git
+if [ -z $GIT ]; then
+	if [ $OS == "osx" ]; then
+		if [ ! -f /Library/Developer/CommandLineTools/usr/bin/clang ]; then
+			logWarn "Installing the Command Line Tools (expect GUI popup)"
+			/usr/bin/xcode-select --install
+			read -p "Press any key when the installation has completed." junk
+		fi
+	elif [ $OS == "ubuntu" ]; then
+		execOrDie "sudo apt-get install build-essential git"
+	elif [ $OS == "centos" ]; then
+		execOrDie "sudo yum groupinstall Development\ Tools"
+	fi
+fi
+GIT=$(findOrDie "git")
+
+
+
+
+
+### MongoDB
+if [ $INSTALL_MONGO == "y" ]; then
+
+	## OS X
+	if [ $OS == "osx" ]; then
+		MONGO_URL="http://fastdl.mongodb.org/osx/mongodb-osx-x86_64-2.4.9.tgz"
+		execOrDie "curl -L ${MONGO_URL} -o /tmp/mongo.tgz"
+		execOrDie "sudo tar --strip-components 1 -C /usr/local/ -zxf /tmp/mongo.tgz"
+		execOrDie "rm /tmp/mongo.tgz"
+
+	## UBUNTU
+	elif [ $OS == "ubuntu" ]; then
+		execOrDie "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+			--recv 7F0CEB10"
+		execOrDie "sudo echo \"deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen\" > /etc/apt/sources.list.d/mongodb.list"
+		execOrDie "sudo apt-get update"
+		execOrDie "sudo apt-get install mongodb-10gen"
+
+	## CENTOS
+	elif [ $OS == "centos" ]; then
+		execOrDie "sudo cat > /etc/yum.repos.d/mongodb.repo <<-EOF
+		[mongodb]
+		name=MongoDB Repository
+		baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/
+		gpgcheck=0
+		enabled=1
+		EOF"
+
+		execOrDie "sudo yum install mongo-10gen mongo-10gen-server"
+	fi
+fi
+MONGOD=$(findOrDie "mongod")
+
+
+
+### Node and npm
+if [ -z $NODE ]; then
+	if [ $OS == "osx" ]; then
+		execOrDie "$CURL http://nodejs.org/dist/v0.10.26/node-v0.10.26.pkg \
+			-o /tmp/node.pkg"
+		execOrDie "sudo /usr/sbin/installer -pkg /tmp/node.pkg -tgt /"
+		execOrDie "rm /tmp/node.pkg"
+
+	elif [ $PLATFORM == "linux" ]; then
+		execOrDie "$CURL \
+			http://nodejs.org/dist/v0.10.26/node-v0.10.26-linux-x64.tar.gz \
+			-o /tmp/node.tgz"
+		execOrDie "sudo /bin/tar --strip-components 1 -C /usr/local/ \
+			-zxf /tmp/node.tgz"
+		execOrDie "rm /tmp/node.tgz"
+
+	else
+		logError "I can't install node/npm on this operating system for you."
+		logError "You'll have to do that yourself, then try again."
+		exit 1
+	fi
+fi
+NODE=$(findOrDie node)
+NPM=$(findOrDie npm)
+
+
+
+### Meteor
+if [ -z $METEOR ]; then
+	execOrDie "$CURL https://install.meteor.com/ | sh"
+fi
+METEOR=$(findOrDie meteor)
+
+
+### Meteorite
+if [ -z $MRT ]; then
+	execOrDie "sudo $NPM install -g meteorite"
+fi
+MRT=$(findOrDie mrt)
+
+
+### pm2
+if [ -z $PM2 ]; then
+	execOrDie "sudo $NPM install -g pm2"
+fi
+PM2=$(findOrDie pm2)
+
+
+### mandrillctl
+MANDRILLCTL=$(which mandrillctl 2>/dev/null)
+if [ -z $MANDRILLCTL ]; then
+	execOrDie "sudo $NPM install -g mandrillctl"
+fi
+MANDRILLCTL=$(findOrDie mandrillctl)
+
+
+### Mandrill source code
+if [ ! -d /usr/local/src/mandrill ]; then
+	execOrDie "$GIT clone https://github.com/wollardj/Mandrill.git \
+		/usr/local/src/mandrill"
+	execOrDie "pushd /usr/local/src/mandrill"
+	TAG=$($GIT tag -l | tail -n 1)
+	execOrDie "$GIT checkout tags/$TAG"
+fi
+
+
+
+### Write the pm2 conf file
+PM2_CONF="[
+"
+MAND_SECT=$(cat <<EOF
+	{
+		"name": "Mandrill",
+		"script": "/usr/local/mandrill/main.js",
+		"instances": "1",
+		"error_file": "/var/log/mandrill.err",
+		"out_file": "/var/log/mandrill.log",
+		"port": "3001",
+		"env": {
+			"ROOT_URL": "http://localhost:3001",
+			"PORT": "3001",
+			"MONGO_URL": "mongodb://localhost:27017/Mandrill",
+			"MANDRILL_MODE": "production"
+		}
+EOF
+)
+
+PM2_CONF="${PM2_CONF}${MAND_SECT}"
+
+# only write the mongod sections if we're on OS X because Ubuntu and
+# CentOS have installers with automatically launch the daemon.
+if [ $INSTALL_MONGO == "y" -a $OS == "osx" ]; then
+	execOrDie "sudo cat > /usr/local/etc/mongo.conf <<-EOF
+	dbpath = /usr/local/MongoDB/data
+	bind_ip = 127.0.0.1
+	noauth = true
+	EOF"
+
+	MONG_SECT=$(cat <<EOF
+	},
+	{
+		"name": "MongodB",
+		"script": "/usr/local/bin/mongod",
+		"args": "['run', '--config', '/usr/local/etc/mongo.conf']",
+		"error_file": "/var/log/mongod.err",
+		"out_file": "/var/log/mongod.log",
+
+	}
+EOF
+)
+	PM2_CONF="${PM2_CONF}${MONGO_SECT}"
+else
+	PM2_CONF="${PM2_CONF}
+	}"
+fi
+PM2_CONF="${PM2_CONF}
+]"
+
+if [ ! -d /usr/local/etc ]; then
+	mkdir -p /usr/local/etc
+fi
+execOrDie "sudo cat > /usr/local/etc/mandrill.json <<EOF
+$PM2_CONF
+EOF"
+
+
+### Build Mandrill
+execOrDie "pushd /usr/local/src/mandrill"
+execOrDie "mrt bundle /tmp/Mandrill.tar.gz"
+if [ ! -d /usr/local/mandrill ]; then
+	execOrDie "sudo mkdir -p /usr/local/mandrill"
+fi
+execOrDie "sudo tar --strip-components 1 -C /usr/local/mandrill -zxf /tmp/Mandrill.tar.gz"
+execOrDie "rm /tmp/Mandrill.tar.gz"
