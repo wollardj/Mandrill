@@ -285,7 +285,7 @@ if [ $INSTALL_MONGO == "y" ]; then
 	if [ $OS == "osx" ]; then
 		MONGO_URL="http://fastdl.mongodb.org/osx/mongodb-osx-x86_64-2.4.9.tgz"
 		execOrDie "curl -L ${MONGO_URL} -o /tmp/mongo.tgz"
-		execOrDie "sudo tar --strip-components 1 -C /usr/local/ -zxf /tmp/mongo.tgz"
+		execOrDie "tar --strip-components 1 -C /usr/local/ -zxf /tmp/mongo.tgz"
 		execOrDie "rm /tmp/mongo.tgz"
 
 	## UBUNTU
@@ -325,8 +325,7 @@ if [ -z $NODE ]; then
 		execOrDie "$CURL \
 			http://nodejs.org/dist/v0.10.26/node-v0.10.26-linux-x64.tar.gz \
 			-o /tmp/node.tgz"
-		execOrDie "sudo /bin/tar --strip-components 1 -C /usr/local/ \
-			-zxf /tmp/node.tgz"
+		execOrDie "/bin/tar --strip-components 1 -C /usr/local/ -zxf /tmp/node.tgz"
 		execOrDie "rm /tmp/node.tgz"
 
 	else
@@ -408,7 +407,7 @@ PM2_CONF="${PM2_CONF}${MAND_SECT}"
 # only write the mongod sections if we're on OS X because Ubuntu and
 # CentOS have installers with automatically launch the daemon.
 if [ $INSTALL_MONGO == "y" -a $OS == "osx" ]; then
-	execOrDie "sudo cat > /usr/local/etc/mongo.conf <<-EOF
+	execOrDie "cat > /usr/local/etc/mongo.conf <<-EOF
 	dbpath = /usr/local/MongoDB/data
 	bind_ip = 127.0.0.1
 	noauth = true
@@ -437,7 +436,7 @@ PM2_CONF="${PM2_CONF}
 if [ ! -d /usr/local/etc ]; then
 	mkdir -p /usr/local/etc
 fi
-execOrDie "sudo cat > /usr/local/etc/mandrill.json <<EOF
+execOrDie "cat > /usr/local/etc/mandrill.json <<EOF
 $PM2_CONF
 EOF"
 
@@ -446,9 +445,9 @@ EOF"
 execOrDie "pushd /usr/local/src/mandrill"
 execOrDie "mrt bundle /tmp/Mandrill.tar.gz"
 if [ ! -d /usr/local/mandrill ]; then
-	execOrDie "sudo mkdir -p /usr/local/mandrill"
+	execOrDie "mkdir -p /usr/local/mandrill"
 fi
-execOrDie "sudo tar --strip-components 1 -C /usr/local/mandrill -zxf /tmp/Mandrill.tar.gz"
+execOrDie "tar --strip-components 1 -C /usr/local/mandrill -zxf /tmp/Mandrill.tar.gz"
 execOrDie "rm /tmp/Mandrill.tar.gz"
 
 execOrDie "sudo pm2 start /usr/local/etc/mandrill.json"
