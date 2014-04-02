@@ -8,12 +8,8 @@
 # Author: Joe Wollard
 # Lots of inspiration, and code in some areas, comes from the Meteor install
 # script.
-#
 
-# clear the screen
-/usr/bin/clear
-
-
+# tools
 PATH="/usr/local/bin:$PATH"
 MONGO=$(which mongo 2>/dev/null)
 NODE=$(which node 2>/dev/null)
@@ -24,9 +20,7 @@ MRT=$(which mrt 2>/dev/null)
 CURL=$(which curl 2>/dev/null)
 GIT=$(which git 2>/dev/null)
 
-
-
-
+# colors
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
@@ -36,21 +30,10 @@ BLUE=$(tput setaf 6)
 GREY=$(tput setaf 7)
 TEXT_RESET=$(tput sgr0)
 
-logInfo () {
-	echo "${GREEN}$@${TEXT_RESET}"
-}
 
-
-logError () {
-	echo "	${RED}$@${TEXT_RESET}"
-}
-
-
-logWarn () {
-	echo "${YELLOW}$@${TEXT_RESET}"
-}
-
-
+logInfo () { echo "${GREEN}$@${TEXT_RESET}"; }
+logError () { echo "	${RED}$@${TEXT_RESET}"; }
+logWarn () { echo "${YELLOW}$@${TEXT_RESET}"; }
 
 # Returns 'y' or 'n' based on the user's response
 promptYN () {
@@ -95,17 +78,12 @@ findOrDie () {
 
 logWarn "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 answer=$(promptYN "This script isn't ready for production use yet. Try it anyway?")
-if [ $answer == "n" ]; then
-	exit 0
-fi
-
+[ $answer == "n" ] &&  exit 0
 
 
 
 # If mandrillctl is already installed, just tell it to update and exit
-if [ -x /usr/local/bin/mandrillctl ]; then
-	execOrDie "sudo /usr/local/bin/mandrillctl --update"
-fi
+[ -x /usr/local/bin/mandrillctl ] && execOrDie "sudo /usr/local/bin/mandrillctl --update"
 
 ### UNAME
 UNAME=$(uname)
@@ -164,21 +142,13 @@ fi
 
 if [ $OS == "unknown" ]; then
 	logWarn "This script hasn't been tested on this platform!"
-	if [ $(promptYN "Continue anyway?") == "n" ]; then
-		exit 0
-	fi
+	[ $(promptYN "Continue anyway?") == "n" ] && exit 0
 fi
 
 
 
 ### MONGO
-if [ -z $MONGO ]; then
-	INSTALL_MONGO=$(promptYN "Do you want to install MongoDB?")
-else
-	echo ""
-	INSTALL_MONGO="n"
-fi
-
+[ -z $MONGO ] && INSTALL_MONGO=$(promptYN "Do you want to install MongoDB?") || INSTALL_MONGO="n"
 
 
 ### Permissions
@@ -233,26 +203,18 @@ if [ $OS == "osx" ]; then
 ## Ubuntu
 elif [ $OS == 'ubuntu' ]; then
 	_GID=$(grep -e "^munki" /etc/group)
-	if [ $? != 0 ]; then
-		execOrDie "sudo /usr/sbin/groupadd --system munki"
-	fi
+	[ $? != 0 ] && execOrDie "sudo /usr/sbin/groupadd --system munki"
 
 	_UID=$(id _mandrill 2> /dev/null)
-	if [ $? != 0 ]; then
-		execOrDie "sudo /usr/sbin/adduser --system _mandrill --ingroup munki --force-badname"
-	fi
+	[ $? != 0 ] && execOrDie "sudo /usr/sbin/adduser --system _mandrill --ingroup munki --force-badname"
 
 ## CentOS
 elif [ $OS == "centos" ]; then
 	_GID=$(grep -e "^munki" /etc/group)
-	if [ $? != 0 ]; then
-		execOrDie "sudo /usr/sbin/groupadd --system munki"
-	fi
+	[ $? != 0 ] && execOrDie "sudo /usr/sbin/groupadd --system munki"
 
 	_UID=$(id _mandrill 2> /dev/null)
-	if [ $? != 0 ]; then
-		execOrDie "sudo /usr/sbin/useradd --system _mandrill -G munki"
-	fi
+	[ $? != 0 ] && execOrDie "sudo /usr/sbin/useradd --system _mandrill -G munki"
 fi
 
 
@@ -336,28 +298,24 @@ if [ -z $NODE ]; then
 fi
 NODE=$(findOrDie node)
 NPM=$(findOrDie npm)
+
+# if we don't do this, npm has a habit of writing to ~/tmp
 execOrDie "$NPM config set tmp /tmp"
 
 
 
 ### Meteor
-if [ -z $METEOR ]; then
-	execOrDie "$CURL https://install.meteor.com/ | sh"
-fi
+[ -z $METEOR ] && execOrDie "$CURL https://install.meteor.com/ | sh"
 METEOR=$(findOrDie meteor)
 
 
 ### Meteorite
-if [ -z $MRT ]; then
-	execOrDie "$NPM install -g meteorite"
-fi
+[ -z $MRT ] && execOrDie "$NPM install -g meteorite"
 MRT=$(findOrDie mrt)
 
 
 ### pm2
-if [ -z $PM2 ]; then
-	execOrDie "$NPM install -g pm2"
-fi
+[ -z $PM2 ] && execOrDie "$NPM install -g pm2"
 PM2=$(findOrDie pm2)
 
 
@@ -365,10 +323,8 @@ PM2=$(findOrDie pm2)
 # COMMENTED OUT UNTIL mandrillctl IS CROSS PLATFORM
 #
 # MANDRILLCTL=$(which mandrillctl 2>/dev/null)
-#if [ -z $MANDRILLCTL ]; then
-#	execOrDie "$NPM install -g mandrillctl"
-#fi
-#MANDRILLCTL=$(findOrDie mandrillctl)
+# [ -z $MANDRILLCTL ] &&  execOrDie "$NPM install -g mandrillctl"
+# MANDRILLCTL=$(findOrDie mandrillctl)
 
 
 ### Mandrill source code
@@ -433,9 +389,7 @@ fi
 PM2_CONF="${PM2_CONF}
 ]"
 
-if [ ! -d /usr/local/etc ]; then
-	mkdir -p /usr/local/etc
-fi
+[ ! -d /usr/local/etc ] &&  mkdir -p /usr/local/etc
 execOrDie "cat > /usr/local/etc/mandrill.json <<EOF
 $PM2_CONF
 EOF"
@@ -444,10 +398,8 @@ EOF"
 ### Build Mandrill
 execOrDie "pushd /usr/local/src/mandrill"
 execOrDie "mrt bundle /tmp/Mandrill.tar.gz"
-if [ ! -d /usr/local/mandrill ]; then
-	execOrDie "mkdir -p /usr/local/mandrill"
-fi
+[ ! -d /usr/local/mandrill ] &&  execOrDie "mkdir -p /usr/local/mandrill"
+
 execOrDie "tar --strip-components 1 -C /usr/local/mandrill -zxf /tmp/Mandrill.tar.gz"
 execOrDie "rm /tmp/Mandrill.tar.gz"
-
 execOrDie "sudo pm2 start /usr/local/etc/mandrill.json"
