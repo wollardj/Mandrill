@@ -350,14 +350,14 @@ METEOR=$(findOrDie meteor)
 
 ### Meteorite
 if [ -z $MRT ]; then
-	execOrDie "sudo $NPM install -g meteorite"
+	execOrDie "$NPM install -g meteorite"
 fi
 MRT=$(findOrDie mrt)
 
 
 ### pm2
 if [ -z $PM2 ]; then
-	execOrDie "sudo $NPM install -g pm2"
+	execOrDie "$NPM install -g pm2"
 fi
 PM2=$(findOrDie pm2)
 
@@ -367,7 +367,7 @@ PM2=$(findOrDie pm2)
 #
 # MANDRILLCTL=$(which mandrillctl 2>/dev/null)
 #if [ -z $MANDRILLCTL ]; then
-#	execOrDie "sudo $NPM install -g mandrillctl"
+#	execOrDie "$NPM install -g mandrillctl"
 #fi
 #MANDRILLCTL=$(findOrDie mandrillctl)
 
