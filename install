@@ -448,3 +448,5 @@ if [ ! -d /usr/local/mandrill ]; then
 fi
 execOrDie "sudo tar --strip-components 1 -C /usr/local/mandrill -zxf /tmp/Mandrill.tar.gz"
 execOrDie "rm /tmp/Mandrill.tar.gz"
+
+execOrDie "sudo pm2 start /usr/local/etc/mandrill.json"
