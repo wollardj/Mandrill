@@ -256,22 +256,6 @@ fi
 
 
 
-### curl
-### (don't bother checking on OS X - if it's not there, we have bigger problems)
-if [ -z $CURL ]; then
-	echo "Installing curl"
-	if [ $OS == "ubuntu" ]; then
-		execOrDie "sudo apt-get install curl"
-	elif [ $OS == "centos" ]; then
-		execOrDie "sudo yum install curl"
-	else
-		logError "Can't continue without curl"
-		exit 1
-	fi
-fi
-CURL=$(findOrDie curl)
-
-
 
 ### git
 if [ -z $GIT ]; then
@@ -377,11 +361,13 @@ PM2=$(findOrDie pm2)
 
 
 ### mandrillctl
-MANDRILLCTL=$(which mandrillctl 2>/dev/null)
-if [ -z $MANDRILLCTL ]; then
-	execOrDie "sudo $NPM install -g mandrillctl"
-fi
-MANDRILLCTL=$(findOrDie mandrillctl)
+# COMMENTED OUT UNTIL mandrillctl IS CROSS PLATFORM
+#
+# MANDRILLCTL=$(which mandrillctl 2>/dev/null)
+#if [ -z $MANDRILLCTL ]; then
+#	execOrDie "sudo $NPM install -g mandrillctl"
+#fi
+#MANDRILLCTL=$(findOrDie mandrillctl)
 
 
 ### Mandrill source code
