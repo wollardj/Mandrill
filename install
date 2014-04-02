@@ -92,9 +92,10 @@ findOrDie () {
 
 
 
+logWarn "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 answer=$(promptYN "This script isn't ready for production use yet. Try it anyway?")
 if [ $answer == "n" ]; then
-  exit 0
+	exit 0
 fi
 
 
