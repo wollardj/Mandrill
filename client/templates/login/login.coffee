@@ -1,3 +1,8 @@
+Template.login.rendered = ()->
+	$('#login_username').focus()
+
+
+
 Template.login.events {
 	'submit form': (event)->
 		event.stopPropagation()

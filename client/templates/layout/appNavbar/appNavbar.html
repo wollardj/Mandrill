@@ -1,0 +1,97 @@
+<template name="appNavbar">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mandrillNavMain">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="{{pathFor 'home'}}">
+					<img src="/ManDfav.png"/>andrill <small>v{{mandrillVersion}}</small>
+				</a>
+			</div>
+
+
+			<div class="collapse navbar-collapse" id="mandrillNavMain">
+				<ul class="nav navbar-nav">
+
+					<li class="{{routeIsActive "manifests"}}">
+						<a href="{{pathFor 'manifests' params='' }}">
+							<span class="{{#if manifestErrorsCount}}text-danger{{/if}}">
+								<i class="glyphicon glyphicon-list-alt"></i>
+								Manifests
+							</span>
+							<span class="badge">{{manifestsCount}}</span>
+						</a>
+					</li>
+					<li class="{{routeIsActive "pkgsinfo"}}">
+						<a href="{{pathFor 'pkgsinfo' params='' }}">
+							<span class="{{#if installsErrorsCount}}text-danger{{/if}}">
+								<i class="glyphicon glyphicon-save"></i>
+								Pkgsinfo
+							</span>
+							<span class="badge">{{installsCount}}</span>
+						</a>
+					</li>
+					<li class="{{routeIsActive "catalogs"}} {{routeIsActive "edit-condition"}}">
+						<a href="{{pathFor 'catalogs' params='' }}">
+							<span class="{{#if catalogsErrorsCount}}text-danger{{/if}}">
+								<i class="glyphicon glyphicon-book"></i>
+								Catalogs
+							</span>
+							<span class="badge">{{catalogsCount}}</span>
+						</a>
+					</li>
+				</ul>
+
+
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown {{routeIsActive 'me'}}">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="glyphicon glyphicon-user"></i>
+							{{loggedInUserDisplayName}}
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu" >
+							{{#if isAdmin}}
+							<li class="{{routeIsActive "accounts"}}
+								{{routeIsActive "accounts-access"}}">
+								<a href="{{pathFor 'accounts'}}">
+									<i class="glyphicon glyphicon-user"></i>
+									Accounts
+								</a>
+							</li>
+							<li class="{{routeIsActive "login-services"}}">
+								<a href="{{pathFor 'login-services'}}">
+									<i class="glyphicon glyphicon-log-in"></i>
+									Login Services
+								</a>
+							</li>
+							<li class="{{routeIsActive "mandrill-settings"}}">
+								<a href="{{pathFor 'mandrill-settings'}}">
+									<i class="glyphicon glyphicon-cog"></i>
+									Mandrill Settings
+								</a>
+							</li>
+							<li class="divider"></li>
+							{{/if}}
+							<li class="{{routeIsActive "me"}}">
+								<a href="{{pathFor 'me'}}">
+									<i class="glyphicon glyphicon-user"></i>
+									My Account
+								</a>
+							</li>
+							<li>
+								<a href="#logout" id="logout">
+									<i class="glyphicon glyphicon-log-out"></i>
+									Logout
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</template>
