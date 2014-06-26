@@ -2,38 +2,12 @@ Session.setDefault 'runningMakeCatalogs', false
 
 
 
-Template.appSidebar.rendered = ->
-	Template.appSidebar.resize()
-
-
-
 Template.appSidebar.routeIsActive = (aRoute) ->
 	routerName = Router.current().route.name
 	if routerName? and routerName is aRoute
 		'active'
 	else
 		''
-
-
-
-Template.appSidebar.resize = ->
-	#// Make sure the height of the sidebar matches the available height
-	#// within the window.
-	winHeight = $(window).height() - 25
-	$sidebar = $('#appSidebar')
-	currentHeight = $sidebar.height()
-
-	#// avoid triggering a re-draw if the height of the window
-	#// isn't changing.
-	if currentHeight isnt winHeight
-		$sidebar.height(winHeight)
-
-
-
-Template.appSidebar.created = ->
-	#// Make sure the height of the sidebar always matches the available
-	#// height when the window is resized.
-	$(window).on('resize', Template.appSidebar.resize)
 
 
 

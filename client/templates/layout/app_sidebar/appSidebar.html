@@ -1,5 +1,9 @@
 <template name="appSidebar">
 	<div id="appSidebar">
+		<a href="{{pathFor 'home'}}" id="mandrill_logo">
+			<i class="glyphicon glyphicon-home"></i>
+			Mandrill v{{mandrillVersion}}
+		</a>
 		<ul class="sidebar-nav">
 			<li class="sidebar-nav-header">
 				Meta
@@ -147,9 +151,4 @@
 		</ul>
 
 	</div>
-
-	<a href="{{pathFor 'home'}}" id="mandrill_logo">
-		<i class="glyphicon glyphicon-home"></i>
-		Mandrill v{{mandrillVersion}}
-	</a>
 </template>
