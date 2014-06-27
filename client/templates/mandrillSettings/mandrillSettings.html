@@ -3,89 +3,106 @@
 		<h2>Mandrill Settings</h2>
 	</div>
 
-	<form class="form-horizontal" role="form">
-		<fieldset>
-			<legend>Munki</legend>
-			<div class="form-group {{munkiRepoPathClass}} has-feedback">
-				<label for="munkiRepoPath" class="col-sm-3 control-label">
-					Repo Path
-				</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control" id="munkiRepoPath" placeholder="/Users/Shared/munki_repo" value="{{settings.munkiRepoPath}}">
-					<span class="glyphicon glyphicon-{{munkiRepoPathFeedbackIcon}} form-control-feedback"></span>
 
+	<form class="form-horizontal" role="form">
+	<div class="row">
+
+
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">Munki Repo Options</div>
+				<div class="panel-body">
+					<div class="form-group {{munkiRepoPathClass}} has-feedback">
+						<label for="munkiRepoPath" class="col-sm-3 control-label">
+							Repo Path
+						</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id="munkiRepoPath" placeholder="/Users/Shared/munki_repo" value="{{settings.munkiRepoPath}}">
+							<span class="glyphicon glyphicon-{{munkiRepoPathFeedbackIcon}} form-control-feedback"></span>
+
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9 col-sm-offset-3">
+							{{#if runningMakeCatalogs}}
+								{{> bubbleLoader}}
+							{{/if}}
+							{{#unless runningMakeCatalogs}}
+							<button id="makecatalogs" class="btn btn-default">
+								makecatalogs{{#if settings.makeCatalogsSanityIsDisabled}} -f{{/if}}
+							</button>
+							{{/unless}}
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9 col-sm-offset-3">
+							<label>
+								<input type="checkbox" value="" id="makeCatalogsIsEnabled" {{makecatalogsIsChecked}}>
+								Allow anyone to run `makecatalogs`.
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9 col-sm-offset-3">
+							<label>
+								<input type="checkbox" value="" id="makeCatalogsSanityIsDisabled" {{makecatalogsDisableSanityIsChecked}}>
+								Disable sanity checks (`makecatalogs -f`).
+							</label>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-sm-9 col-sm-offset-3">
-					{{#if runningMakeCatalogs}}
-						{{> bubbleLoader}}
+		</div>
+
+
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">Git Settings</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<div class="col-sm-9 col-sm-offset-3">
+							<label>
+								<input type="checkbox" value="" id="gitIsEnabled" {{gitIsChecked}}>
+								Enable git.
+							</label>
+						</div>
+					</div>
+					{{#if settings.gitIsEnabled}}
+					<div class="form-group">
+						<label for="gitBinaryPath" class="col-sm-3 control-label">
+							Path to git
+						</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id="gitBinaryPath" placeholder="/usr/bin/git" value="{{settings.gitBinaryPath}}" />
+						</div>
+					</div>
 					{{/if}}
-					{{#unless runningMakeCatalogs}}
-					<button id="makecatalogs" class="btn btn-default">
-						makecatalogs{{#if settings.makeCatalogsSanityIsDisabled}} -f{{/if}}
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">Mandrill Options</div>
+				<div class="panel-body">
+					<button id="rebuildCaches" class="btn btn-default">
+						Rebuild Repo Caches
 					</button>
-					{{/unless}}
+					<span class="help-block">
+						Mandrill caches the manifests, pkgsinfo, and
+						catalogs in your repo via filesystem
+						watchers. In the unlikely event those
+						watchers start missing some changes, this
+						button will purge the database and restart
+						the watcher processes.
+					</span>
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="col-sm-9 col-sm-offset-3">
-					<label>
-						<input type="checkbox" value="" id="makeCatalogsIsEnabled" {{makecatalogsIsChecked}}>
-						Allow anyone to run `makecatalogs`.
-					</label>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-9 col-sm-offset-3">
-					<label>
-						<input type="checkbox" value="" id="makeCatalogsSanityIsDisabled" {{makecatalogsDisableSanityIsChecked}}>
-						Disable sanity checks (`makecatalogs -f`).
-					</label>
-				</div>
-			</div>
-		</fieldset>
-		<fieldset>
-			<legend>Git</legend>
-			<div class="form-group">
-				<div class="col-sm-9 col-sm-offset-3">
-					<label>
-						<input type="checkbox" value="" id="gitIsEnabled" {{gitIsChecked}}>
-						Enable git.
-					</label>
-				</div>
-			</div>
-			{{#if settings.gitIsEnabled}}
-			<div class="form-group">
-				<label for="gitBinaryPath" class="col-sm-3 control-label">
-					Path to git binary
-				</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control" id="gitBinaryPath" placeholder="/usr/bin/git" value="{{settings.gitBinaryPath}}" />
-				</div>
-			</div>
-			{{/if}}
-		</fieldset>
-		<fieldset>
-			<legend>Mandrill</legend>
-			<div class="form-group">
-				<div class="col-sm-9 col-sm-offset-3">
-					<label>
-						<button id="rebuildCaches" class="btn btn-default">
-							Rebuild Repo Caches
-						</button>
-						<span class="help-block">
-							Mandrill caches the manifests, pkgsinfo, and
-							catalogs in your repo via filesystem
-							watchers. In the unlikely event those
-							watchers start missing some changes, this
-							button will purge the database and restart
-							the watcher processes.
-						</span>
-					</label>
-				</div>
-			</div>
-		</fieldset>
+		</div>
+	</div>
+
 	</form>
 
 </template>

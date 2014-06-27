@@ -2,7 +2,17 @@
 
 body
 	position relative
-	padding-top 50px
+	padding 0
+
+#appContainer
+	position fixed
+	background #fff url('/backgroundTile.png') center repeat-x
+	background-size 112px 100%
+	width 100%
+	height 100%
+	margin 0
+	padding 50px 0 0 0
+	overflow auto
 
 .row
 	margin 0
@@ -31,14 +41,9 @@ div.borderless-container
 
 
 
-#appContent
-	margin-left 0
-
-
-
 .mandrill-header
 	text-align center
-	box-shadow inset 0px 5px 15px rgba(0, 0, 0, 0.7)
+	box-shadow inset 0px -10px 10px -10px rgba(0,0,0,0.7)
 	margin 0 -15px 0 -15px
 	padding 15px
 
@@ -114,3 +119,22 @@ p.app-footer
 		margin-top 139px
 
 /* /"sticky" paging toolbar */
+
+
+
+
+
+.panel
+	border-color rgb(208, 208, 208)
+	border-radius 5px 5px 5px 5px
+	box-shadow 0 2px 6px #919293
+
+
+.panel-default
+	.panel-heading
+		background linear-gradient(to bottom, #fefefe 0%, #f6f6f6 50%, #ededed 51%, #e4e4e4 100%)
+
+
+.panel-primary
+	.panel-heading
+		background linear-gradient(to bottom, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%)

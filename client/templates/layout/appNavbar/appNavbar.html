@@ -1,5 +1,5 @@
 <template name="appNavbar">
-	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<nav class="navbar navbar-default navbar-fixed-top appNavbar" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mandrillNavMain">
@@ -17,7 +17,7 @@
 				<ul class="nav navbar-nav">
 
 					<li class="{{routeIsActive "manifests"}}">
-						<a href="{{pathFor 'manifests' params='' }}">
+						<a href="{{pathFor 'manifestsBrowser' params='' }}">
 							<span class="{{#if manifestErrorsCount}}text-danger{{/if}}">
 								<i class="glyphicon glyphicon-list-alt"></i>
 								Manifests
