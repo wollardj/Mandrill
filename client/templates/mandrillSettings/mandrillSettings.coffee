@@ -1,7 +1,10 @@
 Session.setDefault 'runningMakeCatalogs', false
 
+Template.mandrillSettings.settings = ->
+	MandrillSettings.findOne()
+
 Template.mandrillSettings.munkiRepoPathClass = ->
-	settings = Router.current().data().settings
+	settings = MandrillSettings.findOne()
 	if settings.munkiRepoPathIsValid is true
 		'has-success'
 	else
@@ -9,19 +12,22 @@ Template.mandrillSettings.munkiRepoPathClass = ->
 
 
 Template.mandrillSettings.makecatalogsIsChecked = ->
-	if this.settings.makeCatalogsIsEnabled is true then 'checked'
+	settings = MandrillSettings.findOne()
+	if settings? and settings.makeCatalogsIsEnabled is true then 'checked'
 
 
 Template.mandrillSettings.makecatalogsDisableSanityIsChecked = ->
-	if this.settings.makeCatalogsSanityIsDisabled is true then 'checked'
+	settings = MandrillSettings.findOne()
+	if settings? and settings.makeCatalogsSanityIsDisabled is true then 'checked'
 
 
 Template.mandrillSettings.gitIsChecked = ->
-	if this.settings.gitIsEnabled is true then 'checked'
+	settings = MandrillSettings.findOne()
+	if settings? and settings.gitIsEnabled is true then 'checked'
 
 
 Template.mandrillSettings.munkiRepoPathFeedbackIcon = ->
-	settings = Router.current().data().settings
+	settings = MandrillSettings.findOne()
 	if settings.munkiRepoPathIsValid is true
 		'ok'
 	else
@@ -60,7 +66,7 @@ Template.mandrillSettings.events {
 		MandrillSettings.set 'makeCatalogsIsEnabled', value
 
 		if value is true
-			#// initialize the repo if needed.
+			# initialize the repo if needed.
 			Meteor.call 'git-init'
 
 
@@ -72,7 +78,7 @@ Template.mandrillSettings.events {
 		MandrillSettings.set 'makeCatalogsSanityIsDisabled', value
 
 		if value is true
-			#// initialize the repo if needed.
+			# initialize the repo if needed.
 			Meteor.call 'git-init'
 
 
@@ -82,7 +88,7 @@ Template.mandrillSettings.events {
 
 		value = $('#munkiRepoPath').val()
 
-		#// Make sure the path has a trailing '/'
+		# Make sure the path has a trailing '/'
 		if /\/$/.test(value) is false
 			value += '/'
 			$('#munkiRepoPath').val value
@@ -94,6 +100,15 @@ Template.mandrillSettings.events {
 		# https://github.com/wollardj/Mandrill/issues/7
 		if MandrillSettings.get('gitIsEnabled') is true
 			Meteor.call 'git-init'
+
+
+	'change #SoftwareRepoURL': (event)->
+		# Make sure the url has a trailing '/'
+		url = $(event.target).val()
+		if /\/$/.test(url) is false
+			url += '/'
+			$('#SoftwareRepoURL').val url
+		MandrillSettings.set 'SoftwareRepoURL', url
 
 
 	'click #makecatalogs': (event)->

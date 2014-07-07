@@ -10,7 +10,7 @@ shell = Meteor.require 'shelljs'
 	repoPath: ''
 
 
-	# Returns one of 'catalog', 'manifest', 'pkgsinfo', pr 'unknown'
+	# Returns one of 'catalog', 'manifest', 'pkgsinfo', 'icons', or 'unknown'
 	# depending on which subdirectory within the repo the file is found.
 	repoTypeForPath: Meteor.bindEnvironment (aPath)->
 		repo = MandrillSettings.get 'munkiRepoPath', ''
@@ -25,6 +25,8 @@ shell = Meteor.require 'shelljs'
 			'catalogs'
 		else if aPath.indexOf(repo + 'pkgsinfo/') isnt -1
 			'pkgsinfo'
+		else if aPath.indexOf(repo + 'icons/') isnt -1
+			'icons'
 		else
 			'unknown'
 
@@ -47,6 +49,9 @@ shell = Meteor.require 'shelljs'
 
 		else if repoType is 'catalogs'
 			MunkiCatalogs.remove {path: path}
+
+		else if repoType is 'icons'
+			MunkiIcons.remove {path: path}
 
 
 
@@ -72,13 +77,23 @@ shell = Meteor.require 'shelljs'
 		if shell.test('-f', path) is false
 			return
 
+		repoType = WatchHandler.repoTypeForPath path
+		if repoType is 'icons'
+			icons_path = MandrillSettings.get('munkiRepoPath') + 'icons/'
+			icon_file = path.replace(icons_path, '')
+			icon_name = icon_file.split('.')[0]
+			MunkiIcons.upsert {file: icon_file}, {
+				file: icon_file
+				name: icon_name
+			}
+			return
+
 		contents = shell.cat path
 		parsedData = null
 		parseError = null
 		urlName = ''
 		basePath = ''
 		mongoDocument = {}
-		repoType = WatchHandler.repoTypeForPath path
 
 
 		# deal with any errors from fs.readFile()

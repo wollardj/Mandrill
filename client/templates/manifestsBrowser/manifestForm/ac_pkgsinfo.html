@@ -1,0 +1,20 @@
+<template name="ac_pkgsinfo">
+<table>
+	<tr>
+		<td width="70px">
+			<img src="{{icon_url}}" class="pull-left" height="64px" width="64px" />
+		</td>
+		<td>
+			<h4>
+				{{#if display_name}}{{display_name}}{{/if}}
+				{{#unless display_name}}{{name}}{{/unless}}
+				<br />
+				<small>
+					{{#if search_ignores_versions}}latest ({{version}}){{/if}}
+					{{#unless search_ignores_versions}}{{version}}{{/unless}}
+				</small>
+			</h4>
+		</td>
+	</tr>
+</table>
+</template>

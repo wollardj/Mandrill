@@ -21,6 +21,7 @@ Meteor.methods {
 			MunkiManifests.remove {}
 			MunkiCatalogs.remove {}
 			MunkiPkgsinfo.remove {}
+			MunkiIcons.remove {}
 
 		# WatcherConfig.closeWatchers();
 		if MandrillWatchers?
@@ -41,6 +42,7 @@ Meteor.methods {
 				repoPath + 'pkgsinfo/'
 				repoPath + 'manifests/'
 				repoPath + 'catalogs/'
+				repoPath + 'icons/'
 			]
 
 			MandrillWatchers = watchr.watch WatcherConfig

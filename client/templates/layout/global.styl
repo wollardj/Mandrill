@@ -1,17 +1,20 @@
 @import 'globalVars.import.styl'
 
+
+html
+	background #fff url('/backgroundTile.png') repeat-x top right
+
 body
+	background-color transparent
 	position relative
-	padding 0
+	padding 50px 0 0 0
+
 
 #appContainer
 	position fixed
-	background #fff url('/backgroundTile.png') center repeat-x
-	background-size 112px 100%
 	width 100%
 	height 100%
 	margin 0
-	padding 50px 0 0 0
 	overflow auto
 
 .row
@@ -22,11 +25,11 @@ body
 	padding-top 15px
 
 
-.modal
-	z-index 10000
-
 .modal-dialog
 	width 80%
+	.modal-body
+		max-height 450px
+		overflow auto
 
 
 div.borderless-container
@@ -46,20 +49,15 @@ div.borderless-container
 	box-shadow inset 0px -10px 10px -10px rgba(0,0,0,0.7)
 	margin 0 -15px 0 -15px
 	padding 15px
-
 	background header_bg_color
-
-	button
-		position absolute
-		top 30px
-		right 25px
 
 	h1, h2, h3, h4, h5, h6
 		color #fff
 		text-shadow 0 -1px 0 rgba(0, 0, 0, 0.7)
-		display inline-block
+		display block
 		font-family 'Lato', sans-serif
 		font-weight 300
+
 
 
 p.app-footer
@@ -130,6 +128,11 @@ p.app-footer
 	box-shadow 0 2px 6px #919293
 
 
+.panel-heading
+	h1, h2, h3, h4, h5, h6
+		margin 0
+
+
 .panel-default
 	.panel-heading
 		background linear-gradient(to bottom, #fefefe 0%, #f6f6f6 50%, #ededed 51%, #e4e4e4 100%)
@@ -138,3 +141,64 @@ p.app-footer
 .panel-primary
 	.panel-heading
 		background linear-gradient(to bottom, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%)
+
+
+
+
+
+// asana-style form fields (borders are hidden unless mouse over or focus)
+input.low-profile
+textarea.low-profile
+	border 1px solid transparent
+	box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.0)
+
+	&:hover:not(:focus)
+		border 1px solid rgb(203, 203, 203)
+		box-shadow inset 0 1px 1px rgba(0, 0, 0, .075)
+	&:focus
+		border 1px solid initial
+		box-shadow inset 0 1px 1px rgba(0, 0, 0, .075)
+		
+
+
+
+// Typeahead classes
+.tt-dropdown-menu
+	background-color rgba(255, 255, 255, 0.9)
+	padding 0px
+	box-shadow 0 5px 10px rgba(0, 0, 0, 0.7)
+	min-width 170px
+	border-radius 3px 3px 5px 5px
+	p
+		padding 5px
+		margin 0
+		white-space pre
+
+	.tt-suggestions
+		padding 0
+
+		.tt-suggestion:first-of-type
+			border-radius 3px 3px 0 0
+		.tt-suggestion:last-of-type
+			border-radius 0 0 5px 5px
+
+		.tt-suggestion
+			margin 0
+			white-space nowrap
+			color #444
+			text-align left
+			font-size 12pt
+			padding 1px 5px
+
+
+		.tt-cursor
+			background linear-gradient(to bottom, rgba(122,188,255,1) 0%,rgba(96,171,248,1) 44%,rgba(64,150,238,1) 100%)
+			color white
+			text-shadow 0 -1px 0 rgba(0, 0, 0, 0.7)
+
+
+
+// Ace Editor
+.mandrill-aceEditor
+	display block
+	height 560px

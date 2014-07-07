@@ -48,6 +48,12 @@ Meteor.publish 'MunkiCatalogs', ->
 	filter = Mandrill.user.accessPatternsFilter this.userId
 	MunkiCatalogs.find filter
 
+Meteor.publish 'MunkiIcons', ->
+	if Mandrill.user.isValid(this.userId) is true
+		MunkiIcons.find()
+	else
+		[]
+
 
 Meteor.publish 'ServerStats', ->
 	ServerStats.find {}, {sort: {collectedDate: -1}}
