@@ -8,6 +8,7 @@
 	</a>
 </template>
 
+
 <template name="manifestForm">
 <div class="row">
 	<div class="col-sm-9">
@@ -22,163 +23,26 @@
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<div class="panel panel-primary managed_installs-panel">
-					<div class="panel-heading">
-						<span class="glyphicon glyphicon-save"></span>
-						Managed Installs
-						<span class="badge pull-right">
-							{{#unless managed_installs}}0{{/unless}}
-							{{#if managed_installs}}
-							{{managed_installs.length}}
-							{{/if}}
-						</span>
-					</div>
-					<div class="panel-body">
-						<input
-							type="text"
-							id="select_managed_installs_field"
-							class="typeahead low-profile form-control"
-							placeholder="+ managed install"
-							data-source="ac_pkgs"
-							data-selected="ac_manifest_field_selected"
-							data-template="ac_pkgsinfo" />
-					</div>
-
-					<ul class="list-group">
-						{{#each managed_installs}}
-						<li class="
-							list-group-item
-							elastic-in
-							has-remove-btn
-							{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
-						>
-							{{> remove_btn}}
-							<img src="{{icon_url}}" width="26px" />
-							{{pkg_display_name}}
-							<small class="text-muted">{{this}}</small>
-						</li>
-						{{/each}}
-					</ul>
-				</div>
+				{{#with 'managed_installs'}}
+				{{> manifest_installer_item}}
+				{{/with}}
 			</div>
 			<div class="col-md-6">
-				<div class="panel panel-default optional_installs-panel">
-					<div class="panel-heading">
-						<span class="glyphicon glyphicon-cloud-download"></span>
-						Optional Installs
-						<span class="badge pull-right">
-							{{#unless optional_installs}}0{{/unless}}
-							{{#if optional_installs}}
-							{{optional_installs.length}}
-							{{/if}}
-						</span>
-					</div>
-					<div class="panel-body">
-						<input
-							type="text"
-							id="select_optional_installs_field"
-							class="typeahead low-profile form-control"
-							placeholder="+ optional install"
-							data-source="ac_pkgs"
-							data-selected="ac_manifest_field_selected"
-							data-template="ac_pkgsinfo" />
-					</div>
-					<ul class="list-group">
-						{{#each optional_installs}}
-						<li class="
-							list-group-item
-							elastic-in
-							has-remove-btn
-							{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
-						>
-							{{> remove_btn}}
-							<img src="{{icon_url}}" width="26px" />
-							{{pkg_display_name}}
-							<small class="text-muted">{{this}}</small>
-						</li>
-						{{/each}}
-					</ul>
-				</div>
+				{{#with 'optional_installs'}}
+				{{> manifest_installer_item}}
+				{{/with}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-				<div class="panel panel-default managed_updates-panel">
-					<div class="panel-heading">
-						<span class="glyphicon glyphicon-refresh"></span>
-						Managed Updates
-						<span class="badge pull-right">
-							{{#unless managed_updates}}0{{/unless}}
-							{{#if managed_updates}}
-							{{managed_updates.length}}
-							{{/if}}
-						</span>
-					</div>
-					<div class="panel-body">
-						<input
-							type="text"
-							id="select_managed_updates_field"
-							class="typeahead low-profile form-control"
-							placeholder="+ managed update"
-							data-source="ac_pkgs"
-							data-selected="ac_manifest_field_selected"
-							data-template="ac_pkgsinfo" />
-					</div>
-					<ul class="list-group">
-						{{#each managed_updates}}
-						<li class="
-							list-group-item
-							elastic-in
-							has-remove-btn
-							{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
-						>
-							{{> remove_btn}}
-							<img src="{{icon_url}}" width="26px" />
-							{{pkg_display_name}}
-							<small class="text-muted">{{this}}</small>
-						</li>
-						{{/each}}
-					</ul>
-				</div>
+				{{#with 'managed_updates'}}
+				{{> manifest_installer_item}}
+				{{/with}}
 			</div>
 			<div class="col-md-6">
-				<div class="panel panel-default managed_uninstalls-panel">
-					<div class="panel-heading">
-						<span class="glyphicon glyphicon-remove-circle"></span>
-						Managed Uninstalls
-						<span class="badge pull-right">
-							{{#unless managed_uninstalls}}0{{/unless}}
-							{{#if managed_uninstalls}}
-							{{managed_uninstalls.length}}
-							{{/if}}
-						</span>
-					</div>
-					<div class="panel-body">
-						<input
-							type="text"
-							id="select_managed_uninstalls_field"
-							class="typeahead low-profile form-control"
-							placeholder="+ managed uninstall"
-							data-source="ac_pkgs"
-							data-selected="ac_manifest_field_selected"
-							data-template="ac_pkgsinfo" />
-					</div>
-					<ul class="list-group">
-						{{#each managed_uninstalls}}
-						<li class="
-							list-group-item
-							elastic-in
-							has-remove-btn
-							{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
-						>
-							{{> remove_btn}}
-							<img src="{{icon_url}}" width="26px" />
-							{{pkg_display_name}}
-							<small class="text-muted">{{this}}</small>
-						</li>
-						{{/each}}
-					</ul>
-				</div>
+				{{#with 'managed_uninstalls'}}
+				{{> manifest_installer_item}}
+				{{/with}}
 			</div>
 		</div>
 	</div>

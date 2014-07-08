@@ -1,0 +1,38 @@
+<template name="manifest_installer_item">
+<div class="panel panel-default {{this}}-panel">
+	<div class="panel-heading">
+		<span class="glyphicon glyphicon-{{glyph}}"></span>
+		{{title}}
+		<span class="badge pull-right">
+			{{#unless datum}}0{{/unless}}
+			{{#if datum}}{{datum.length}}{{/if}}
+		</span>
+	</div>
+	<div class="panel-body">
+		<input
+			type="text"
+			id="select_{{this}}_field"
+			class="typeahead low-profile form-control"
+			placeholder="+ {{this}}"
+			data-source="ac_pkgs"
+			data-selected="ac_manifest_field_selected"
+			data-template="ac_pkgsinfo" />
+	</div>
+
+	<ul class="list-group">
+		{{#each datum}}
+		<li class="
+			list-group-item
+			elastic-in
+			has-remove-btn
+			{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
+		>
+			{{> remove_btn}}
+			<img src="{{icon_url}}" width="26px" />
+			{{pkg_display_name}}
+			<small class="text-muted">{{this}}</small>
+		</li>
+		{{/each}}
+	</ul>
+</div>
+</template>
