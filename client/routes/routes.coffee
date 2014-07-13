@@ -12,7 +12,12 @@ Router.map ->
 		path: '/',
 		controller: 'HomeRouter'
 	}
-	
+
+	this.route 'repo_browser', {
+		path: '/repo/'
+		controller: 'RepoRouter'
+	}
+
 	this.route 'manifests', {
 		path: '/manifests/:urlName?',
 		controller: 'ManifestsRouter'
@@ -33,17 +38,17 @@ Router.map ->
 		path: '/pkgsinfo/:urlName?',
 		controller: 'PkgsinfoRouter'
 	}
-	
+
 	this.route 'catalogs', {
 		path: '/catalogs/:urlName?',
 		controller: 'CatalogsRouter'
 	}
-	
+
 	this.route 'me', {
 		path: '/me',
 		controller: 'MeRouter'
 	}
-	
+
 
 
 	#// --- Admin Routes --- //
@@ -67,7 +72,7 @@ Router.map ->
 		path: '/login-services',
 		controller: 'LoginServicesRouter'
 	}
-	
+
 	this.route 'mandrill-settings', {
 		path: '/mandrill-settings',
 		controller: 'MandrillSettingsRouter'

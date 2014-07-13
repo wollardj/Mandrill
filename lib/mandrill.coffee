@@ -6,6 +6,34 @@
 	subs: {}
 
 
+	# methods for handling strings as paths
+	path: {
+		components: (a_string)->
+			a_string
+				.replace(/^\/*/, '') # remove leading '/'
+				.replace(/\/*$/, '') # remove trailing '/'
+				.split('/')
+
+		# takes one or more strings as arguments and creates a single
+		# absolute (starts with '/') path.
+		concat: ()->
+			# clean up any trailing/leading separators
+			strings = []
+			for str in arguments
+				if str? and str.replace?
+					strings.push str.replace(/^\/*/, '').replace(/\/*$/,'')
+
+			path = ''
+			for item in strings
+				path = path + '/' + item
+			path
+
+		# same as Mandrill.path.append, but doesn't prepend a '/' to the result.
+		concat_relative: ()->
+			Mandrill.path.concat.apply(null, arguments).replace(/^\/*/, '')
+	}
+
+
 	tpl: {
 		activateTooltips: ->
 			items = $('[data-toggle]')
