@@ -113,7 +113,7 @@ p.app-footer
 	@media screen and (min-width: 768px)
 		margin-top 75px
 
-	@media screen and (max-width: 767px)	
+	@media screen and (max-width: 767px)
 		margin-top 139px
 
 /* /"sticky" paging toolbar */
@@ -149,16 +149,33 @@ p.app-footer
 // asana-style form fields (borders are hidden unless mouse over or focus)
 input.low-profile
 textarea.low-profile
+	background-color transparent
+	border-radius 3px
 	border 1px solid transparent
 	box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.0)
+	color #777
+	height 25px
+	padding 1px 5px
+	transition all 200ms
 
 	&:hover:not(:focus)
+		background-color white
 		border 1px solid rgb(203, 203, 203)
 		box-shadow inset 0 1px 1px rgba(0, 0, 0, .075)
 	&:focus
-		border 1px solid initial
+		background-color white
+		border 1px solid rgb(183, 183, 183)
 		box-shadow inset 0 1px 1px rgba(0, 0, 0, .075)
-		
+
+	&.search
+		width 60px
+
+		&:focus
+			outline none
+			height 40px
+			width 400px
+			box-shadow inset 0 1px 1px rgba(0, 0, 0, .1)
+
 
 
 

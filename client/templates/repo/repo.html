@@ -1,47 +1,58 @@
 <template name="repo">
-  <p class="lead text-warning">Github inspired navigation</p>
+    <p class="lead text-warning">Github inspired navigation</p>
 
 
-  <ol class="breadcrumb">
-    {{#each breadcrumb}}
-      {{#if is_active}}
-      <li class="active">
-        {{name}}
-        <span class="badge">{{dir_listing.length}}</span>
-      </li>
-      {{/if}}
-      {{#unless is_active}}
-      <li><a href="{{url}}">{{name}}</a></li>
-      {{/unless}}
-    {{/each}}
-  </ol>
+    <ol class="breadcrumb">
+        <li>
+            <input
+                type="search"
+                class="low-profile search"
+                value="{{filter}}"
+                placeholder="Search" />
+        </li>
+        {{#each breadcrumb}}
+
+        {{#if is_active}}
+        <li class="active">
+            {{name}}
+            <span class="badge">{{dir_listing.length}}</span>
+        </li>
+        {{/if}}
+        {{#unless is_active}}
+        <li>
+            <a href="{{url}}">{{name}}</a>
+        </li>
+        {{/unless}}
+
+        {{/each}}
+    </ol>
 
 <div class="panel">
-  <table class="table table-bordered">
+    <table class="table table-bordered">
     <tbody>
     {{#if dot_dot_url}}
     <tr>
-      <td>
-        <span class="glyphicon glyphicon-chevron-up" style="visibility: hidden"></span>
-        <a href="{{dot_dot_url}}">..</a>
-      </td>
+        <td>
+            <span class="glyphicon glyphicon-chevron-up" style="visibility: hidden"></span>
+            <a href="{{dot_dot_url}}">..</a>
+        </td>
     </tr>
     {{/if}}
     {{#each dir_listing}}
     <tr>
-      <td>
-        {{#unless is_leaf}}
-        <span class="glyphicon glyphicon-folder-close text-info"></span>
-        {{/unless}}
-        {{#if is_leaf}}
-        <span class="glyphicon glyphicon-file"></span>
-        {{/if}}
-        <a href="{{url}}">{{name}}</a>
-      </td>
+        <td>
+            {{#unless is_leaf}}
+            <span class="glyphicon glyphicon-folder-close text-info"></span>
+            {{/unless}}
+            {{#if is_leaf}}
+            <span class="glyphicon glyphicon-file"></span>
+            {{/if}}
+            <a href="{{url}}">{{name}}</a>
+        </td>
     </tr>
     {{/each}}
-  </tbody>
-  </table>
+    </tbody>
+    </table>
 </div>
 
 </template>
