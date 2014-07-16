@@ -5,8 +5,44 @@ shell.config.fatal = false
 
 Meteor.methods {
 
-	# Atomically overwrites the file at path with the contents of body.
-	# If path doesn't exist, it will be created.
+	###
+		Deletes the given file or directory, provided the user is permitted.
+		`path` is expected to be absolute.
+	###
+	'unlink': (path)->
+		Mandrill.user.canModifyPath this.userId, path, true
+		if not path?
+			throw new Meteor.Error 417, 'Expected a path to unlink.'
+
+		repoPath = GitBroker.git().repoPath
+
+		if GitBroker.gitIsEnabled() is true and
+				/^\?\?/.test(GitBroker.status(path)[0]) is false
+
+			GitBroker.remove path
+			GitBroker.commit this.userId, path,
+				'[Mandrill] Deleting file(s) at path "' +
+				GitBroker.relativePathForFile(path) + '"'
+
+		else
+			shell.rm '-rf', path
+			shell_rm_error = shell.error()
+
+		# if the file still exists, let's make sure it gets put back into the
+		# database, assuming it's been removed by some other code.
+		if shell.test('-e', path)
+			WatchHandler.processFile path
+			throw new Meteor.Error 500, 'Failed to remove ' + path
+
+		if shell_rm_error?
+			throw new Meteor.Error 500, shell.error()
+
+
+
+	###
+		Atomically overwrites the file at path with the contents of body.
+		If path doesn't exist, it will be created.
+	###
 	'filePutContents': (path, body)->
 		repoPath = GitBroker.git().repoPath
 
@@ -14,23 +50,6 @@ Meteor.methods {
 
 		if not path?
 			throw new Meteor.Error 417, 'Expected a file path.'
-		
-		# try to update the record if possible.
-		if path.indexOf('/manifests/') >= 0
-			MunkiManifests.upsert {'path': path}, {
-				'$set': {
-					'raw': body
-					'dom': plist.parse(body)
-				}
-			}
-		
-		else if path.indexOf('/pkgsinfo/') >= 0
-			MunkiPkgsinfo.upsert {'path': path}, {
-				'$set': {
-					'raw': body
-					'dom': plist.parse(body)
-				}
-			}
 
 
 		# write the file atomically
