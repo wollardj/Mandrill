@@ -4,7 +4,7 @@ class @GitBroker
 		account = Meteor.users.findOne userId
 		if userId? and account? and account.profile? and account.emails?
 			account.profile.name + ' <' + account.emails[0].address + '>'
-		
+
 		else
 			throw new Meteor.Error 403, 'Could not determine who is logged ' +
 				'in. Blocking commit request.'
@@ -58,7 +58,7 @@ class @GitBroker
 
 
 	@remove: Meteor.bindEnvironment (path)->
-		GitBroker.git().exec 'rm', '-f', path
+		GitBroker.git().exec 'rm', '-rf', path
 	, (e)->
 		throw e
 
@@ -79,7 +79,7 @@ class @GitBroker
 		fmt = '--pretty=%H%x1F%h%x1F%aN%x1F%ae%x1F%s%x1F%b%x1F%aD'
 		results = GitBroker.git().exec 'log', '-z', fmt, path
 		logs = []
-		
+
 		if results.code isnt 0
 			throw new Meteor.Error results.code, 'Unable to retrieve logs for \'' + path + '\'.'
 
