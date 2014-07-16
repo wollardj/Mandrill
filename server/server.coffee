@@ -22,7 +22,9 @@ Meteor.startup ->
 		# below 1024 and demote our privileges. This is done by switching the
 		# process owner to the '_mandrill' user - similar to what Apache does.
 
-		if process.env.MANDRILL_MODE? and process.env.MANDRILL_MODE is 'production'
+		if process.env.MANDRILL_MODE? and
+				process.env.MANDRILL_MODE is 'production'
+
 			# Make sure we're running as the _mandrill user
 			oldUid = process.getuid()
 			try
@@ -69,4 +71,3 @@ Meteor.startup ->
 		MandrillSettings.set 'gitIsEnabled', false
 	if not MandrillSettings.get('gitBinaryPath')?
 		MandrillSettings.get 'gitBinaryPath', '/usr/bin/git'
-	
