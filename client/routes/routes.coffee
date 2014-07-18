@@ -13,7 +13,7 @@ Router.map ->
 		controller: 'HomeRouter'
 	}
 
-	this.route 'repo_browser', {
+	this.route 'repo', {
 		path: '/repo/'
 		controller: 'RepoRouter'
 	}

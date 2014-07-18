@@ -18,10 +18,7 @@ Meteor.methods {
 			# The settings have changed, so we'll want to
 			# clean out the database to make way for data from
 			# any new paths that were defined.
-			MunkiManifests.remove {}
-			MunkiCatalogs.remove {}
-			MunkiPkgsinfo.remove {}
-			MunkiIcons.remove {}
+			MunkiRepo.remove {}
 
 		# WatcherConfig.closeWatchers();
 		if MandrillWatchers?
@@ -38,12 +35,7 @@ Meteor.methods {
 
 			MandrillSettings.set 'munkiRepoPathIsValid', shell.test('-d', repoPath)
 
-			WatcherConfig.paths = [
-				repoPath + 'pkgsinfo/'
-				repoPath + 'manifests/'
-				repoPath + 'catalogs/'
-				repoPath + 'icons/'
-			]
+			WatcherConfig.paths = [ repoPath ]
 
 			MandrillWatchers = watchr.watch WatcherConfig
 			{repoPath: repoPath}

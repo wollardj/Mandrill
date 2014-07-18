@@ -20,14 +20,11 @@ class @AppRouter extends RouteController
 		if isLoggedIn is true
 			# Setup global data subscriptions once the user has logged in.
 			return [
-				Meteor.subscribe('MandrillSettings'),
-				Meteor.subscribe('repoStats', user),
-				Meteor.subscribe('MandrillAccounts'),
-				Meteor.subscribe('ServerStats'),
-				Meteor.subscribe('MunkiManifests', {}, {sort:{err: -1, urlName:1}}),
-				Meteor.subscribe('MunkiPkgsinfo'),
-				Meteor.subscribe('MunkiCatalogs')
-				Meteor.subscribe('MunkiIcons')
+				Meteor.subscribe('MandrillStats')
+				Meteor.subscribe('MandrillSettings')
+				Meteor.subscribe('MandrillAccounts')
+				Meteor.subscribe('ServerStats')
+				Meteor.subscribe('MunkiRepo')
 			]
 		else
 			# Return an empty array if no one is logged in.
@@ -35,7 +32,7 @@ class @AppRouter extends RouteController
 
 
 	onBeforeAction: (pause)->
-		
+
 		user = Meteor.user()
 		isLoggedIn = user?
 		isAdmin = user? and user.mandrill? and user.mandrill.isAdmin is true

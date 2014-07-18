@@ -1,5 +1,5 @@
 <template name="appNavbar">
-	<nav class="navbar navbar-default navbar-fixed-top appNavbar" role="navigation">
+	<nav class="navbar navbar-inverse navbar-fixed-top appNavbar" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mandrillNavMain">
@@ -17,30 +17,12 @@
 				<ul class="nav navbar-nav">
 
 					<li class="{{routeIsActive "manifests"}}">
-						<a href="{{pathFor 'manifestsBrowser' params='' }}">
-							<span class="{{#if manifestErrorsCount}}text-danger{{/if}}">
-								<i class="glyphicon glyphicon-list-alt"></i>
-								Manifests
+						<a href="{{pathFor 'repo' params='' }}">
+							<i class="glyphicon glyphicon-list-alt"></i>
+							Munki
+							<span class="badge">
+								{{munki_repo_item_count}}
 							</span>
-							<span class="badge">{{manifestsCount}}</span>
-						</a>
-					</li>
-					<li class="{{routeIsActive "pkgsinfo"}}">
-						<a href="{{pathFor 'pkgsinfo' params='' }}">
-							<span class="{{#if installsErrorsCount}}text-danger{{/if}}">
-								<i class="glyphicon glyphicon-save"></i>
-								Pkgsinfo
-							</span>
-							<span class="badge">{{installsCount}}</span>
-						</a>
-					</li>
-					<li class="{{routeIsActive "catalogs"}} {{routeIsActive "edit-condition"}}">
-						<a href="{{pathFor 'catalogs' params='' }}">
-							<span class="{{#if catalogsErrorsCount}}text-danger{{/if}}">
-								<i class="glyphicon glyphicon-book"></i>
-								Catalogs
-							</span>
-							<span class="badge">{{catalogsCount}}</span>
 						</a>
 					</li>
 				</ul>

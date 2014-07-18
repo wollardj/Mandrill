@@ -50,7 +50,7 @@ Meteor.methods {
 					# Skip this pkginfo unless we're running with the force flag
 					if not insane
 						continue
-				
+
 				# form a path for the installer item location
 				installerItemPath = repoPath + 'pkgs/' + pkginfo.dom.installer_item_location
 

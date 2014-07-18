@@ -1,5 +1,5 @@
 Session.setDefault 'runningMakeCatalogs', false
-
+Session.setDefault 'munki_repo_item_count', '...'
 
 
 Template.appNavbar.routeIsActive = (aRoute) ->
@@ -11,17 +11,13 @@ Template.appNavbar.routeIsActive = (aRoute) ->
 
 
 
-Template.appNavbar.otherTools = ->
-	OtherTools.find({}, {sort: {displayText: 1}}).fetch()
-
-
-
-Template.appNavbar.manifestsCount = ->
-	stats = RepoStats.findOne 'manifests'
-	if stats? and stats.count
-		stats.count
+Template.appNavbar.munki_repo_item_count = ->
+	mr = MandrillStats.findOne('munki_repo')
+	if mr?
+		mr.count
 	else
-		0
+		'...'
+
 
 
 

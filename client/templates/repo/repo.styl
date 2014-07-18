@@ -1,0 +1,28 @@
+img.repo_pkgicon
+    margin -8px 0 -8px -4px
+    height 25px
+
+.mandrill-repo-delete
+    color white
+    background-color red
+    display block
+    height 100%
+    float left
+    margin -8px 0 -8px -8px
+    padding 8px 0
+    border-top-left-radius inherit
+    border-bottom-left-radius inherit
+    overflow hidden
+    width 0px
+    transition background-color 100ms, width 250ms, padding 250ms
+
+    &:hover
+        color white
+        background-color #a00
+        text-decoration none
+
+    &.mandrill-repo-delete-visible
+        width 60px
+        padding 8px
+        margin -8px 8px -8px -8px
+        transition width 250ms, padding 250ms

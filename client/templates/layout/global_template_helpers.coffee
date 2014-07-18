@@ -59,6 +59,9 @@ Meteor.startup ->
 		Meteor.absoluteUrl()
 
 
+	UI.registerHelper 'timeago', (a_date)->
+		moment(a_date).fromNow()
+
 
 	#// Determines if the current user is an admin.
 	Handlebars.registerHelper 'isAdmin', ->

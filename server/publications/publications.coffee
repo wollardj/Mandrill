@@ -1,21 +1,6 @@
 Meteor.publish 'PaginatedQueryStats', ->
 	PaginatedQueryStats.find()
 
-
-Meteor.publish 'OtherTools', ->
-	if Mandrill.user.isValid(this.userId)
-		OtherTools.find()
-	else
-		[]
-
-
-Meteor.publish 'Paths', ->
-	if Mandrill.user.isValid(this.userId)
-		Paths.find()
-	else
-		[]
-
-
 Meteor.publish 'MandrillSettings', ->
 	if Mandrill.user.isValid(this.userId) is true
 		MandrillSettings.find()
@@ -23,37 +8,9 @@ Meteor.publish 'MandrillSettings', ->
 		[]
 
 
-Meteor.publish 'MunkiManifests', (query, opts)->
-
+Meteor.publish 'MunkiRepo', (query, opts)->
 	filter = Mandrill.user.accessPatternsFilter this.userId, query
-	results = MunkiManifests.find filter, opts
-	PaginatedQueryStats.upsert {}, {
-		total: MunkiManifests.find(filter, opts).count()
-	}
-	results
-
-
-
-Meteor.publish 'MunkiPkgsinfo', (query, opts)->
-
-	filter = Mandrill.user.accessPatternsFilter this.userId, query
-	results = MunkiPkgsinfo.find filter, opts
-	PaginatedQueryStats.upsert {}, {
-		total: MunkiPkgsinfo.find(filter, opts).count()
-	}
-	results
-
-
-Meteor.publish 'MunkiCatalogs', ->
-	filter = Mandrill.user.accessPatternsFilter this.userId
-	MunkiCatalogs.find filter
-
-Meteor.publish 'MunkiIcons', ->
-	if Mandrill.user.isValid(this.userId) is true
-		MunkiIcons.find()
-	else
-		[]
-
+	results = MunkiRepo.find filter, opts
 
 Meteor.publish 'ServerStats', ->
 	ServerStats.find {}, {sort: {collectedDate: -1}}
@@ -74,5 +31,47 @@ Meteor.publish 'MandrillAccounts', ->
 
 	else
 		query._id = this.userId
-	
+
 	Meteor.users.find query, {fields: fields}
+
+
+
+
+
+
+
+# Each of the methods defined in this file return a count for
+# the respective collection.
+
+Meteor.publish 'MandrillStats', ->
+
+	self = this
+	collection = 'mandrill_stats'
+	fields = {fields: {_id: 1}}
+	filter = Mandrill.user.accessPatternsFilter self.userId
+	munki_repo_count = 0
+	initializing = true
+	handles = []
+
+
+	# MunkiRepo
+	handles[0] = MunkiRepo.find(filter, fields).observeChanges {
+		added: ->
+			munki_repo_count++
+			if initializing is false
+				self.changed collection, 'munki_repo', {count: munki_repo_count}
+
+		removed: ->
+			munki_repo_count--
+			self.changed collection, 'munki_repo', {count: munki_repo_count}
+	}
+
+
+	initializing = false
+	self.added collection, 'munki_repo', {count: munki_repo_count}
+	self.ready()
+
+	self.onStop ->
+		for handle in handles
+			if handle? and handle.stop?
+				handle.stop()

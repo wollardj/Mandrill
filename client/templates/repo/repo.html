@@ -1,58 +1,171 @@
 <template name="repo">
-    <p class="lead text-warning">Github inspired navigation</p>
 
 
-    <ol class="breadcrumb">
-        <li>
-            <input
-                type="search"
-                class="low-profile search"
-                value="{{filter}}"
-                placeholder="Search" />
-        </li>
-        {{#each breadcrumb}}
+<ul class="list-group visible-xs">
+    <li class="list-group-item">
+        <input
+            type="search"
+            class="form-control search"
+            placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
+    </li>
 
+{{#each breadcrumb.reverse}}
+    <li class="list-group-item">
         {{#if is_active}}
-        <li class="active">
             {{name}}
-            <span class="badge">{{dir_listing.length}}</span>
-        </li>
+            <span class="badge">
+                {{session_get 'results_length'}}
+            </span>
         {{/if}}
         {{#unless is_active}}
-        <li>
-            <a href="{{url}}">{{name}}</a>
-        </li>
+        <span class="
+            glyphicon
+            glyphicon-folder-close"></span>
+        <a href="{{url}}">{{name}}</a>
         {{/unless}}
+    </li>
+{{/each}}
+</ul>
 
-        {{/each}}
-    </ol>
+<ol class="breadcrumb visible-sm visible-md visible-lg">
+{{#each breadcrumb}}
+    <li class="{{#if is_active}}active{{/if}}">
+        {{#if is_active}}
+            {{name}}
+            <span class="badge">{{session_get 'results_length'}}</span>
+        {{/if}}
+        {{#unless is_active}}
+        <a href="{{url}}">{{name}}</a>
+        {{/unless}}
+    </li>
+{{/each}}
+</ol>
 
-<div class="panel">
-    <table class="table table-bordered">
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-8">
+            </div>
+            <div class="col-xs-4 col-xs-offset-8">
+                <input
+                    type="search"
+                    class="form-control search"
+                    placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
     <tbody>
-    {{#if dot_dot_url}}
     <tr>
-        <td>
-            <span class="glyphicon glyphicon-chevron-up" style="visibility: hidden"></span>
-            <a href="{{dot_dot_url}}">..</a>
+        <td colspan="3">
+            <a href="{{dot_dot_url}}" class="btn btn-default btn-sm
+            {{#unless dot_dot_url}}disabled{{/unless}}">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                ../
+            </a>
+            <button
+                id="repo_edit"
+                class="
+                    btn
+                    {{#if session_get 'repo_edit_mode'}}btn-warning{{/if}}
+                    {{#unless session_get 'repo_edit_mode'}}
+                        btn-default
+                    {{/unless}}
+                    btn-default
+                    btn-sm
+                    pull-right
+                    {{#if session_get 'repo_edit_mode'}}active{{/if}}"
+            >
+                <span class="glyphicon glyphicon-edit"></span>
+                {{#if session_get 'repo_edit_mode'}}Done{{/if}}
+                {{#unless session_get 'repo_edit_mode'}}Edit{{/unless}}
+            </button>
         </td>
     </tr>
-    {{/if}}
     {{#each dir_listing}}
     <tr>
         <td>
+            {{#unless is_protected}}
+            <a
+                href="#"
+                class="
+                    mandrill-repo-delete
+                    {{#if session_get 'repo_edit_mode'}}
+                        mandrill-repo-delete-visible
+                    {{/if}}"
+            >
+                Delete
+            </a>
+            {{/unless}}
+
             {{#unless is_leaf}}
             <span class="glyphicon glyphicon-folder-close text-info"></span>
             {{/unless}}
+
             {{#if is_leaf}}
-            <span class="glyphicon glyphicon-file"></span>
+                <span title="{{file_size}}">
+                    {{#if pkgsinfo_icon}}
+                        <img src="{{pkgsinfo_icon}}" class="repo_pkgicon" />
+                    {{/if}}
+                    {{#unless pkgsinfo_icon}}
+                        <span class="glyphicon glyphicon-file"></span>
+                    {{/unless}}
+                </span>
             {{/if}}
-            <a href="{{url}}">{{name}}</a>
+
+            <a href="{{url}}">
+                <span title="{{name}}">
+                    {{name}}
+                    {{#if this.dom.display_name}}
+                    <span class="text-muted"> - {{this.dom.display_name}}</span>
+                    {{/if}}
+                </span>
+            </a>
+        </td>
+
+        <td>
+            {{#if is_leaf}}
+            {{#each this.dom.catalogs}}
+                <span class="label label-default">{{this}}</span>
+            {{/each}}
+            {{/if}}
+        </td>
+
+        <td>
+            {{#if is_leaf}}
+            <small class="text-muted" title="{{this.stat.mtime}}">
+                {{timeago this.stat.mtime}}
+            </small>
+            {{/if}}
         </td>
     </tr>
     {{/each}}
     </tbody>
     </table>
+
+
+    {{#unless session_get 'results_length'}}
+    <div class="panel-body">
+        {{#if session_get 'repo_filter'}}
+        Nothing in your repo matches <strong>{{session_get 'repo_filter'}}</strong>
+        {{/if}}
+        {{#unless session_get 'repo_filter'}}
+        Weird, there doesn't seem to be any data here. o_0
+        {{/unless}}
+    </div>
+    {{/unless}}
 </div>
 
+{{#if readme}}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h5>README.md</h5>
+    </div>
+    <div class="panel-body">
+        {{#markdown}}{{readme}}{{/markdown}}
+    </div>
+</div>
+{{/if}}
 </template>

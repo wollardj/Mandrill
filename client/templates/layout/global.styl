@@ -2,12 +2,17 @@
 
 
 html
-	background #fff url('/backgroundTile.png') repeat-x top right
+	background #f2f1e8 linear-gradient(to bottom,  #d7d8d2 0%, #f2f1e8 100%) repeat-x top right
+	transition background 1.0s
+
+	&.login-window
+		background #424138 linear-gradient(to bottom,  #272822 0%,#424138 100%) repeat-x top right
+		transition background 1.0s
 
 body
 	background-color transparent
 	position relative
-	padding 50px 0 0 0
+	padding 65px 0 0 0
 
 
 #appContainer
@@ -125,12 +130,14 @@ p.app-footer
 .panel
 	border-color rgb(208, 208, 208)
 	border-radius 5px 5px 5px 5px
-	box-shadow 0 2px 6px #919293
+	// box-shadow 0 1px 3px #000
 
 
 .panel-heading
 	h1, h2, h3, h4, h5, h6
 		margin 0
+	.row
+		margin 0 -23px
 
 
 .panel-default

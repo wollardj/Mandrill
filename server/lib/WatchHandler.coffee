@@ -14,17 +14,19 @@ shell = Meteor.require 'shelljs'
 	# depending on which subdirectory within the repo the file is found.
 	repoTypeForPath: Meteor.bindEnvironment (aPath)->
 		repo = MandrillSettings.get 'munkiRepoPath', ''
-				
+
 		if repo isnt ''
 			WatchHandler.repoPath = repo
 
 		if aPath.indexOf(repo + 'manifests/') isnt -1
 			'manifests'
-		
+
 		else if aPath.indexOf(repo + 'catalogs/') isnt -1
 			'catalogs'
 		else if aPath.indexOf(repo + 'pkgsinfo/') isnt -1
 			'pkgsinfo'
+		else if aPath.indexOf(repo + 'pkgs/') isnt -1
+			'pkgs'
 		else if aPath.indexOf(repo + 'icons/') isnt -1
 			'icons'
 		else
@@ -39,24 +41,11 @@ shell = Meteor.require 'shelljs'
 	# Removes a file from the database, using its path to find
 	# the document
 	deleteFile: Meteor.bindEnvironment (path)->
-		repoType = WatchHandler.repoTypeForPath path
-
-		if repoType is 'manifests'
-			MunkiManifests.remove {path: path}
-
-		else if repoType is 'pkgsinfo'
-			MunkiPkgsinfo.remove {path: path}
-
-		else if repoType is 'catalogs'
-			MunkiCatalogs.remove {path: path}
-
-		else if repoType is 'icons'
-			MunkiIcons.remove {path: path}
+		MunkiRepo.remove {path: path}
 
 
 
 
-	
 	# Reads a file at the given path and attempts to parse its plist
 	# contents. If the file cannot be read from disk, an exception is
 	# thrown. In all other cases, including a failure to parse, a document
@@ -78,29 +67,24 @@ shell = Meteor.require 'shelljs'
 			return
 
 		repoType = WatchHandler.repoTypeForPath path
-		if repoType is 'icons'
-			icons_path = MandrillSettings.get('munkiRepoPath') + 'icons/'
-			icon_file = path.replace(icons_path, '')
-			icon_name = icon_file.split('.')[0]
-			MunkiIcons.upsert {file: icon_file}, {
-				file: icon_file
-				name: icon_name
-			}
-			return
+		parseable_types = ['pkgsinfo', 'manifests', 'catalogs']
+		maybe_parseable = parseable_types.indexOf(repoType) isnt -1
 
-		contents = shell.cat path
+		if maybe_parseable is true or
+				(repoType isnt 'pkgs' and repoType isnt 'icons')
+			contents = shell.cat path
+
 		parsedData = null
 		parseError = null
 		urlName = ''
 		basePath = ''
 		mongoDocument = {}
 
-
 		# deal with any errors from fs.readFile()
 		if err?
 			parseError = 'Unable to read file ' + path
 
-		else
+		else if maybe_parseable is true
 			# Attempt to parse the plist file
 			try
 				parsedData = plist.parse contents
@@ -108,18 +92,19 @@ shell = Meteor.require 'shelljs'
 				parseError = e.toString()
 
 
-		# we'll add a url 'safe'-ish value to be used by the
-		# router for better linking
-		basePath = WatchHandler.repoPath + repoType + '/'
-		urlName = path.replace basePath, ''
-			.replace /\//g, '_'
-
 		mongoDocument = {
 			path: path
 			dom: parsedData
 			raw: contents
-			urlName: urlName
+			stat: fs.statSync(path)
 		}
+
+		# add some metadata about the files in the /icons dir
+		if repoType is 'icons'
+			icons_path = MandrillSettings.get('munkiRepoPath') + 'icons/'
+			icon_file = path.replace(icons_path, '')
+			mongoDocument.icon_file = icon_file
+			mongoDocument.icon_name = icon_file.split('.')[0]
 
 		if parseError?
 			mongoDocument.err = parseError
@@ -130,26 +115,10 @@ shell = Meteor.require 'shelljs'
 		# document or documents, it/they are updated. If not,
 		# the information is inserted as a new document.
 
-		# Inserting a manifest
-		if repoType is 'manifests'
-			MunkiManifests.upsert {path: path}, mongoDocument,
-				(err)->
-					if err?
-						console.error err
-
-		# Inserting a pkgsinfo
-		else if repoType is 'pkgsinfo'
-			MunkiPkgsinfo.upsert {path: path}, mongoDocument,
-				(err)->
-					if err?
-						console.error err
-
-		# Inserting a catalog
-		else if repoType is 'catalogs'
-			MunkiCatalogs.upsert {path: path}, mongoDocument,
-				(err)->
-					if err?
-						console.error err
+		MunkiRepo.upsert {path: path}, mongoDocument,
+			(err)->
+				if err?
+					console.error err
 	, (e)->
 		throw e
 
