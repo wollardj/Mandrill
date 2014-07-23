@@ -2,7 +2,7 @@ Session.setDefault 'runningMakeCatalogs', false
 
 
 
-Template.appNavbar.routeIsActive = (aRoute) ->
+Template.appSidebar.routeIsActive = (aRoute) ->
 	routerName = Router.current().route.name
 	if routerName? and routerName is aRoute
 		'active'
@@ -11,12 +11,12 @@ Template.appNavbar.routeIsActive = (aRoute) ->
 
 
 
-Template.appNavbar.otherTools = ->
+Template.appSidebar.otherTools = ->
 	OtherTools.find({}, {sort: {displayText: 1}}).fetch()
 
 
 
-Template.appNavbar.manifestsCount = ->
+Template.appSidebar.manifestsCount = ->
 	stats = RepoStats.findOne 'manifests'
 	if stats? and stats.count
 		stats.count
@@ -25,7 +25,7 @@ Template.appNavbar.manifestsCount = ->
 
 
 
-Template.appNavbar.manifestErrorsCount = ->
+Template.appSidebar.manifestErrorsCount = ->
 	stats = RepoStats.findOne 'manifestErrors'
 	if stats? and stats.count
 		stats.count
@@ -34,7 +34,7 @@ Template.appNavbar.manifestErrorsCount = ->
 
 
 
-Template.appNavbar.installsCount = ->
+Template.appSidebar.installsCount = ->
 	stats = RepoStats.findOne 'pkgsinfo'
 	if stats? and stats.count
 		stats.count
@@ -43,7 +43,7 @@ Template.appNavbar.installsCount = ->
 
 
 
-Template.appNavbar.installsErrorsCount = ->
+Template.appSidebar.installsErrorsCount = ->
 	stats = RepoStats.findOne 'pkgsinfoErrors'
 	if stats? and stats.count
 		stats.count
@@ -52,7 +52,7 @@ Template.appNavbar.installsErrorsCount = ->
 
 
 
-Template.appNavbar.catalogsCount = ->
+Template.appSidebar.catalogsCount = ->
 	stats = RepoStats.findOne 'catalogs'
 	if stats? and stats.count
 		stats.count
@@ -61,7 +61,7 @@ Template.appNavbar.catalogsCount = ->
 
 
 
-Template.appNavbar.catalogsErrorsCount = ->
+Template.appSidebar.catalogsErrorsCount = ->
 	stats = RepoStats.findOne 'catalogErrors'
 	if stats? and stats.count
 		stats.count
@@ -70,12 +70,12 @@ Template.appNavbar.catalogsErrorsCount = ->
 
 
 
-Template.appNavbar.makeCatalogsIsEnabled = ->
+Template.appSidebar.makeCatalogsIsEnabled = ->
 	MandrillSettings.get 'makeCatalogsIsEnabled', false
 
 
 
-Template.appNavbar.loggedInUserDisplayName = ->
+Template.appSidebar.loggedInUserDisplayName = ->
 	act = Meteor.users.findOne()
 	if act? and act.profile? and act.profile.name?
 		act.profile.name
@@ -84,12 +84,12 @@ Template.appNavbar.loggedInUserDisplayName = ->
 
 
 
-Template.appNavbar.runningMakeCatalogs = ->
+Template.appSidebar.runningMakeCatalogs = ->
 	Session.get 'runningMakeCatalogs'
 
 
 
-Template.appNavbar.makecatalogsCommand = ->
+Template.appSidebar.makecatalogsCommand = ->
 	insane = MandrillSettings.get 'makeCatalogsSanityIsDisabled', false
 	if insane is true
 		'makecatalogs -f'
@@ -98,7 +98,7 @@ Template.appNavbar.makecatalogsCommand = ->
 
 
 
-Template.appNavbar.events {
+Template.appSidebar.events {
 	'click #logout': (event) ->
 		event.stopPropagation()
 		event.preventDefault()

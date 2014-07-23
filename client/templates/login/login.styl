@@ -6,13 +6,11 @@ div.login-body
 	color #aaa
 	text-shadow 0 -1px 0 #000
 
-	position fixed
+	position absolute
 	height 100%
-	min-height 100%
 	width 100%
 	margin 0
-	padding  0 0 0
-	top 0
+	padding 0
 
 	h2
 		color #ddd
@@ -35,28 +33,15 @@ div.login-body
 
 
 
-	.form-login-container
-		display block
-		top 50%
-		left 50%
+	.form-login
 		width 300px
 		height 300px
-		margin-top -100px
-		margin-left -150px
-		position fixed
-		padding 0
-
-		.bubble-loader
-			margin 125px auto
-
-		h2
-			margin 0 0 15px 0
-			padding 0
-
-		form
-			margin 0
-			padding 0
-		
+		margin auto
+		position absolute
+		top 0
+		right 0
+		left 0
+		bottom 0
 
 		input[type="text"]
 			margin-bottom -1px
