@@ -5,7 +5,6 @@ Template.manifest_installer_item.datum = ->
 	else
 		[]
 
-# Returns the glyphicon-{{glyph}} appropriate for the category.
 Template.manifest_installer_item.glyph = ->
 	glyphs = {
 		'managed_installs': 'save'
@@ -15,9 +14,6 @@ Template.manifest_installer_item.glyph = ->
 	}
 	glyphs[this.toString()]
 
-
-# Converts the value of `this` to a title.
-# example: 'managed_installs' becomes 'Managed Installs'
 Template.manifest_installer_item.title = ->
 	key = this.toString()
 	key.replace('_', ' ')
@@ -38,15 +34,12 @@ Template.manifest_installer_item.icon_url = ->
 		'/pkg.png'
 
 
-# Searches for the pkginfo item by name and returns its display_name, if there is one.
 Template.manifest_installer_item.pkg_display_name = ->
 	pkg = MunkiPkgsinfo.findOne({'dom.name': this.toString().split('-')[0]})
 	if pkg? and pkg.dom? and pkg.dom.display_name?
 		pkg.dom.display_name
 
 
-# Searches for a matching pkginfo item by its name and returns `true` if found,
-# `false` if not.
 Template.manifest_installer_item.pkg_name_is_valid = ->
 	MunkiPkgsinfo.findOne({'dom.name': this.toString()})?
 
@@ -134,7 +127,7 @@ Template.manifest_installer_item.ac_pkgs = (query, callback)->
 			}
 
 		# We'll flip a and b to make the newest versions first
-		.sort (b,a)->
+		pkgs = pkgs.sort (b,a)->
 			name_order = a.name.localeCompare(b.name)
 			if name_order is 0
 				Mandrill.util.versionCompare a.version, b.version
@@ -145,6 +138,7 @@ Template.manifest_installer_item.ac_pkgs = (query, callback)->
 		# reduce and mutate the results
 		if Session.equals('search_ignores_versions', true) is true
 			filtered_pkgs = []
+
 			for obj, i in pkgs
 				found = false
 				for fobj,j in filtered_pkgs
