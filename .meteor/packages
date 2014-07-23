@@ -16,5 +16,5 @@ logger
 i18n
 blaze-layout
 coffeescript
-iron-router
 stylus
+iron-router
