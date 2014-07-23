@@ -27,7 +27,7 @@
 				console.error 'an error occured:', arguments
 
 
-		watching: (err, watcherInstance)->
+		watching: Meteor.bindEnvironment (err, watcherInstance)->
 
 			if err?
 				console.error 'Could not setup watchr for ' +
@@ -37,12 +37,26 @@
 				console.log 'Watching for changes in ' +
 					watcherInstance.path
 
+				# Make sure the files for the path are in the git repo for bug
+				# https://github.com/wollardj/Mandrill/issues/14
+				if GitBroker.gitIsEnabled() is true
+					GitBroker.add watcherInstance.path + '/*'
+					GitBroker.commit(
+						'Mandrill Admin'
+						watcherInstance.path + '/*'
+						'[Mandrill] Adding all new files to the repo'
+						'',
+						true
+					)
+
 				# watchr has finished adding its watcher for this path,
 				# so now we can harvest that information and start
 				# putting stuff in the database.
 				WatcherConfig.paths = WatchHandler.watcherPaths watcherInstance
 				for path in WatcherConfig.paths
 					WatchHandler.processFile path
+		, (e)->
+			throw e
 
 
 		# When a file is updated, created, or deleted, this method
@@ -50,6 +64,17 @@
 		change: Meteor.bindEnvironment (type, path)->
 			if type isnt 'delete'
 				WatchHandler.processFile path
+				# Make sure the files for the path are in the git repo for bug
+				# https://github.com/wollardj/Mandrill/issues/14
+				if GitBroker.gitIsEnabled() is true
+					GitBroker.add path
+					GitBroker.commit(
+						'Mandrill Admin'
+						path
+						'[Mandrill] Importing ' + _.last(path.split('/')) + ' to the repo'
+						'Full path: ' + path,
+						true
+					)
 
 			else
 				WatchHandler.deleteFile path

@@ -1,10 +1,12 @@
 class @GitBroker
 
-	@authorString: Meteor.bindEnvironment (userId)->
+	@authorString: Meteor.bindEnvironment (userId, force)->
 		account = Meteor.users.findOne userId
 		if userId? and account? and account.profile? and account.emails?
 			account.profile.name + ' <' + account.emails[0].address + '>'
-		
+
+		else if force is true
+			'Mandrill Server <no@reply.com>'
 		else
 			throw new Meteor.Error 403, 'Could not determine who is logged ' +
 				'in. Blocking commit request.'
@@ -79,7 +81,7 @@ class @GitBroker
 		fmt = '--pretty=%H%x1F%h%x1F%aN%x1F%ae%x1F%s%x1F%b%x1F%aD'
 		results = GitBroker.git().exec 'log', '-z', fmt, path
 		logs = []
-		
+
 		if results.code isnt 0
 			throw new Meteor.Error results.code, 'Unable to retrieve logs for \'' + path + '\'.'
 
@@ -100,12 +102,12 @@ class @GitBroker
 
 
 
-	@commit: Meteor.bindEnvironment (committerId, path, subject, body)->
+	@commit: Meteor.bindEnvironment (committerId, path, subject, body, force)->
 
 		git = GitBroker.git()
 		commitArgs = [
 			'commit'
-			'--author', GitBroker.authorString committerId
+			'--author', GitBroker.authorString(committerId, force)
 			'-m', (subject or '')
 			'-m', (body or '')
 			path
