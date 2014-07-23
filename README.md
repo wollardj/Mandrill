@@ -95,4 +95,6 @@ As of version 0.7.1 the following options are available:
 
 
 ### Questions?
-Ask away: [https://groups.google.com/d/forum/mandrill-dev](https://groups.google.com/d/forum/mandrill-dev)
+
+ - [https://groups.google.com/d/forum/mandrill-dev](https://groups.google.com/d/forum/mandrill-dev)
+ - [@joe_wollard](https://twitter.com/joe_wollard)
