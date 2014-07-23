@@ -8,14 +8,16 @@
 			{{#if datum}}{{datum.length}}{{/if}}
 		</span>
 	</div>
-	<input
-		type="text"
-		id="select_{{this}}_field"
-		class="typeahead low-profile form-control"
-		placeholder="⌨ type here to add an installer item"
-		data-source="ac_pkgs"
-		data-selected="ac_manifest_field_selected"
-		data-template="ac_pkgsinfo" />
+	<div class="panel-body">
+		<input
+			type="text"
+			id="select_{{this}}_field"
+			class="typeahead low-profile form-control"
+			placeholder="+ {{this}}"
+			data-source="ac_pkgs"
+			data-selected="ac_manifest_field_selected"
+			data-template="ac_pkgsinfo" />
+	</div>
 
 	<ul class="list-group">
 		{{#each datum}}
