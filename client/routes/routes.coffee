@@ -1,11 +1,3 @@
-Router.configure {
-	layoutTemplate: 'appLayout'
-	loadingTemplate: 'loading'
-	notFoundTemplate: 'notFound'
-}
-
-
-
 Router.map ->
 
 	this.route 'home', {
@@ -16,17 +8,6 @@ Router.map ->
 	this.route 'manifests', {
 		path: '/manifests/:urlName?',
 		controller: 'ManifestsRouter'
-	}
-
-	this.route 'manifestsBrowser', {
-		path: '/manifests-Browser/:urlName?',
-		controller: 'ManifestsBrowserRouter'
-		onAfterAction: ()->
-			if this.params? and this.params.urlName?
-				Session.set 'active_manifest',
-					MunkiManifests.findOne({urlName: this.params.urlName})
-			else
-				Session.set 'active_manifest', {}
 	}
 
 	this.route 'pkgsinfo', {

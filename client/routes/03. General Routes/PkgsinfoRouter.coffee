@@ -59,7 +59,7 @@
 				query.$and.push userQuery
 
 		
-		this.subscribe 'MunkiPkgsInfo', query, opts
+		this.subscribe 'MunkiPkgsinfo', query, opts
 				.wait()
 
 		if not this.params.urlName?

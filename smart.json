@@ -7,7 +7,6 @@
     "logger": {},
     "i18n": {},
     "blaze-layout": {},
-    "iron-router": {},
-    "typeahead": {}
+    "iron-router": {}
   }
 }

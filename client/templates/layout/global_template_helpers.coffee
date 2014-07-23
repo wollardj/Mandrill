@@ -1,13 +1,6 @@
 Meteor.startup ->
 
 
-	UI.registerHelper 'session_get', (key)->
-		Session.get key
-
-	UI.registerHelper 'session_equals', (key, val)->
-		Session.equals key, val
-
-
 	Handlebars.registerHelper 'momentFromNow', (someDate)->
 		moment(someDate).fromNow()
 

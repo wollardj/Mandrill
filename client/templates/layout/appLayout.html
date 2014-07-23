@@ -10,24 +10,28 @@
 <template name="appLayout">
 	{{#if currentUser}}
 	{{> appNavbar}}
-	<div id="appContent">
-		<div class="row">
-			<div class="col-xs-12">{{> yield}}</div>
-		</div>
-		<hr />
-		<p class="app-footer small text-muted text-center">
-			<a href="https://github.com/wollardj/Mandrill" target="_blank">
-				Mandrill {{mandrillVersion}}
-			</a> on <a href="https://www.meteor.com" target="_blank">
-				Meteor {{meteorVersion}}
-			</a>
-		</p>
-	</div>
 	{{/if}}
+	<div id="appContainer">
+		{{#if currentUser}}
+		<div id="appContent">
+			<div class="row">
+				<div class="col-xs-12">{{> yield}}</div>
+			</div>
+			<hr />
+			<p class="app-footer small text-muted text-center">
+				<a href="https://github.com/wollardj/Mandrill" target="_blank">
+					Mandrill {{mandrillVersion}}
+				</a> on <a href="https://www.meteor.com" target="_blank">
+					Meteor {{meteorVersion}}
+				</a>
+			</p>
+		</div>
+		{{/if}}
 
-	{{#unless currentUser}}
-	{{> yield}}
-	{{/unless}}
+		{{#unless currentUser}}
+		{{> yield}}
+		{{/unless}}
 
+	</div>
 	{{> serverStatusDialog}}
 </template>

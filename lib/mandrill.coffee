@@ -1,10 +1,6 @@
 @Mandrill = {
 
-	version: '0.8.0'
-
-	# a namespace for client-side subscriptions
-	subs: {}
-
+	version: '0.7.1'
 
 	tpl: {
 		activateTooltips: ->
@@ -78,70 +74,6 @@
 
 
 	util: {
-
-		# Activates the typeahead plugin for the given selector and
-		# converts the wrapping span's `display` to 'block' from
-		# the default of 'inline-block'. The default `display` value causes
-		# weird layout and width-flexing bugs with bootstrap3
-		activateTypeahead: (selector)->
-			if not selector?
-				selector = '.typeahead'
-			Meteor.typeahead.inject(selector)
-			$(selector)
-				.parents "span.twitter-typeahead"
-				.css 'position', 'relative'
-				.css 'display', 'flex'
-
-
-		# Compares two version strings and returns values appropriate for
-		# sorting; -1, 0, 1
-		versionCompare: (v1, v2, options)->
-			lexicographical = false
-			zeroExtend = true
-			v1parts = v1.split('.')
-			v2parts = v2.split('.')
-
-			if options?
-				if options.lexicographical?
-					lexicographical = true
-				if options.zeroExtend?
-					zeroExtend = true
-
-			isValidPart = (x)->
-				if lexicographical is true
-					/^\d+[A-Za-z]*$/.test(x)
-				else
-					/^\d+$/.test(x)
-
-			if not v1parts.every(isValidPart) or not v2parts.every(isValidPart)
-				return NaN
-
-			if zeroExtend is true
-				while v1parts.length < v2parts.length
-					v1parts.push("0")
-				while v2parts.length < v1parts.length
-					v2parts.push("0")
-
-			if lexicographical is false
-				v1parts = v1parts.map(Number)
-				v2parts = v2parts.map(Number)
-
-			for obj,i in v1parts
-				if v2parts.length is i
-					return 1
-
-				if v1parts[i] is v2parts[i]
-					continue
-				else if v1parts[i] > v2parts[i]
-					return 1
-				else
-					return -1
-
-			if v1parts.length != v2parts.length
-				return -1
-			return 0
-
-
 
 		#/*
 		#	Thank you, php.js:
@@ -295,36 +227,6 @@
 
 
 	user: {
-
-		# Returns the user-specific preferences dictionary for the current user
-		prefs: ->
-			user = Meteor.user()
-			if user? and user.mandrill? and user.mandrill.prefs?
-				user.mandrill.prefs
-			else
-				{}
-
-
-		# Returns the value for a pref key for the current user
-		pref: (key)->
-			prefs = Mandrill.user.prefs()
-			if prefs[key]?
-				prefs[key]
-			else
-				undefined
-
-
-		# Sets a given pref key's value for the current user
-		setPref: (key, val)->
-			user = Meteor.user()
-			if user? and user._id?
-				doc = {}
-				doc['mandrill.prefs.'+key] = val
-				Meteor.users.update({_id: user._id}, {$set: doc})
-			else
-				console.warn 'Not updating preferences; no one is logged in.'
-
-
 
 		# If the user is banned, this method will log that user out and
 		# return true. If not, it will simply return false, as in

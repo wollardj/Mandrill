@@ -1,2 +1,6 @@
-class @MandrillSettingsRouter extends AdminRouter
-	template: 'mandrillSettings'
+@MandrillSettingsRouter  = AdminRouter.extend {
+	template: 'mandrillSettings',
+
+	data: ->
+		{settings: MandrillSettings.findOne()}
+}

@@ -2,8 +2,8 @@
 	template: 'catalogs',
 
 	onBeforeAction: ->
-		#this.subscribe 'MunkiCatalogs'
-		#	.wait()
+		this.subscribe 'MunkiCatalogs'
+			.wait()
 		SelectedCatalogItems.remove {}
 		if this.params.urlName?
 			catalog = MunkiCatalogs.findOne {urlName: this.params.urlName}

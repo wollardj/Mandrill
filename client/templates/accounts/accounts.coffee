@@ -1,13 +1,3 @@
-Template.accounts.accounts = ->
-	Meteor.users.find({}, {
-		sort: {
-			'mandrill.is_admin': -1,
-			'profile.name': 1
-		}
-	})
-
-
-
 Template.accounts.rendered = ->
 	Mandrill.tpl.activateTooltips()
 

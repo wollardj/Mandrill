@@ -1,4 +1,3 @@
-plist = Meteor.require 'plist-native'
 shell = Meteor.require 'shelljs'
 shell.config.silent = true
 shell.config.fatal = false
@@ -17,20 +16,10 @@ Meteor.methods {
 		
 		# try to update the record if possible.
 		if path.indexOf('/manifests/') >= 0
-			MunkiManifests.upsert {'path': path}, {
-				'$set': {
-					'raw': body
-					'dom': plist.parse(body)
-				}
-			}
+			MunkiManifests.upsert {'path': path}, {'$set': {'raw': body}}
 		
 		else if path.indexOf('/pkgsinfo/') >= 0
-			MunkiPkgsinfo.upsert {'path': path}, {
-				'$set': {
-					'raw': body
-					'dom': plist.parse(body)
-				}
-			}
+			MunkiPkgsinfo.upsert {'path': path}, {'$set': {'raw': body}}
 
 
 		# write the file atomically
@@ -64,9 +53,4 @@ Meteor.methods {
 			atomicPath: atomic,
 			realPath: path
 		}
-
-
-	'filePutContentsUsingObject': (path, obj)->
-		xml = plist.buildString obj
-		Meteor.call 'filePutContents', path, xml
 }
