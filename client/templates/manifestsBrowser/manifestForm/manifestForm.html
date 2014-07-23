@@ -85,12 +85,7 @@
 					</div>
 					<ul class="list-group">
 						{{#each optional_installs}}
-						<li class="
-							list-group-item
-							elastic-in
-							has-remove-btn
-							{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
-						>
+						<li class="list-group-item elastic-in has-remove-btn">
 							{{> remove_btn}}
 							<img src="{{icon_url}}" width="26px" />
 							{{pkg_display_name}}
@@ -126,12 +121,7 @@
 					</div>
 					<ul class="list-group">
 						{{#each managed_updates}}
-						<li class="
-							list-group-item
-							elastic-in
-							has-remove-btn
-							{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
-						>
+						<li class="list-group-item elastic-in has-remove-btn">
 							{{> remove_btn}}
 							<img src="{{icon_url}}" width="26px" />
 							{{pkg_display_name}}
@@ -165,12 +155,7 @@
 					</div>
 					<ul class="list-group">
 						{{#each managed_uninstalls}}
-						<li class="
-							list-group-item
-							elastic-in
-							has-remove-btn
-							{{#unless pkg_name_is_valid}}list-group-item-danger{{/unless}}"
-						>
+						<li class="list-group-item elastic-in has-remove-btn">
 							{{> remove_btn}}
 							<img src="{{icon_url}}" width="26px" />
 							{{pkg_display_name}}
