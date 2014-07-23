@@ -38,5 +38,5 @@
 		@update settings._id, upd
 	else
 		ins = {}
-		ins[key] = val
+		inst[key] = val
 		@insert ins
