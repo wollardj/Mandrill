@@ -106,7 +106,7 @@ Template.manifestForm.ac_manifest_field_selected = (event, datum)->
 	field = id.replace(/^select_(.*)_field$/, '$1')
 	if field?
 		$('#' + id).typeahead('val', '')
-		prepend_to_active_manifest field, datum.value
+		add_to_active_manifest_sorted field, datum.value
 
 
 
