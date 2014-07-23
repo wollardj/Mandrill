@@ -135,7 +135,6 @@ Template.manifestsBrowser.events {
 					(err, data)->
 						if err?
 							Mandrill.show.error err
-						Router.go 'manifestsBrowser', {urlName: data.urlName}
 				)
 			else
 				Mandrill.show.error(new Meteor.Error(500,
