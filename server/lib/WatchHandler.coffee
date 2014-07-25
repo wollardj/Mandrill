@@ -42,6 +42,9 @@ shell = Meteor.require 'shelljs'
 	# the document
 	deleteFile: Meteor.bindEnvironment (path)->
 		MunkiRepo.remove {path: path}
+	, (e)->
+		throw e
+
 
 
 
@@ -76,8 +79,6 @@ shell = Meteor.require 'shelljs'
 
 		parsedData = null
 		parseError = null
-		urlName = ''
-		basePath = ''
 		mongoDocument = {}
 
 		# deal with any errors from fs.readFile()

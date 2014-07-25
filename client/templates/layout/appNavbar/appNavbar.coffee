@@ -3,7 +3,9 @@ Session.setDefault 'munki_repo_item_count', '...'
 
 
 Template.appNavbar.routeIsActive = (aRoute) ->
-	routerName = Router.current().route.name
+	current_router = Router.current()
+	if current_router? and current_router.route?
+		routerName = Router.current().route.name
 	if routerName? and routerName is aRoute
 		'active'
 	else

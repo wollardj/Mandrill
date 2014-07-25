@@ -146,6 +146,7 @@ Template.repo.is_protected = ()->
     Here's the magic.
 ###
 Template.repo.dir_listing = ()->
+    Meteor.user()
     Session.set 'repo_readme', ''
     repo = MandrillSettings.get 'munkiRepoPath'
     url = Router.current().params.c
@@ -165,8 +166,8 @@ Template.repo.dir_listing = ()->
             'dom.version': true
             'dom.catalogs': true
         }
-        sort:{path:1}
     }
+    search_opts = {}
 
 
     # If the user is also searching for something, we need to build that into
@@ -240,13 +241,24 @@ Template.repo.dir_listing = ()->
 
     # obtain all of the paths that match the current set of bread crumbs.
     # e.g. search ALL the things.
-    results = MunkiRepo.find(search_obj, search_opts)
-        .fetch().map(reduce_path_map)
+    timing = {}
+    profile = (key, start)->
+        timing[key] = Math.round(
+            (performance.now() - start) * 100
+        ) / 100 + 'ms'
+    start = performance.now()
+    results = MunkiRepo.find(search_obj, search_opts).fetch()
+    profile 'fetch', start
+    start = performance.now()
+    results = results.map(reduce_path_map)
+    profile 'map', start
 
     # filter the null values and sort the results
-    results = results.filter (it)->
-        it?
+    start = performance.now()
+    results = _.compact results
+    profile 'filter', start
 
+    start = performance.now()
     results.sort (a, b)->
         # if a and b are the same type (leaf or not leaf) then we'll compare
         # their names. Otherwise, directories should be above files.
@@ -256,11 +268,12 @@ Template.repo.dir_listing = ()->
             1
         else
             -1
+    profile 'sort', start
     # return the first 'results_limit' results, unless that value is -1, in
     # which case, we'll just return everything.
     Session.set 'results_length', results.length
+    console.log timing
     results
-
 
 
 Template.repo.events {

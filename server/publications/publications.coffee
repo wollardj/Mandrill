@@ -10,7 +10,7 @@ Meteor.publish 'MandrillSettings', ->
 
 Meteor.publish 'MunkiRepo', (query, opts)->
 	filter = Mandrill.user.accessPatternsFilter this.userId, query
-	results = MunkiRepo.find filter, opts
+	MunkiRepo.find filter, opts
 
 Meteor.publish 'ServerStats', ->
 	ServerStats.find {}, {sort: {collectedDate: -1}}

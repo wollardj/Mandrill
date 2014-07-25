@@ -9,11 +9,8 @@
 
 <template name="appLayout">
 	{{#if currentUser}}
-	{{> appNavbar}}
-	<div id="appContent">
-		<div class="row">
-			<div class="col-xs-12">{{> yield}}</div>
-		</div>
+		{{> appNavbar}}
+		{{> yield}}
 		<hr />
 		<p class="app-footer small text-muted text-center">
 			<a href="https://github.com/wollardj/Mandrill" target="_blank">
@@ -22,7 +19,6 @@
 				Meteor {{meteorVersion}}
 			</a>
 		</p>
-	</div>
 	{{/if}}
 
 	{{#unless currentUser}}
