@@ -4,31 +4,54 @@
 			{{#if loggingIn}}
 			{{> bubbleLoader}}
 			{{/if}}
-			
+
 			{{#unless loggingIn}}
 			<h2>
 				<img src="/ManDfav.png"/>andrill <small>v{{mandrillVersion}}</small>
 			</h2>
 			<form class="form-login" role="form">
-				<input type="text" class="form-control" placeholder="Username" required autofocus id="login_username" />
-				<input type="password" class="form-control" placeholder="Password" id="login_password" required />
+				<input	type="text"
+						class="form-control"
+						placeholder="Username"
+						required
+						autofocus
+						autocorrect="off"
+						autocapitalize="off"
+						id="login_username"
+				/>
+				<input	type="password"
+						class="form-control"
+						placeholder="Password"
+						id="login_password"
+						required
+				/>
 				<br />
-				<button type="submit" class="btn btn-primary btn-block">Sign in</button>
+				<button	type="submit"
+						class="btn btn-primary btn-block"
+				>Sign in</button>
 
 				{{#if loginServicesOAuthIsAvailable}}
 				<hr />
 				{{/if}}
 
 				{{#if loginServiceIsConfigured 'github'}}
-				<button id="login-with-github" type="button" class="btn btn-sm btn-default btn-block">
+				<button	id="login-with-github"
+						type="button"
+						class="btn btn-sm btn-default btn-block"
+				>
 					<img src="https://github.com/favicon.ico" height="16px" />
 					Sign in using GitHub
 				</button>
 				{{/if}}
 
 				{{#if loginServiceIsConfigured 'google'}}
-				<button id="login-with-google" type="button" class="btn btn-sm btn-default btn-block">
-					<img src="http://www.google.com/favicon.ico" height="16px" />
+				<button	id="login-with-google"
+						type="button"
+						class="btn btn-sm btn-default btn-block"
+				>
+					<img	src="http://www.google.com/favicon.ico"
+							height="16px"
+					/>
 					Sign in using Google
 				</button>
 				{{/if}}
