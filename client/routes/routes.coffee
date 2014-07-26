@@ -5,10 +5,10 @@ Router.configure {
 }
 
 
-Router.onBeforeAction ->
+Router.onBeforeAction (pause)->
 	if Meteor.loggingIn()
 		this.render 'loading'
-		this.pause()
+		pause()
 
 
 
