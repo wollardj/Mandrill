@@ -5,6 +5,12 @@ Router.configure {
 }
 
 
+Router.onBeforeAction ->
+	if Meteor.loggingIn()
+		this.render 'loading'
+		this.pause()
+
+
 
 Router.map ->
 
