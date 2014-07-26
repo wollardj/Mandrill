@@ -7,31 +7,32 @@
 
     <div class="{{#if readme}}col-lg-8{{/if}}">
 
-        <ul class="list-group visible-xs">
-            <li class="list-group-item">
-                <input
-                    type="search"
-                    class="form-control search"
-                    placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
-            </li>
-
-        {{#each breadcrumb.reverse}}
-            <li class="list-group-item">
-                {{#if is_active}}
-                    {{name}}
-                    <span class="badge">
-                        {{session_get 'results_length'}}
-                    </span>
-                {{/if}}
-                {{#unless is_active}}
-                <span class="
-                    glyphicon
-                    glyphicon-folder-close"></span>
-                <a href="{{url}}">{{name}}</a>
-                {{/unless}}
-            </li>
-        {{/each}}
-        </ul>
+        <div class="panel panel-default visible-xs">
+            <div class="panel-heading">
+                Your are here.
+            </div>
+            <ul class="list-group">
+            {{#each breadcrumb.reverse}}
+                <li class="list-group-item">
+                    {{#if is_active}}
+                        <span class="
+                            glyphicon
+                            glyphicon-folder-open text-info"></span>
+                        {{name}}
+                        <span class="badge">
+                            {{session_get 'results_length'}}
+                        </span>
+                    {{/if}}
+                    {{#unless is_active}}
+                    <span class="
+                        glyphicon
+                        glyphicon-folder-open text-info"></span>
+                    <a href="{{url}}">{{name}}</a>
+                    {{/unless}}
+                </li>
+            {{/each}}
+            </ul>
+        </div>
 
         <ol class="breadcrumb visible-sm visible-md visible-lg">
         {{#each breadcrumb}}
@@ -51,13 +52,32 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-xs-8">
-                    </div>
-                    <div class="col-xs-4 col-xs-offset-8">
-                        <input
-                            type="search"
-                            class="form-control search"
-                            placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
+                    <div class="col-sm-4 col-sm-offset-8">
+                        <div class="input-group">
+                            <input
+                                type="search"
+                                id="repo_search"
+                                class="form-control search"
+                                placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
+                            <span class="input-group-btn">
+                                <button     class="btn btn-default
+                                    {{#unless session_get 'repo_filter'}}
+                                        disabled
+                                    {{/unless}}"
+                                            id="clear_repo_filter"
+                                            type="button"
+                                >
+                                    <i class="glyphicon
+                                        {{#if session_get 'repo_filter'}}
+                                            glyphicon-remove
+                                        {{/if}}
+                                        {{#unless session_get 'repo_filter'}}
+                                            glyphicon-search
+                                        {{/unless}}
+                                    "></i>
+                                </button>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

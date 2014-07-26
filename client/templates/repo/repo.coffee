@@ -332,9 +332,9 @@ Template.repo.events {
         focus, allowing the CSS transition to shrink the search field back to
         its original size.
     ###
-    'keydown .search': (event)->
+    'click #clear_repo_filter, keydown .search': (event)->
         # blur on esc - also cancel the current search if there is one.
-        if event.keyCode is 27
+        if not event.keyCode? or event.keyCode is 27
             event.preventDefault()
             event.stopPropagation()
             Session.set 'repo_filter', ''
