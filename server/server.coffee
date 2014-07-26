@@ -1,3 +1,5 @@
+shell = Meteor.require 'shelljs'
+
 Meteor.startup ->
 	setupAfterPortIsBound = Meteor.bindEnvironment ->
 		# Make sure the database and repo filesystem are in sync
@@ -68,6 +70,10 @@ Meteor.startup ->
 	if not MandrillSettings.get('munkiRepoPath')?
 		MandrillSettings.set 'munkiRepoPath', '/Users/Shared/munki_repo/'
 	if not MandrillSettings.get('gitIsEnabled')?
-		MandrillSettings.set 'gitIsEnabled', false
+		# Enable git by default if the git binary is found in PATH
+		if shell.which('git')?
+			MandrillSettings.set 'gitIsEnabled', true
+		else
+			MandrillSettings.set 'gitIsEnabled', false
 	if not MandrillSettings.get('gitBinaryPath')?
-		MandrillSettings.get 'gitBinaryPath', '/usr/bin/git'
+		MandrillSettings.set 'gitBinaryPath', shell.which('git')
