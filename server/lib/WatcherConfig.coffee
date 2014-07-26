@@ -37,6 +37,14 @@
 				console.log 'Watching for changes in ' +
 					watcherInstance.path
 
+				# watchr has finished adding its watcher for this path,
+				# so now we can harvest that information and start
+				# putting stuff in the database.
+				WatcherConfig.paths = WatchHandler.watcherPaths watcherInstance
+				console.log 'Processing', WatcherConfig.paths.length, 'files'
+				for path in WatcherConfig.paths
+					WatchHandler.processFile path
+
 				# Make sure the files for the path are in the git repo for bug
 				# https://github.com/wollardj/Mandrill/issues/14
 				if GitBroker.gitIsEnabled() is true
@@ -45,16 +53,9 @@
 						'Mandrill Admin'
 						watcherInstance.path + '/*'
 						'[Mandrill] Adding all new files to the repo'
-						'',
+						''
 						true
 					)
-
-				# watchr has finished adding its watcher for this path,
-				# so now we can harvest that information and start
-				# putting stuff in the database.
-				WatcherConfig.paths = WatchHandler.watcherPaths watcherInstance
-				for path in WatcherConfig.paths
-					WatchHandler.processFile path
 		, (e)->
 			throw e
 
