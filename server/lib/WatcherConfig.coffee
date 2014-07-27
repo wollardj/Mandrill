@@ -8,7 +8,9 @@
 #
 @WatcherConfig = {
 	paths: []
-	ignoreHiddenFiles: true
+	ignoreCustomPatterns: /\/\.git\//
+	ignoreCommonPatterns: false
+	ignoreHiddenFiles: false
 
 
 	# We're going to wrap all of these calls to Meteor.bindEnvironment

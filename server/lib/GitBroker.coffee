@@ -1,10 +1,15 @@
+shell = Meteor.require 'shelljs'
+
+
 class @GitBroker
 
-	@authorString: Meteor.bindEnvironment (userId)->
+	@authorString: Meteor.bindEnvironment (userId, force)->
 		account = Meteor.users.findOne userId
 		if userId? and account? and account.profile? and account.emails?
 			account.profile.name + ' <' + account.emails[0].address + '>'
 
+		else if force is true
+			'Mandrill Server <no@reply.com>'
 		else
 			throw new Meteor.Error 403, 'Could not determine who is logged ' +
 				'in. Blocking commit request.'
@@ -19,6 +24,14 @@ class @GitBroker
 		aFile.replace repoPath, ''
 	, (e)->
 		throw e
+
+
+
+	@createDotGitIgnoreIfNeeded: Meteor.bindEnvironment ->
+		repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+		gitignore = Mandrill.path.concat repoPath, '.gitignore'
+		if not shell.test '-e', gitignore
+			"*.DS_Store\npkgs/\n*.swp\n".to gitignore
 
 
 
@@ -58,7 +71,7 @@ class @GitBroker
 
 
 	@remove: Meteor.bindEnvironment (path)->
-		GitBroker.git().exec 'rm', '-rf', path
+		GitBroker.git().exec 'rm', '-f', path
 	, (e)->
 		throw e
 
@@ -100,12 +113,12 @@ class @GitBroker
 
 
 
-	@commit: Meteor.bindEnvironment (committerId, path, subject, body)->
+	@commit: Meteor.bindEnvironment (committerId, path, subject, body, force)->
 
 		git = GitBroker.git()
 		commitArgs = [
 			'commit'
-			'--author', GitBroker.authorString committerId
+			'--author', GitBroker.authorString(committerId, force)
 			'-m', (subject or '')
 			'-m', (body or '')
 			path

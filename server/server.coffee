@@ -77,3 +77,5 @@ Meteor.startup ->
 			MandrillSettings.set 'gitIsEnabled', false
 	if not MandrillSettings.get('gitBinaryPath')?
 		MandrillSettings.set 'gitBinaryPath', shell.which('git')
+	if true is MandrillSettings.get 'gitIsEnabled'
+		GitBroker.createDotGitIgnoreIfNeeded()
