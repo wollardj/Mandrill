@@ -1,6 +1,7 @@
 fs = Meteor.require 'fs'
 plist = Meteor.require 'plist-native'
 shell = Meteor.require 'shelljs'
+type_checker = Meteor.require 'istextorbinary'
 
 @CurrentWatcherPath = new Meteor.EnvironmentVariable()
 
@@ -73,9 +74,9 @@ shell = Meteor.require 'shelljs'
 		parseable_types = ['pkgsinfo', 'manifests', 'catalogs']
 		maybe_parseable = parseable_types.indexOf(repoType) isnt -1
 
-		if maybe_parseable is true or
-				(repoType isnt 'pkgs' and repoType isnt 'icons')
-			contents = shell.cat path
+		# if the file is text (not binary) we'll try to parse it and
+		# store its contents in the database.
+		maybe_parseable = type_checker.isTextSync path
 
 		parsedData = null
 		parseError = null
