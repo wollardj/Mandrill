@@ -5,9 +5,12 @@
     <div class="container-fluid">
         <ol class="breadcrumb">
             {{#each breadcrumb}}
-            {{#unless is_active}}
-            <li><a href="{{url}}">{{name}}</a></li>
-            {{/unless}}
+            <li class="{{#if is_active}}active{{/if}}">
+                {{#unless is_active}}
+                <a href="{{url}}">{{name}}</a>
+                {{/unless}}
+                {{#if is_active}}{{name}}{{/if}}
+            </li>
             {{/each}}
         </ol>
 
