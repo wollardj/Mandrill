@@ -9,7 +9,7 @@ Session.setDefault 'results_length', 0
 ###
 Template.repo.breadcrumb = ()->
     params_c = Router.current().params.c
-    crumbs = [{name: 'Munki', url: "?", is_active: false}]
+    crumbs = [{name: 'Munki', url: Router.path 'repo', is_active: false}]
     if params_c?
         url = []
         crumbs.push part for part in Mandrill.path.components(params_c).map (it)->
