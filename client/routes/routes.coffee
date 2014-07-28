@@ -24,19 +24,10 @@ Router.map ->
 		controller: 'RepoRouter'
 	}
 
-	this.route 'manifests', {
-		path: '/manifests/:urlName?',
-		controller: 'ManifestsRouter'
-	}
+	this.route 'repo_editor', {
+		path: 'repo/edit/'
+		controller: 'RepoEditRouter'
 
-	this.route 'pkgsinfo', {
-		path: '/pkgsinfo/:urlName?',
-		controller: 'PkgsinfoRouter'
-	}
-
-	this.route 'catalogs', {
-		path: '/catalogs/:urlName?',
-		controller: 'CatalogsRouter'
 	}
 
 	this.route 'me', {
