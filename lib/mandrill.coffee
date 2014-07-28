@@ -31,6 +31,13 @@
 		# same as Mandrill.path.append, but doesn't prepend a '/' to the result.
 		concat_relative: ()->
 			Mandrill.path.concat.apply(null, arguments).replace(/^\/*/, '')
+
+
+		# Determines if a path has an extension that is a common image type
+		is_image: (path)->
+			patt = new RegExp "(tif|tiff|gif|ico|jpg|jpeg|jif|jfif|" +
+				"jp2|jpx|j2k|j2c|fpx|pcd|png)$", 'i'
+			patt.test path
 	}
 
 

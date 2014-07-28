@@ -1,6 +1,19 @@
 Session.setDefault 'ace_is_ready', false
 
 
+
+Template.repo_edit.is_image = ->
+	crumb = Router.current().params.c
+	if crumb?
+		Mandrill.path.is_image crumb
+
+
+Template.repo_edit.image_url = ->
+	url = MandrillSettings.get 'SoftwareRepoURL'
+	crumb = Mandrill.path.concat_relative Router.current().params.c
+	url + '/' + crumb
+
+
 Template.repo_edit.ace = ->
 	try
 		editor = ace.edit('aceEditor')
@@ -8,8 +21,8 @@ Template.repo_edit.ace = ->
 			Session.set 'ace_is_ready', true
 	catch e
 		Session.set 'ace_is_ready', false
-		#// let this fail silently since it will almost certainly
-		#// fail to find #aceEditor until everything is rendered.
+		# let this fail silently since it will almost certainly
+		# fail to find #aceEditor until everything is rendered.
 
 	editor
 

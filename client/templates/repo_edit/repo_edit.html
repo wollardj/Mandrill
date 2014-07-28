@@ -15,15 +15,23 @@
         </ol>
 
 
+        {{#if this.raw}}
         <div class="panel panel-default">
             <div class="panel-heading">Editor</div>
             <div id="aceEditor">{{update_ace}}</div>
         </div>
+        {{/if}}
 
         {{#unless this.raw}}
         <p class="lead text-center">
             This file cannot be edited directly.
         </p>
         {{/unless}}
+
+        {{#if is_image}}
+        <div class="text-center">
+            <img src="{{image_url}}"/>
+        </div>
+        {{/if}}
     </div>
 </template>
