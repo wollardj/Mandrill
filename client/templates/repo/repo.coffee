@@ -14,7 +14,11 @@ Template.repo.breadcrumb = ()->
         url = []
         crumbs.push part for part in Mandrill.path.components(params_c).map (it)->
             url.push it
-            {name: it, url: "?c=" + url.join('/'), is_active: false}
+            {
+                name: it
+                url: Router.path 'repo', {}, {query: "c=" + url.join('/')}
+                is_active: false
+            }
 
         # make the last item in the array the 'active' breadcrumb
         crumbs[crumbs.length - 1].is_active = true
@@ -210,9 +214,8 @@ Template.repo.dir_listing = ()->
         files.push record.name
 
         if repo_filter
-            # the user is searching for something, which means all the results
-            # are files.
-            record.url = '?c=' + it.path.replace(repo, '')
+            # the user is searching for something, which means all the
+            # results are files.
             record._id = it._id
             record.is_leaf = true
         else
@@ -222,7 +225,6 @@ Template.repo.dir_listing = ()->
             # the current record.name value and then testing to see if that
             # exact string matches the current record's path (it.path).
             full_component_path = Mandrill.path.concat(repo, url, record.name)
-            record.url = '?c=' + Mandrill.path.concat(url, record.name)
             record.is_leaf = it.path is full_component_path.replace(/\/*$/, '')
             if record.is_leaf is true
                 record._id = it._id
@@ -235,6 +237,13 @@ Template.repo.dir_listing = ()->
                 record.icon_file = it.icon_file
             if it.stat?
                 record.stat = it.stat
+            record.url = Router.path 'repo_edit', {}, {
+                query: 'c=' + it.path.replace(repo, '')
+            }
+        else
+            record.url = Router.path 'repo', {}, {
+                query: 'c=' + Mandrill.path.concat(url, record.name)
+            }
         record
 
 

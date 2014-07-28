@@ -24,7 +24,7 @@ Router.map ->
 		controller: 'RepoRouter'
 	}
 
-	this.route 'repo_editor', {
+	this.route 'repo_edit', {
 		path: 'repo/edit/'
 		controller: 'RepoEditRouter'
 

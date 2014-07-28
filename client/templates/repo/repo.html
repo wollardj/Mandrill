@@ -86,27 +86,41 @@
             <tbody>
             <tr>
                 <td colspan="3">
-                    <a href="{{dot_dot_url}}" class="btn btn-default btn-sm
-                    {{#unless dot_dot_url}}disabled{{/unless}}">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    <a
+                        href="{{dot_dot_url}}"
+                        class="
+                            btn
+                            btn-default
+                            btn-sm
+                            {{#unless dot_dot_url}}disabled{{/unless}}">
+                        <span
+                            class="glyphicon glyphicon-chevron-left"></span>
                         ../
                     </a>
                     <button
                         id="repo_edit"
                         class="
                             btn
-                            {{#if session_get 'repo_edit_mode'}}btn-warning{{/if}}
+                            {{#if session_get 'repo_edit_mode'}}
+                                btn-warning
+                            {{/if}}
                             {{#unless session_get 'repo_edit_mode'}}
                                 btn-default
                             {{/unless}}
                             btn-default
                             btn-sm
                             pull-right
-                            {{#if session_get 'repo_edit_mode'}}active{{/if}}"
+                            {{#if session_get 'repo_edit_mode'}}
+                                active
+                            {{/if}}"
                     >
                         <span class="glyphicon glyphicon-edit"></span>
-                        {{#if session_get 'repo_edit_mode'}}Done{{/if}}
-                        {{#unless session_get 'repo_edit_mode'}}Edit{{/unless}}
+                        {{#if session_get 'repo_edit_mode'}}
+                            Done
+                        {{/if}}
+                        {{#unless session_get 'repo_edit_mode'}}
+                            Edit
+                        {{/unless}}
                     </button>
                 </td>
             </tr>
@@ -127,16 +141,25 @@
                     {{/unless}}
 
                     {{#unless is_leaf}}
-                    <span class="glyphicon glyphicon-folder-close text-info"></span>
+                    <span
+                        class="
+                            glyphicon
+                            glyphicon-folder-close
+                            text-info"
+                    ></span>
                     {{/unless}}
 
                     {{#if is_leaf}}
                         <span title="{{file_size}}">
                             {{#if pkgsinfo_icon}}
-                                <img src="{{pkgsinfo_icon}}" class="repo_pkgicon" />
+                                <img
+                                    src="{{pkgsinfo_icon}}"
+                                    class="repo_pkgicon" />
                             {{/if}}
                             {{#unless pkgsinfo_icon}}
-                                <span class="glyphicon glyphicon-file"></span>
+                                <span
+                                    class="glyphicon glyphicon-file"
+                                ></span>
                             {{/unless}}
                         </span>
                     {{/if}}
@@ -145,7 +168,9 @@
                         <span title="{{name}}">
                             {{name}}
                             {{#if this.dom.display_name}}
-                            <span class="text-muted"> - {{this.dom.display_name}}</span>
+                            <span class="text-muted">
+                                - {{this.dom.display_name}}
+                            </span>
                             {{/if}}
                         </span>
                     </a>
@@ -175,7 +200,8 @@
             {{#unless session_get 'results_length'}}
             <div class="panel-body">
                 {{#if session_get 'repo_filter'}}
-                Nothing in your repo matches <strong>{{session_get 'repo_filter'}}</strong>
+                Nothing in your repo matches
+                <strong> {{session_get 'repo_filter'}}</strong>
                 {{/if}}
                 {{#unless session_get 'repo_filter'}}
                 Weird, there doesn't seem to be any data here. o_0

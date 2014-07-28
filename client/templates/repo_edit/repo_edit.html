@@ -1,0 +1,26 @@
+<template name="repo_edit">
+    <div class="mandrill-header">
+        <h2>Munki Repo</h2>
+    </div>
+    <div class="container-fluid">
+        <ol class="breadcrumb">
+            {{#each breadcrumb}}
+            {{#unless is_active}}
+            <li><a href="{{url}}">{{name}}</a></li>
+            {{/unless}}
+            {{/each}}
+        </ol>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Editor</div>
+            <div id="aceEditor">{{update_ace}}</div>
+        </div>
+
+        {{#unless this.raw}}
+        <p class="lead text-center">
+            This file cannot be edited directly.
+        </p>
+        {{/unless}}
+    </div>
+</template>
