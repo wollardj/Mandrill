@@ -14,28 +14,25 @@ Template.repo_edit.ace = ->
 	editor
 
 
-Template.repo_edit.rendered = ->
-    editor = Template.MandrillEditor.ace()
-
-	if editor?
-		editor.setTheme 'ace/theme/xcode'
-		editor.getSession().setMode 'ace/mode/xml'
-		editor.getSession().setUseWrapMode true
-
-
-
 Template.repo_edit.update_ace = ->
-    patt = new RegExp(Router.current().params.c + '$')
-    record = MunkiRepo.findOne {path: patt}
-    content = if record? and record.raw? then record.raw else ''
-    editor = Template.repo_edit.ace()
-    if editor? and content?
-        console.log 'updating ace'
-        editor.setValue content, -1
-    else if content?
-        content
-    else
-        ''
+	crumb = Router.current().params.c
+	patt = new RegExp crumb + '$'
+	record = MunkiRepo.findOne {path: patt}
+	content = if record? and record.raw? then record.raw else ''
+	editor = Template.repo_edit.ace()
+	setTimeout ->
+		editor = Template.repo_edit.ace()
+		Mandrill.util.ace.detect_mode crumb, editor
+		editor.setTheme 'ace/theme/monokai'
+		editor.getSession().setUseWrapMode true
+	, 50
+	if editor? and content?
+		console.log 'updating ace'
+		editor.setValue(content, -1)
+	else if content?
+		content
+	else
+		''
 
 Template.repo_edit.breadcrumb = ->
     # params = Router.current().params
