@@ -1,7 +1,6 @@
 fs = Meteor.require 'fs'
 plist = Meteor.require 'plist-native'
 shell = Meteor.require 'shelljs'
-type_checker = Meteor.require 'istextorbinary'
 
 @CurrentWatcherPath = new Meteor.EnvironmentVariable()
 
@@ -71,45 +70,42 @@ type_checker = Meteor.require 'istextorbinary'
 			return
 
 		repoType = WatchHandler.repoTypeForPath path
-		parseable_types = ['pkgsinfo', 'manifests', 'catalogs']
-		maybe_parseable = parseable_types.indexOf(repoType) isnt -1
+		doc = {path: path, stat: fs.statSync(path)}
 
+		# read the first 1024 bytes of the file to be used as a sample
+		# for determining if the entire file is text or binary,
+		buffer_size = if doc.stat.size > 1024 then 1024 else doc.stat.size
+		handle = fs.openSync path, 'r'
+		buffer = new Buffer(buffer_size)
+		fs.readSync handle, buffer, 0, buffer_size
+		fs.closeSync handle
 		# if the file is text (not binary) we'll try to parse it and
 		# store its contents in the database.
-		maybe_parseable = type_checker.isTextSync path
+		maybe_parseable = true
+		sample = buffer.toString('utf8', 0, buffer_size)
+		for i in [0...sample.length]
+			code = sample.charCodeAt(i)
+			if code is 65533 or code <= 8
+				maybe_parseable = false
+				break
 
-		parsedData = null
-		parseError = null
-		mongoDocument = {}
 
-		# deal with any errors from fs.readFile()
-		if err?
-			parseError = 'Unable to read file ' + path
 
-		else if maybe_parseable is true
+		if maybe_parseable is true
+			doc.raw = fs.readFileSync path, 'utf8'
+
 			# Attempt to parse the plist file
 			try
-				parsedData = plist.parse contents
+				doc.dom = plist.parse doc.raw
 			catch e
-				parseError = e.toString()
-
-
-		mongoDocument = {
-			path: path
-			dom: parsedData
-			raw: contents
-			stat: fs.statSync(path)
-		}
+				doc.err = e.toString()
 
 		# add some metadata about the files in the /icons dir
 		if repoType is 'icons'
-			icons_path = MandrillSettings.get('munkiRepoPath') + 'icons/'
-			icon_file = path.replace(icons_path, '')
-			mongoDocument.icon_file = icon_file
-			mongoDocument.icon_name = icon_file.split('.')[0]
-
-		if parseError?
-			mongoDocument.err = parseError
+			repo_path = MandrillSettings.get('munkiRepoPath')
+			icons_path = Mandrill.path.concat(repo_path, 'icons/')
+			doc.icon_file = path.replace(icons_path, '')
+			doc.icon_name = doc.icon_file.split('.')[0]
 
 
 		# For the uninitiated, 'upsert' does just what it
@@ -117,7 +113,7 @@ type_checker = Meteor.require 'istextorbinary'
 		# document or documents, it/they are updated. If not,
 		# the information is inserted as a new document.
 
-		MunkiRepo.upsert {path: path}, mongoDocument,
+		MunkiRepo.upsert {path: doc.path}, doc,
 			(err)->
 				if err?
 					console.error err
