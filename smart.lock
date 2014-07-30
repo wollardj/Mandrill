@@ -8,15 +8,14 @@
       "moment": {},
       "logger": {},
       "i18n": {},
-      "blaze-layout": {},
       "iron-router": {},
       "typeahead": {}
     },
     "packages": {
       "bootstrap-3": {
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
-        "tag": "v3.1.1-1",
-        "commit": "63dd38968828bb8963636df93e9a1c45e2dfe67e"
+        "tag": "v3.2.0-1",
+        "commit": "17a63902fc6cf1096c5289d963c66cf28b474727"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
@@ -43,20 +42,35 @@
         "tag": "v0.1.2",
         "commit": "e24f4ad9242741984dfa3985be4ed2c3bc34f9d5"
       },
+      "iron-router": {
+        "git": "https://github.com/EventedMind/iron-router.git",
+        "tag": "v0.8.1",
+        "commit": "74e867557fd9cb81173e048e5f81cf4a0a1160a8"
+      },
+      "typeahead": {
+        "git": "https://github.com/sergeyt/meteor-typeahead.git",
+        "tag": "v0.0.11",
+        "commit": "b97b4a92edeceb8f76aa8e6eb0f71252b34d4de3"
+      },
+      "iron-layout": {
+        "git": "https://github.com/EventedMind/iron-layout.git",
+        "tag": "v0.2.0",
+        "commit": "4a2d53e35ba036b0c189c7ceca34be494d4c6c97"
+      },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "tag": "v0.2.5",
         "commit": "273e3ab7d005d91a1a59c71bd224533b4dae2fbd"
       },
-      "iron-router": {
-        "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.7.1",
-        "commit": "d1ffb3f06ea4c112132b030f2eb1a70b81675ecb"
+      "iron-core": {
+        "git": "https://github.com/EventedMind/iron-core.git",
+        "tag": "v0.2.0",
+        "commit": "0e48b5dc50d03f01025b7b900fb5ce2f13d52cad"
       },
-      "typeahead": {
-        "git": "https://github.com/sergeyt/meteor-typeahead.git",
-        "tag": "v0.0.10",
-        "commit": "fe0bb03aea8493037de134d815f9663feb21a944"
+      "iron-dynamic-template": {
+        "git": "https://github.com/EventedMind/iron-dynamic-template.git",
+        "tag": "v0.2.1",
+        "commit": "4dd1185c4d9d616c9abdb3f33e4a7d5a88db7e18"
       }
     }
   }
