@@ -20,3 +20,6 @@ typeahead
 iron-layout
 iron-core
 iron-dynamic-template
+/iron-layout
+/iron-core
+/iron-dynamic-template
