@@ -60,12 +60,13 @@
                                 class="form-control search"
                                 placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
                             <span class="input-group-btn">
-                                <button     class="btn btn-default
-                                    {{#unless session_get 'repo_filter'}}
-                                        disabled
-                                    {{/unless}}"
-                                            id="clear_repo_filter"
-                                            type="button"
+                                <button
+                                    class="btn btn-default
+                                        {{#unless session_get 'repo_filter'}}
+                                            disabled
+                                        {{/unless}}"
+                                    id="clear_repo_filter"
+                                    type="button"
                                 >
                                     <i class="glyphicon
                                         {{#if session_get 'repo_filter'}}
@@ -92,9 +93,14 @@
                             btn
                             btn-default
                             btn-sm
-                            {{#unless dot_dot_url}}disabled{{/unless}}">
+                            {{#unless dot_dot_url}}
+                                disabled
+                            {{/unless}}">
                         <span
-                            class="glyphicon glyphicon-chevron-left"></span>
+                            class="
+                                glyphicon
+                                glyphicon-chevron-left
+                        "></span>
                         ../
                     </a>
                     <button

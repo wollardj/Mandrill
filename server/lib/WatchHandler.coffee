@@ -105,7 +105,9 @@ shell = Meteor.require 'shelljs'
 			repo_path = MandrillSettings.get('munkiRepoPath')
 			icons_path = Mandrill.path.concat(repo_path, 'icons/')
 			doc.icon_file = path.replace(icons_path, '')
-			doc.icon_name = doc.icon_file.split('.')[0]
+			doc.icon_name = Mandrill.path.concat_relative(
+				doc.icon_file.split('.')[0]
+			)
 
 
 		# For the uninitiated, 'upsert' does just what it
