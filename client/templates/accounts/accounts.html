@@ -3,10 +3,10 @@
 		<h2>Accounts</h2>
 	</div>
 
-	<p class="text-center text-info">
+	<p class="lead text-center">
 		Only people with accounts listed here will be able to login to Mandrill.
 	</p>
-	
+
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<form class="form-inline" role="form">
@@ -16,7 +16,7 @@
 				<button type="submit" class="btn btn-primary btn-sm">Add New Account</button>
 			</form>
 		</div>
-		
+
 		<table class="table table-striped table-responsive">
 			<thead>
 			<tr>
@@ -38,17 +38,17 @@
 							{{#if mandrill.isAdmin}}btn-success{{/if}}
 							{{#unless mandrill.isAdmin}}btn-default{{/unless}}">
 								{{#if mandrill.isAdmin}}
-								<i class="glyphicon glyphicon-check"></i>
+								<i class="fa fa-check-square-o"></i>
 								{{/if}}
 								{{#unless mandrill.isAdmin}}
-								<i class="glyphicon glyphicon-unchecked"></i>
+								<i class="fa fa-square-o"></i>
 								{{/unless}}
 							</button>
 							{{#unless mandrill.isAdmin}}
 							<button type="button" data-toggle="tooltip" data-placement="right" title="<nobr>Edit {{username}}'s file access</nobr>" class="btn
 								{{#if mandrill.accessPatterns.length}}btn-default{{/if}}
 								{{#unless mandrill.accessPatterns.length}}btn-warning{{/unless}}" data-show-access="true">
-								<i class="glyphicon glyphicon-edit"></i> {{accessPatternsCount}}
+								<i class="fa fa-pencil-square-o"></i> {{accessPatternsCount}}
 							</button>
 							{{/unless}}
 						{{/unless}}
@@ -72,18 +72,18 @@
 						<button type="button"
 								title="Log user out"
 								class="btn btn-default logout {{#unless isLoggedIn}}disabled{{/unless}}">
-							<i class="glyphicon glyphicon-log-out"></i>
+							<i class="fa fa-sign-out"></i>
 						</button>
 						<button type="button"
 								title="Reset {{username}}'s local password"
 								class="btn btn-default reset-password">
-							<i class="glyphicon glyphicon-asterisk"></i>
+							<i class="fa fa-asterisk"></i>
 						</button>
 
 						<button type="button"
 								title="{{#if isBanned}}Un-ban this account.{{/if}}{{#unless isBanned}}Ban this account.{{/unless}}"
 								class="btn {{#unless isBanned}}btn-default{{/unless}} ban-user {{#if isBanned}}active btn-danger{{/if}}">
-							<i class="glyphicon glyphicon-ban-circle"></i>
+							<i class="fa fa-ban"></i>
 						</button>
 					</div>
 					{{/unless}}
@@ -91,7 +91,7 @@
 				<td>{{loginServicesIcons}}</td>
 				<td>
 					{{#unless isCurrentUser}}
-					<a data-toggle="tooltip" title="Delete this account. You can re-create it later if needed." href="#" class="glyphicon glyphicon-trash text-danger"></a>
+					<a data-toggle="tooltip" title="Delete this account. You can re-create it later if needed." href="#" class="fa fa-trash-o text-danger"></a>
 					{{/unless}}
 				</td>
 			</tr>

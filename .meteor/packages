@@ -9,12 +9,11 @@ accounts-github
 accounts-google
 accounts-password
 accounts-ui
-bootstrap-3
 ace-embed
 moment
-logger
-i18n
 coffeescript
 iron-router
 stylus
 showdown
+fontawesome4
+auto-nprogress

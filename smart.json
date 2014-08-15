@@ -1,12 +1,11 @@
 {
   "packages": {
-    "bootstrap-3": {},
     "npm": {},
     "ace-embed": {},
     "moment": {},
-    "logger": {},
-    "i18n": {},
     "iron-router": {},
-    "typeahead": {}
+    "typeahead": {},
+    "fontawesome4": {},
+    "auto-nprogress": {}
   }
 }

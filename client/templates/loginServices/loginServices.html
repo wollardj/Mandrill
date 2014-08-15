@@ -7,16 +7,16 @@
 	<ul class="nav nav-tabs" id="login-services-tabs">
 		<li class="active">
 			<a href="#github_accounts" data-toggle="tab">
-				<img src="https://github.com/favicon.ico" height="16px" />
+				<i class="fa fa-github"></i>
 				GitHub
-				{{#if loginServiceIsConfigured 'github'}}<i class="glyphicon glyphicon-ok-circle text-success"></i>{{/if}}
+				{{#if loginServiceIsConfigured 'github'}}<i class="fa fa-check-circle text-success"></i>{{/if}}
 			</a>
 		</li>
 		<li>
 			<a href="#google_accounts" data-toggle="tab">
-				<img src="http://www.google.com/favicon.ico" height="16px" />
+				<i class="fa fa-google"></i>
 				Google
-				{{#if loginServiceIsConfigured 'google'}}<i class="glyphicon glyphicon-ok-circle text-success"></i>{{/if}}
+				{{#if loginServiceIsConfigured 'google'}}<i class="fa fa-check-circle text-success"></i>{{/if}}
 			</a>
 		</li>
 	</ul>
@@ -26,16 +26,14 @@
 	<div class="tab-content">
 		<div class="tab-pane fade in active" id="github_accounts">
 			<div class="panel panel-default">
-				<div class="panel-heading"></div>
 				<div class="panel-body">
 					{{> loginServicesGithub}}
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="tab-pane fade" id="google_accounts">
 			<div class="panel panel-default">
-				<div class="panel-heading"></div>
 				<div class="panel-body">
 					{{> loginServicesGoogle}}
 				</div>

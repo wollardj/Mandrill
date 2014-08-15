@@ -1,5 +1,5 @@
 <template name="appNavbar">
-	<nav class="navbar navbar-inverse navbar-fixed-top appNavbar" role="navigation">
+	<nav class="navbar navbar-default navbar-fixed-top appNavbar" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mandrillNavMain">
@@ -18,7 +18,7 @@
 
 					<li class="{{routeIsActive "manifests"}}">
 						<a href="{{pathFor 'repo' params='' }}">
-							<i class="glyphicon glyphicon-list-alt"></i>
+							<i class="fa fa-database"></i>
 							Munki
 							<span class="badge">
 								{{munki_repo_item_count}}
@@ -31,7 +31,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown {{routeIsActive 'me'}}">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<i class="glyphicon glyphicon-user"></i>
+							<i class="fa fa-user"></i>
 							{{loggedInUserDisplayName}}
 							<b class="caret"></b>
 						</a>
@@ -40,19 +40,19 @@
 							<li class="{{routeIsActive "accounts"}}
 								{{routeIsActive "accounts-access"}}">
 								<a href="{{pathFor 'accounts'}}">
-									<i class="glyphicon glyphicon-user"></i>
+									<i class="fa fa-users"></i>
 									Accounts
 								</a>
 							</li>
 							<li class="{{routeIsActive "login-services"}}">
 								<a href="{{pathFor 'login-services'}}">
-									<i class="glyphicon glyphicon-log-in"></i>
+									<i class="fa fa-openid"></i>
 									Login Services
 								</a>
 							</li>
 							<li class="{{routeIsActive "mandrill-settings"}}">
 								<a href="{{pathFor 'mandrill-settings'}}">
-									<i class="glyphicon glyphicon-cog"></i>
+									<i class="fa fa-cogs"></i>
 									Mandrill Settings
 								</a>
 							</li>
@@ -60,13 +60,13 @@
 							{{/if}}
 							<li class="{{routeIsActive "me"}}">
 								<a href="{{pathFor 'me'}}">
-									<i class="glyphicon glyphicon-user"></i>
+									<i class="fa fa-user"></i>
 									My Account
 								</a>
 							</li>
 							<li>
 								<a href="#logout" id="logout">
-									<i class="glyphicon glyphicon-log-out"></i>
+									<i class="fa fa-sign-out"></i>
 									Logout
 								</a>
 							</li>

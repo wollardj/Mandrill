@@ -29,9 +29,9 @@ Template.mandrillSettings.gitIsChecked = ->
 Template.mandrillSettings.munkiRepoPathFeedbackIcon = ->
 	settings = MandrillSettings.findOne()
 	if settings.munkiRepoPathIsValid is true
-		'ok'
+		'check'
 	else
-		'warning-sign'
+		'exclamation-triangle'
 
 
 Template.mandrillSettings.runningMakeCatalogs = ->

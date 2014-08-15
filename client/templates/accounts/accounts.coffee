@@ -46,19 +46,15 @@ Template.accounts.loginServicesIcons = ->
 	name = if this.profile and this.profile.name then this.profile.name else this.username
 
 	icons += '<i data-toggle="tooltip" title="' + name +
-		' has a local account" class="glyphicon glyphicon-user"></i>'
+		' has a local account" class="fa fa-user"></i>'
 
 	if this.services and this.services.google
-		icons += ' <img data-toggle="tooltip" title="' + name +
-			' has logged in using Google" height="15px" ' +
-			'style="margin-bottom: 6px" src="' +
-			'https://www.google.com/favicon.ico" />'
+		icons += ' <i data-toggle="tooltip" title="' + name +
+			' has logged in using Google" class="fa fa-google"></i>'
 
 	if this.services and this.services.github
-		icons += ' <img data-toggle="tooltip" title="' + name +
-			' has logged in using Github" height="15px" ' +
-			'style="margin-bottom: 6px" ' +
-			'src="http://www.github.com/favicon.ico" />'
+		icons += ' <i data-toggle="tooltip" title="' + name +
+			' has logged in using Github" class="fa fa-github"></i>'
 
 	new Handlebars.SafeString(icons)
 
@@ -110,7 +106,7 @@ Template.accounts.events {
 					found = true
 					break
 			found
-		
+
 		#// Look for orphaned service accounts and remove them.
 		for own key, value of this.services
 			if key is 'password' or key is 'resume'
@@ -161,7 +157,7 @@ Template.accounts.events {
 	'click button.ban-user': ->
 		if Meteor.userId() is this._id
 			return
-		
+
 		if this.mandrill.isBanned is true
 			Meteor.users.update {_id: this._id}, {'$set': {
 					'mandrill.isBanned': false
@@ -183,7 +179,7 @@ Template.accounts.events {
 			if err?
 				Mandrill.show.error err
 				return
-	
+
 			Mandrill.show.success(
 					'Password reset for "' + username + '"',
 					'The new password is <code>' + data.result + '</code>'
@@ -197,7 +193,7 @@ Template.accounts.events {
 	'click button[data-toggle-admin]': (event)->
 		event.stopPropagation()
 		event.preventDefault()
-		
+
 		if Meteor.userId() is this._id
 			return
 

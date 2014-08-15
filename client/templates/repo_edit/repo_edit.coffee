@@ -36,7 +36,7 @@ Template.repo_edit.update_ace = ->
 	setTimeout ->
 		editor = Template.repo_edit.ace()
 		Mandrill.util.ace.detect_mode crumb, editor
-		editor.setTheme 'ace/theme/monokai'
+		editor.setTheme 'ace/theme/tomorrow_night'
 		editor.getSession().setUseWrapMode true
 	, 50
 	if editor? and content?

@@ -1,23 +1,9 @@
 @import 'globalVars.import.styl'
 
 
-html
-	background #f2f1e8 linear-gradient(to bottom,  #d7d8d2 0%, #f2f1e8 100%) repeat-x top right
-	transition background 1.0s
-
-	&.login-window
-		background #424138 linear-gradient(to bottom,  #272822 0%,#424138 100%) repeat-x top right
-		transition background 1.0s
-
 body
-	background-color transparent
-	position relative
 	padding 50px 0 0 0
 
-
-
-.tab-pane
-	padding-top 15px
 
 
 .modal-dialog
@@ -27,22 +13,10 @@ body
 		overflow auto
 
 
-div.borderless-container
-	margin 0 -15px -15px -15px
-
-	.navbar
-		border-radius 0
-		margin-left 0
-		margin-right 0
-		padding-left 15px
-		padding-right 15px
-
-
-
 .mandrill-header
 	text-align center
 	box-shadow inset 0px -10px 10px -10px rgba(0,0,0,0.7)
-	margin 0 0 15px 0
+	margin 0 0 35px 0
 	padding 15px
 	background header_bg_color
 
@@ -62,12 +36,6 @@ p.app-footer
 	font-family 'Lato', sans-serif
 	font-weight 300
 
-/*
-	Meant for use with .mandrill-header to provide a little space between the
-	bottom of the header and the body content.
- */
-.pad-bottom
-	margin-bottom 20px
 
 
 
@@ -76,74 +44,6 @@ p.app-footer
 	margin 10px 0
 
 
-
-
-
-
-
-/* "sticky" paging toolbar */
-/* affixed navbars */
-
-.paging-toolbar.affix-top
-	position static
-
-
-.paging-toolbar.affix .navbar
-	background-color rgba(250, 250, 250, 0.93)
-	margin 0
-
-.paging-toolbar.affix
-	position fixed
-	top 50px
-	left 0
-	right 0
-	box-shadow 1px 0 5px #000
-	transition box-shadow 250ms
-
-
-/*
-	Make sure the table doesn't jump around when the navbar
-	goes from 'static' to 'fixed'. Also make sure we're
-	taking into account that the navbar will collapse under
-	768px
-*/
-.paging-toolbar.affix ~ table.paging-table
-	@media screen and (min-width: 768px)
-		margin-top 75px
-
-	@media screen and (max-width: 767px)
-		margin-top 139px
-
-/* /"sticky" paging toolbar */
-
-
-
-
-
-.panel
-	border-color rgb(208, 208, 208)
-	border-radius 5px 5px 5px 5px
-	// box-shadow 0 1px 3px #000
-
-
-.panel-heading
-	h1, h2, h3, h4, h5, h6
-		margin 0
-	.row
-		margin 0 -23px
-
-
-.panel-default
-	.panel-heading
-		// background linear-gradient(to bottom, #fefefe 0%, #f6f6f6 50%, #ededed 51%, #e4e4e4 100%)
-		background linear-gradient(to bottom, #ccc 0%, #eee 100%)
-		text-shadow 0 1px #fff
-		border-bottom-color #ccc
-
-
-.panel-primary
-	.panel-heading
-		background linear-gradient(to bottom, rgba(30,87,153,1) 0%, rgba(32,124,202,1) 100%)
 
 
 

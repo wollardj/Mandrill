@@ -3,6 +3,11 @@
     <h2>Munki Repo</h2>
 </div>
 
+
+<div class="container-fluid">
+{{>repo_toolbar}}
+</div>
+
 <div class="container-fluid">
 
     <div class="{{#if readme}}col-lg-8{{/if}}">
@@ -14,19 +19,14 @@
             <ul class="list-group">
             {{#each breadcrumb.reverse}}
                 <li class="list-group-item">
+                    <i class="fa fa-folder-open-o text-info"></i>
                     {{#if is_active}}
-                        <span class="
-                            glyphicon
-                            glyphicon-folder-open text-info"></span>
                         {{name}}
                         <span class="badge">
                             {{session_get 'results_length'}}
                         </span>
                     {{/if}}
                     {{#unless is_active}}
-                    <span class="
-                        glyphicon
-                        glyphicon-folder-open text-info"></span>
                     <a href="{{url}}">{{name}}</a>
                     {{/unless}}
                 </li>
@@ -50,86 +50,9 @@
 
 
         <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-4 col-sm-offset-8">
-                        <div class="input-group">
-                            <input
-                                type="search"
-                                id="repo_search"
-                                class="form-control search"
-                                placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
-                            <span class="input-group-btn">
-                                <button
-                                    class="btn btn-default
-                                        {{#unless session_get 'repo_filter'}}
-                                            disabled
-                                        {{/unless}}"
-                                    id="clear_repo_filter"
-                                    type="button"
-                                >
-                                    <i class="glyphicon
-                                        {{#if session_get 'repo_filter'}}
-                                            glyphicon-remove
-                                        {{/if}}
-                                        {{#unless session_get 'repo_filter'}}
-                                            glyphicon-search
-                                        {{/unless}}
-                                    "></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <table class="table">
             <tbody>
-            <tr>
-                <td colspan="3">
-                    <a
-                        href="{{dot_dot_url}}"
-                        class="
-                            btn
-                            btn-default
-                            btn-sm
-                            {{#unless dot_dot_url}}
-                                disabled
-                            {{/unless}}">
-                        <span
-                            class="
-                                glyphicon
-                                glyphicon-chevron-left
-                        "></span>
-                        ../
-                    </a>
-                    <button
-                        id="repo_edit"
-                        class="
-                            btn
-                            {{#if session_get 'repo_edit_mode'}}
-                                btn-warning
-                            {{/if}}
-                            {{#unless session_get 'repo_edit_mode'}}
-                                btn-default
-                            {{/unless}}
-                            btn-default
-                            btn-sm
-                            pull-right
-                            {{#if session_get 'repo_edit_mode'}}
-                                active
-                            {{/if}}"
-                    >
-                        <span class="glyphicon glyphicon-edit"></span>
-                        {{#if session_get 'repo_edit_mode'}}
-                            Done
-                        {{/if}}
-                        {{#unless session_get 'repo_edit_mode'}}
-                            Edit
-                        {{/unless}}
-                    </button>
-                </td>
-            </tr>
             {{#each dir_listing}}
             <tr>
                 <td>
@@ -147,12 +70,7 @@
                     {{/unless}}
 
                     {{#unless is_leaf}}
-                    <span
-                        class="
-                            glyphicon
-                            glyphicon-folder-close
-                            text-info"
-                    ></span>
+                    <i class="fa fa-folder text-info"></i>
                     {{/unless}}
 
                     {{#if is_leaf}}
@@ -163,9 +81,7 @@
                                     class="repo_pkgicon" />
                             {{/if}}
                             {{#unless pkgsinfo_icon}}
-                                <span
-                                    class="glyphicon glyphicon-file"
-                                ></span>
+                                <i class="fa fa-file"></i>
                             {{/unless}}
                         </span>
                     {{/if}}
@@ -222,7 +138,7 @@
     <div class="col-lg-4">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5>README.md</h5>
+                <h5><i class="fa fa-file-text"></i> README.md</h5>
             </div>
             <div class="panel-body">
                 {{#markdown}}{{readme}}{{/markdown}}
