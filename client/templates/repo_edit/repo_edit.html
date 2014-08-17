@@ -1,0 +1,109 @@
+<template name="repo_edit">
+    <div class="mandrill-header">
+        <h2>Munki Repo</h2>
+    </div>
+    <div class="container-fluid">
+
+        <div class="col-sm-9">
+
+            <div class="row">
+                <div class="col-xs-9">
+                    <ol class="breadcrumb">
+                        {{#each breadcrumb}}
+                        <li class="{{#if is_active}}active{{/if}}">
+                            {{#unless is_active}}
+                            <a href="{{url}}">{{name}}</a>
+                            {{/unless}}
+                            {{#if is_active}}{{name}}{{/if}}
+                        </li>
+                        {{/each}}
+                    </ol>
+                </div>
+                <div class="col-xs-3">
+                    <a
+                        class="btn btn-default btn-block"
+                        href="{{item_url}}"
+                        download="{{item_filename}}"
+                        title="Download {{item_filename}}"
+                    >
+                        <i class="fa fa-cloud-download"></i>
+                        {{formatBytes file_size}}
+                    </a>
+                </div>
+            </div>
+
+            {{#if this.raw}}
+            <div class="panel panel-default">
+                <div id="aceEditor">{{update_ace}}</div>
+            </div>
+            {{/if}}
+
+            {{#if is_image}}
+            <div class="text-center">
+                <img src="{{item_url}}"/>
+            </div>
+            {{/if}}
+            {{#unless this.raw}}
+                {{#unless is_image}}
+                <p class="text-center lead">
+                    {{item_filename}} cannot be edited in the browser.
+                </p>
+                {{/unless}}
+            {{/unless}}
+        </div>
+
+
+        <div class="col-sm-3">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#git-commit" data-toggle="tab">
+                        <i class="fa fa-floppy-o"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#info" data-toggle="tab">
+                        <i class="fa fa-info"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#git-logs" data-toggle="tab">
+                        <i class="fa fa-history"></i>
+                    </a>
+                </li>
+            </ul>
+
+
+            <div class="tab-content">
+
+
+                <div class="tab-pane fade in active" id="git-commit">
+                    <h3 class="text-center">Commit Changes</h3>
+                    {{> repo_edit_tabs_git_commit}}
+                </div>
+
+
+                <div class="tab-pane fade" id="info">
+                    <h3 class="text-center">Info</h3>
+                    {{#with this.stat}}
+                    {{> repo_edit_tabs_info}}
+                    {{/with}}
+                </div>
+
+
+                <div class="tab-pane fade" id="git-logs">
+                    <h3 class="text-center">Git Logs</h3>
+                    {{#unless session_get 'tab_git-logs'}}
+                    <p class="lead">Loading...</p>
+                    {{/unless}}
+                    {{#if session_get 'tab_git-logs'}}
+                    {{#with session_get 'tab_git-logs'}}
+                        {{> repo_edit_tabs_git_logs}}
+                    {{/with}}
+                    {{/if}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
