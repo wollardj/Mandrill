@@ -15,23 +15,81 @@
         </ol>
 
 
-        {{#if this.raw}}
-        <div class="panel panel-default">
-            <div class="panel-heading">Editor</div>
-            <div id="aceEditor">{{update_ace}}</div>
-        </div>
-        {{/if}}
+        <div class="col-sm-9">
 
-        {{#unless this.raw}}
-        <p class="lead text-center">
-            This file cannot be edited directly.
-        </p>
-        {{/unless}}
+            {{#if this.raw}}
+            <div class="panel panel-default">
+                <div class="panel-heading">Editor</div>
+                <div id="aceEditor">{{update_ace}}</div>
+            </div>
+            {{/if}}
 
-        {{#if is_image}}
-        <div class="text-center">
-            <img src="{{image_url}}"/>
+            {{#if is_image}}
+            <div class="text-center">
+                <img src="{{item_url}}"/>
+            </div>
+            {{/if}}
+            {{#unless this.raw}}
+                {{#unless is_image}}
+                <p class="text-center lead">
+                    {{item_filename}} cannot be edited in the browser.
+                </p>
+                {{/unless}}
+            {{/unless}}
         </div>
-        {{/if}}
+
+
+        <div class="col-sm-3">
+            <form role="form">
+                <fieldset>
+                    <legend>Commit Changes</legend>
+                    <div class="form-group">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="git-subject" />
+                    </div>
+                    <div class="form-group">
+                        <textarea
+                            class="form-control"
+                            id="git-body"
+                            placeholder="Add an optional extended description of your changes..."
+                        ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group btn-group-justified">
+                            <div class="btn-group">
+                                <button
+                                    type="button"
+                                    id="git-cancel"
+                                    class="btn btn-danger">
+                                        <i class="fa fa-chevron-left"></i>
+                                        Cancel
+                                </button>
+                            </div>
+                            <div class="btn-group">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary">
+                                    <i class="fa fa-save"></i>
+                                    Commit Changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
+            <hr />
+            
+            <a
+                href="{{item_url}}"
+                download="{{item_filename}}"
+                class="text-center btn-block"
+            >
+                <i class="fa fa-cloud-download"></i>
+                Download ({{formatBytes file_size}})
+            </a>
+        </div>
     </div>
 </template>

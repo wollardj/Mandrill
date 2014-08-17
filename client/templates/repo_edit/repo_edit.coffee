@@ -8,10 +8,27 @@ Template.repo_edit.is_image = ->
 		Mandrill.path.is_image crumb
 
 
-Template.repo_edit.image_url = ->
+
+Template.repo_edit.item_url = ->
 	url = MandrillSettings.get 'SoftwareRepoURL'
-	crumb = Mandrill.path.concat_relative Router.current().params.c
-	url + '/' + crumb
+	crumb = Router.current().params.c
+	if url? and crumb?
+		Mandrill.path.concat_relative url, crumb
+	else
+		''
+
+Template.repo_edit.item_filename = ->
+	crumb = Router.current().params.c
+	_.last crumb.split('/')
+
+
+Template.repo_edit.file_size = ->
+	crumb = Router.current().params.c
+	record = MunkiRepo.findOne {path: new RegExp(crumb + '$')}
+	if record? and record.stat? and record.stat.size?
+		record.stat.size
+	else
+		0
 
 
 Template.repo_edit.ace = ->
@@ -48,10 +65,24 @@ Template.repo_edit.update_ace = ->
 		''
 
 Template.repo_edit.breadcrumb = ->
-    # params = Router.current().params
-    # Mandrill.path.concat_relative(params.c).split '/'
     Template.repo.breadcrumb()
 
+
+
+Template.repo_edit.events {
+
+	#
+	# Return the user to the parent directory when the cancel button is
+	# clicked.
+	#
+	'click #git-cancel': (event)->
+		event.preventDefault()
+		event.stopPropagation()
+
+		parent_path = _.initial Router.current().params.c.split('/')
+		url = Router.path 'repo', {}, {query: 'c=' + parent_path.join('/')}
+		Router.go url
+}
 
 
 ###

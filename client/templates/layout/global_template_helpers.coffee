@@ -8,6 +8,19 @@ Meteor.startup ->
 		Session.equals key, val
 
 
+	UI.registerHelper 'formatBytes', (bytes)->
+		suffix = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+		if bytes?
+			i = 0
+			size = bytes
+			while size > 1024
+				size /= 1024
+				i++
+			Math.round(size) + suffix[i]
+		else
+			'??'
+
+
 	Handlebars.registerHelper 'momentFromNow', (someDate)->
 		moment(someDate).fromNow()
 

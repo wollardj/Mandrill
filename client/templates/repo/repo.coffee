@@ -45,18 +45,6 @@ Template.repo.pkgsinfo_icon = ()->
             Mandrill.path.concat_relative repo_url, 'icons', icon.icon_file
 
 
-Template.repo.file_size = ()->
-    suffix = ['B', 'KB', 'MB', 'GB', 'TB']
-    if this.stat? and this.stat.size?
-        i = 0
-        size = this.stat.size
-        while size > 1024
-            size /= 1024
-            i++
-        Math.round(size) + suffix[i]
-    else
-        '??'
-
 
 ###
     If there is a README.md file in the current directory, we'll fetch its

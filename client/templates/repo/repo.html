@@ -74,7 +74,7 @@
                     {{/unless}}
 
                     {{#if is_leaf}}
-                        <span title="{{file_size}}">
+                        <span title="{{formatBytes this.stat.size}}">
                             {{#if pkgsinfo_icon}}
                                 <img
                                     src="{{pkgsinfo_icon}}"
