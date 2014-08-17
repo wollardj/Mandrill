@@ -21,28 +21,28 @@ Meteor.startup ->
 			'??'
 
 
-	Handlebars.registerHelper 'momentFromNow', (someDate)->
+	UI.registerHelper 'momentFromNow', (someDate)->
 		moment(someDate).fromNow()
 
 
-	Handlebars.registerHelper 'meteorOnline', ->
+	UI.registerHelper 'meteorOnline', ->
 		Meteor.status().status is 'connected'
 
-	#/*
-	#	Analyes Meteor.status() and returns en empty string if we're
-	#	connected. Otherwise, this will return a message.
-	#	Examples of strings:
-	#
-	#	- when status is "waiting"
-	#		"Attempt 1. Will try again in 3 seconds"
-	#	- when status is "connecting"
-	#		"connecting..."
-	#	- when status is "offline"
-	#		"Offline"
-	#	- when status is "failed"
-	#		"Connection failed. [...]" where [...] is the failure message
-	#*/
-	Handlebars.registerHelper 'meteorStatus', ->
+	###
+		Analyes Meteor.status() and returns en empty string if we're
+		connected. Otherwise, this will return a message.
+		Examples of strings:
+			
+		- when status is "waiting"
+			"Attempt 1. Will try again in 3 seconds"
+		- when status is "connecting"
+			"connecting..."
+		- when status is "offline"
+			"Offline"
+		- when status is "failed"
+			"Connection failed. [...]" where [...] is the failure message
+	###
+	UI.registerHelper 'meteorStatus', ->
 		status = Meteor.status()
 		if status.status is 'connected'
 			true
@@ -57,18 +57,18 @@ Meteor.startup ->
 			'Connection failed. ' + status.reason
 
 
-	Handlebars.registerHelper 'currentRoute', ->
+	UI.registerHelper 'currentRoute', ->
 		Router.current().route.name
 
 
-	Handlebars.registerHelper 'mandrillVersion', ->
+	UI.registerHelper 'mandrillVersion', ->
 		Mandrill.version
 
 
-	Handlebars.registerHelper 'meteorVersion', ->
+	UI.registerHelper 'meteorVersion', ->
 		Meteor.release
 
-	Handlebars.registerHelper 'absoluteUrl', ->
+	UI.registerHelper 'absoluteUrl', ->
 		Meteor.absoluteUrl()
 
 
@@ -76,20 +76,20 @@ Meteor.startup ->
 		moment(a_date).fromNow()
 
 
-	#// Determines if the current user is an admin.
-	Handlebars.registerHelper 'isAdmin', ->
+	# Determines if the current user is an admin.
+	UI.registerHelper 'isAdmin', ->
 		user = Meteor.user()
 		user? and user.mandrill? and user.mandrill.isAdmin is true
 
 
-	Handlebars.registerHelper 'loginServiceIsConfigured', (serviceName)->
+	UI.registerHelper 'loginServiceIsConfigured', (serviceName)->
 		service = Accounts.loginServiceConfiguration.findOne {service: serviceName}
 		if service?
 				true
 		else
 			false
 
-	Handlebars.registerHelper 'loginServicesOAuthIsAvailable', ->
+	UI.registerHelper 'loginServicesOAuthIsAvailable', ->
 		services = Accounts.loginServiceConfiguration.find().count()
 		if services? and services > 0
 			true
