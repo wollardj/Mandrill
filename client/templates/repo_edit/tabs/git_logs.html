@@ -3,6 +3,9 @@
     <p class="alert alert-danger">{{error.message}}</p>
     {{/if}}
     {{#unless error}}
+        {{#unless logs}}
+            <p class="text-center text-muted">No git logs found for this file</p>
+        {{/unless}}
     <div class="list-group repo_edit_tabs_git_logs">
         <div>
         {{#each logs}}
