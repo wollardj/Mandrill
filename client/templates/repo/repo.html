@@ -5,12 +5,14 @@
 
 
 <div class="container-fluid">
-{{>repo_toolbar}}
+    <div class="col-xs-12">
+        {{>repo_toolbar}}
+    </div>
 </div>
 
 <div class="container-fluid">
 
-    <div class="{{#if readme}}col-lg-8{{/if}}">
+    <div class="{{#unless readme}}col-xs-12{{/unless}}{{#if readme}}col-lg-8{{/if}}">
 
         <div class="panel panel-default visible-xs">
             <div class="panel-heading">

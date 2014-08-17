@@ -1,4 +1,5 @@
 Session.setDefault 'ace_is_ready', false
+Session.setDefault 'tab_git-logs', false
 
 
 
@@ -23,8 +24,7 @@ Template.repo_edit.item_filename = ->
 
 
 Template.repo_edit.file_size = ->
-	crumb = Router.current().params.c
-	record = MunkiRepo.findOne {path: new RegExp(crumb + '$')}
+	record = Router.current().data()
 	if record? and record.stat? and record.stat.size?
 		record.stat.size
 	else
@@ -45,14 +45,12 @@ Template.repo_edit.ace = ->
 
 
 Template.repo_edit.update_ace = ->
-	crumb = Router.current().params.c
-	patt = new RegExp crumb + '$'
-	record = MunkiRepo.findOne {path: patt}
-	content = if record? and record.raw? then record.raw else ''
 	editor = Template.repo_edit.ace()
+	record = Router.current().data()
+	content = if record? and record.raw? then record.raw else ''
 	setTimeout ->
 		editor = Template.repo_edit.ace()
-		Mandrill.util.ace.detect_mode crumb, editor
+		Mandrill.util.ace.detect_mode record.path, editor
 		editor.setTheme 'ace/theme/tomorrow_night'
 		editor.getSession().setUseWrapMode true
 	, 50
@@ -82,42 +80,21 @@ Template.repo_edit.events {
 		parent_path = _.initial Router.current().params.c.split('/')
 		url = Router.path 'repo', {}, {query: 'c=' + parent_path.join('/')}
 		Router.go url
+
+
+	###
+		Tab click events
+	###
+	'shown.bs.tab a[data-toggle="tab"]': (event)->
+		tab = $(event.target).attr('href').replace(/^#/, '')
+		Session.set 'tab_git-logs', false
+		if tab is 'git-logs'
+			crumb = Router.current().params.c
+			path = MandrillSettings.get 'munkiRepoPath'
+			path = Mandrill.path.concat path, crumb
+			Meteor.call 'git-log', path, (error, result)->
+				Session.set 'tab_git-logs', {
+					error: error
+					logs: result
+				}
 }
-
-
-###
-    Override to set the document body.
-###
-###
-Template.repo_edit.document_body = ->
-    patt = new RegExp(Router.current().params.c + '$')
-    doc = MunkiRepo.findOne {path: patt}
-    editor = Template.repo_edit.ace()
-    if editor?
-        hasLocalChanges = editor.session.getUndoManager().dirtyCounter > 0
-    else
-        hasLocalChanges = false
-	currentBody = if editor? then editor.session.getValue() else ''
-	readOnly = true
-
-	if doc? and doc.path?
-		readOnly = not Mandrill.user.canModifyPath(Meteor.userId(), doc.path, false)
-
-	if editor?
-		editor.setReadOnly readOnly
-
-	if editor? and doc? and doc.raw?
-		if hasLocalChanges is false
-			editor.setValue doc.raw
-		else if currentBody isnt doc.raw
-			answer = confirm 'This document has changed. Do you want to load the changes now?'
-			if answer is yes
-				editor.setValue doc.raw
-		else
-			editor.setValue doc.raw
-
-	else if doc? and doc.raw?
-		doc.raw
-	else
-		''
-###

@@ -21,6 +21,19 @@ Meteor.startup ->
 			'??'
 
 
+	UI.registerHelper 'statMode2octal', (statMode)->
+		# taken from `man 2 stat`
+		S_IRUSR  = 0o0000400  # read permission, owner
+		S_IWUSR  = 0o0000200  # write permission, owner
+		S_IXUSR  = 0o0000100  # execute/search permission, owner
+
+		perms = if statMode & S_IRUSR then 'r' else '-'
+		perms += if statMode & S_IWUSR then 'w' else '-'
+		perms += if statMode & S_IXUSR then 'x' else '-'
+		perms
+
+
+
 	UI.registerHelper 'momentFromNow', (someDate)->
 		moment(someDate).fromNow()
 
@@ -28,11 +41,12 @@ Meteor.startup ->
 	UI.registerHelper 'meteorOnline', ->
 		Meteor.status().status is 'connected'
 
+
 	###
 		Analyes Meteor.status() and returns en empty string if we're
 		connected. Otherwise, this will return a message.
 		Examples of strings:
-			
+
 		- when status is "waiting"
 			"Attempt 1. Will try again in 3 seconds"
 		- when status is "connecting"

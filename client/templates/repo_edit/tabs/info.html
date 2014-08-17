@@ -1,0 +1,40 @@
+<template name="repo_edit_tabs_info">
+    <div class="row">
+        <div class="col-xs-6 text-right"><strong>Size</strong></div>
+        <div class="col-xs-6">{{formatBytes size}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 text-right"><strong>Mode</strong></div>
+        <div class="col-xs-6">{{statMode2octal mode}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 text-right"><strong>Owner</strong></div>
+        <div class="col-xs-6">{{uid}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 text-right"><strong>Created</strong></div>
+        <div class="col-xs-6">
+            <abbr title="{{ctime}}">{{timeago ctime}}</abbr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 text-right"><strong>Modified</strong></div>
+        <div class="col-xs-6">
+            <abbr title="{{mtime}}">{{timeago mtime}}</abbr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 text-right"><strong>Accessed</strong></div>
+        <div class="col-xs-6">
+            <abbr title="{{atime}}">{{timeago atime}}</abbr>
+        </div>
+    </div>
+
+    <hr />
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <input class="form-control input-sm" type="text" value="{{repo_item_url}}" />
+        </div>
+    </div>
+</template>

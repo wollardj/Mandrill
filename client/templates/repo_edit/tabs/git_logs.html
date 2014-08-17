@@ -1,0 +1,28 @@
+<template name="repo_edit_tabs_git_logs">
+    {{#if error}}
+    <p class="alert alert-danger">{{error.message}}</p>
+    {{/if}}
+    {{#unless error}}
+    <div class="list-group repo_edit_tabs_git_logs">
+        <div>
+        {{#each logs}}
+            <div class="list-group-item">
+                <h5>
+                    <div class="label label-primary pull-right">
+                        {{hash}}
+                    </div>
+                    {{subject}}
+                </h5>
+                {{#if body}}
+                <blockquote class="small">{{body}}</blockquote>
+                {{/if}}
+                <small class="text-muted">
+                    {{authorName}} authored
+                    <abbr title="{{authorDate}}">{{timeago authorDate}}</abbr>
+                </small>
+            </div>
+        {{/each}}
+        </div>
+    </div>
+    {{/unless}}
+</template>
