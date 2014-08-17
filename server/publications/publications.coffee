@@ -1,6 +1,3 @@
-Meteor.publish 'PaginatedQueryStats', ->
-	PaginatedQueryStats.find()
-
 Meteor.publish 'MandrillSettings', ->
 	if Mandrill.user.isValid(this.userId) is true
 		MandrillSettings.find()
