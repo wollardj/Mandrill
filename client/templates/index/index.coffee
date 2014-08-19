@@ -31,14 +31,14 @@ Template.index.uptime = ->
 	while seconds > 86400
 		days++
 		seconds = seconds - 86400
-	
+
 	if days > 0
 		result.push days + 'd'
 
 	while seconds > 3600
 		hours++
 		seconds = seconds - 3600
-	
+
 	if hours > 0
 		result.push hours + 'h'
 
@@ -113,6 +113,9 @@ Template.index.networkInfo = ->
 	output = ''
 
 	for own key, value of ifaces
+		if /^utun/.test(key) or key is 'lo0'
+			continue
+
 		output += '<tr><th>' + key +
 			'</th><td><ul class="list-unstyled">';
 		for own aKey, aValue of value
