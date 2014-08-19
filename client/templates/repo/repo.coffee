@@ -1,6 +1,5 @@
 Session.setDefault 'repo_filter', ''
 Session.setDefault 'repo_edit_mode', false
-Session.setDefault 'results_length', 0
 
 
 
@@ -106,12 +105,13 @@ Template.repo.record_is_type = (a_type)->
 
 
 ###
-    Determines if the given item is a protected directory. A protected directory
-    is one expected by Munki; catalogs, manifests, pkgs, pkgsinfo, icons
+    Determines if the given item is a protected directory. A protected
+    directory is one expected by Munki; catalogs, manifests, pkgs, pkgsinfo,
+    icons.
 ###
 Template.repo.is_protected = ()->
     protected_dirs = ['catalogs', 'manifests', 'pkgs', 'pkgsinfo', 'icons']
-    if not url = Router.current().params.c?
+    if not Router.current().params.c?
         protected_dirs.indexOf(this.name) isnt -1
     else
         false
@@ -120,18 +120,18 @@ Template.repo.is_protected = ()->
 
 
 
-###
-    Here's the magic.
-###
+
+
+
+
+
 Template.repo.dir_listing = ()->
-    Meteor.user()
     Session.set 'repo_readme', ''
     repo = MandrillSettings.get 'munkiRepoPath'
     url = Router.current().params.c
-    results_limit = Session.get 'results_limit'
+    search_path = new RegExp '^' + Mandrill.path.concat(repo, url, '/')
     repo_filter = Session.get 'repo_filter'
     files = []
-    search_path = new RegExp( '^' + Mandrill.path.concat(repo, url) + '/' )
     search_obj = {path: search_path}
     search_opts = {
         fields: {
@@ -139,13 +139,13 @@ Template.repo.dir_listing = ()->
             'stat': true
             'icon_name': true
             'icon_file': true
-            'dom.name': true
-            'dom.display_name': true
+#            'dom.name': true
+#            'dom.display_name': true
             'dom.version': true
             'dom.catalogs': true
         }
     }
-    search_opts = {}
+
 
 
     # If the user is also searching for something, we need to build that into
@@ -168,24 +168,27 @@ Template.repo.dir_listing = ()->
             ]
         }
 
-    # function used to map() the results of each query
-    reduce_path_map = (it)->
+
+    # function used to reduce() the results of each query
+    reduce = (file_list, it)->
         # If there's a filter (search) we'll want the relative path of each
         # result so the user knows where each file lives.
-        record = { name: it.path.replace(search_path, '') }
+        name = it.path.replace search_path, ''
         if not repo_filter
-            # If there's no filter (search), we'll just want the relative
-            # name of each item in the results
-            record.name = record.name
-                .replace(/^\/*/, '')
-                .split('/')[0]
+            name = name.replace(/^\/*/, '').split('/')[0]
+        if not file_list[name]?
+            file_list[name] = it._id
+        file_list
 
-        # return a null value if the current path component has already
-        # been returned at least once.
-        if -1 isnt files.indexOf record.name
-            return null
-        # if we're still here, it's a unique result,
-        files.push record.name
+
+    map = (it)->
+        record = {}
+
+        # If there's a filter (search) we'll want the relative path of each
+        # result so the user knows where each file lives.
+        record.name = it.path.replace search_path, ''
+        if not repo_filter
+            record.name = record.name.replace(/^\/*/, '').split('/')[0]
 
         if repo_filter
             # the user is searching for something, which means all the
@@ -195,9 +198,9 @@ Template.repo.dir_listing = ()->
         else
             # The user isn't searching for anything, so we need to find out
             # if the current item is a file or a directory. This is done by
-            # rebuilding the concatenating the munki repo, the url (?c) and
-            # the current record.name value and then testing to see if that
-            # exact string matches the current record's path (it.path).
+            # concatenating the repo path, cookie crumb url (if any), and the
+            # current record.name value and then testing to see if the result
+            # matches it.path
             full_component_path = Mandrill.path.concat(repo, url, record.name)
             record.is_leaf = it.path is full_component_path.replace(/\/*$/, '')
             if record.is_leaf is true
@@ -222,6 +225,7 @@ Template.repo.dir_listing = ()->
 
 
 
+
     # obtain all of the paths that match the current set of bread crumbs.
     # e.g. search ALL the things.
     timing = {}
@@ -229,17 +233,32 @@ Template.repo.dir_listing = ()->
         timing[key] = Math.round(
             (performance.now() - start) * 100
         ) / 100 + 'ms'
-    start = performance.now()
-    results = MunkiRepo.find(search_obj, search_opts).fetch()
-    profile 'fetch', start
-    start = performance.now()
-    results = results.map(reduce_path_map)
-    profile 'map', start
 
-    # filter the null values and sort the results
+    # First, we'll just fetch the matching records' path attributes and
+    # reduce them into an object {filename: _id}. Only returning the path
+    # attribute for the reduce is _much_ faster than asking for the entire
+    # record when there are a lot of matches.
     start = performance.now()
-    results = _.compact results
-    profile 'filter', start
+    prefetch = MunkiRepo.find(search_obj, {fields:{path: true}}).fetch()
+        .reduce reduce, {}
+    profile 'prefetch', start
+
+    start = performance.now()
+    search_opts.limit = -1
+    search_obj = {'$or':[]}
+    for key,val of prefetch
+        search_opts.limit++
+        search_obj['$or'].push {'_id': val}
+
+    if search_obj['$or']? and search_obj['$or'].length
+        results = MunkiRepo.find(search_obj, search_opts).fetch()
+    else
+        results = []
+    profile 'fetch', start
+
+    start = performance.now()
+    results = results.map map
+    profile 'map', start
 
     start = performance.now()
     results.sort (a, b)->
@@ -252,11 +271,13 @@ Template.repo.dir_listing = ()->
         else
             -1
     profile 'sort', start
-    # return the first 'results_limit' results, unless that value is -1, in
-    # which case, we'll just return everything.
     Session.set 'results_length', results.length
     console.log timing
     results
+
+
+
+
 
 
 Template.repo.events {
