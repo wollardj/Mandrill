@@ -63,36 +63,6 @@ Template.repo.readme = ()->
 
 
 
-###
-    Returns the number to be used in the first column's colspan attribute
-    based on the type of record and with the assumption that it's a 3 column
-    table
-        manifests = 2
-        pkgsinfo = 1
-        everything else = 3
-###
-Template.repo.colspan = ()->
-    repo = MandrillSettings.get 'munkiRepoPath'
-    c = Router.current().params.c
-
-    # If this item isn't a leaf node, then we know it's not going to have any
-    # content to display in other columns
-    if not this.is_leaf
-        return 3
-
-    if c? then path = Mandrill.path.concat(repo, c, this.name)
-    else path = Mandrill.path.concat(repo, this.name)
-
-    m_path = new RegExp '^' + Mandrill.path.concat(repo, 'manifests/')
-    p_path = new RegExp '^' + Mandrill.path.concat(repo, 'pkgsinfo/')
-
-    # manifests
-    if m_path.test path then 2
-    # pkgsinfo
-    else if p_path.test path then 0
-    # everything else
-    else 3
-
 
 Template.repo.record_is_type = (a_type)->
     colspan = Template.repo.colspan.apply this
@@ -139,8 +109,6 @@ Template.repo.dir_listing = ()->
             'stat': true
             'icon_name': true
             'icon_file': true
-#            'dom.name': true
-#            'dom.display_name': true
             'dom.version': true
             'dom.catalogs': true
         }
@@ -242,9 +210,10 @@ Template.repo.dir_listing = ()->
     prefetch = MunkiRepo.find(search_obj, {fields:{path: true}}).fetch()
         .reduce reduce, {}
     profile 'prefetch', start
+    console.log prefetch
 
     start = performance.now()
-    search_opts.limit = -1
+    search_opts.limit = 0
     search_obj = {'$or':[]}
     for key,val of prefetch
         search_opts.limit++
