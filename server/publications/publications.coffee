@@ -7,6 +7,13 @@ Meteor.publish 'MandrillSettings', ->
 
 Meteor.publish 'MunkiRepo', (query, opts)->
 	filter = Mandrill.user.accessPatternsFilter this.userId, query
+	opts = if not opts then {} else opts
+	if not opts.fields
+		# omit the raw text of the file by default since that can grow to be
+		# rather large.
+		opts.fields = {
+			raw: false
+		}
 	MunkiRepo.find filter, opts
 
 Meteor.publish 'ServerStats', ->

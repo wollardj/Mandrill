@@ -4,39 +4,15 @@
 </div>
 
 
-<div class="row">
-    <div class="col-xs-12">
-        {{>repo_toolbar}}
-    </div>
-</div>
+{{>repo_toolbar}}
 
-<div class="row">
+<hr />
 
-    <div class="{{#unless readme}}col-xs-12{{/unless}}{{#if readme}}col-lg-8{{/if}}">
+<div class="container-fluid">
 
-        <div class="panel panel-default visible-xs">
-            <div class="panel-heading">
-                Your are here.
-            </div>
-            <ul class="list-group">
-            {{#each breadcrumb.reverse}}
-                <li class="list-group-item">
-                    <i class="fa fa-folder-open-o text-info"></i>
-                    {{#if is_active}}
-                        {{name}}
-                        <span class="badge">
-                            {{session_get 'results_length'}}
-                        </span>
-                    {{/if}}
-                    {{#unless is_active}}
-                    <a href="{{url}}">{{name}}</a>
-                    {{/unless}}
-                </li>
-            {{/each}}
-            </ul>
-        </div>
+    <div class="{{#if readme}}col-lg-8{{/if}}{{#unless readme}}col-xs-12{{/unless}}">
 
-        <ol class="breadcrumb visible-sm visible-md visible-lg">
+        <ol class="breadcrumb text-nowrap" style="overflow: auto">
         {{#each breadcrumb}}
             <li class="{{#if is_active}}active{{/if}}">
                 {{#if is_active}}
@@ -50,33 +26,27 @@
         {{/each}}
         </ol>
 
-
-        <div class="panel panel-primary">
-
-            <table class="table">
-            <tbody>
+        <div class="list-group">
             {{#each dir_listing}}
-            <tr>
-                <td>
-                    {{#unless is_protected}}
-                    <a
-                        href="#"
-                        class="
-                            mandrill-repo-delete
-                            {{#if session_get 'repo_edit_mode'}}
-                                mandrill-repo-delete-visible
-                            {{/if}}"
-                    >
-                        Delete
-                    </a>
-                    {{/unless}}
-
-                    {{#unless is_leaf}}
-                    <i class="fa fa-folder text-info"></i>
-                    {{/unless}}
-
-                    {{#if is_leaf}}
-                        <span title="{{formatBytes this.stat.size}}">
+            <a href="{{url}}" class="list-group-item has-delete-button">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-8">
+                        {{#unless is_protected}}
+                        <a
+                            href="#"
+                            class="
+                                mandrill-repo-delete
+                                {{#if session_get 'repo_edit_mode'}}
+                                    mandrill-repo-delete-visible
+                                {{/if}}"
+                        >
+                            Delete
+                        </a>
+                        {{/unless}}
+                        {{#unless is_leaf}}
+                        <i class="fa fa-folder text-info"></i>
+                        {{/unless}}
+                        {{#if is_leaf}}
                             {{#if pkgsinfo_icon}}
                                 <img
                                     src="{{pkgsinfo_icon}}"
@@ -85,43 +55,40 @@
                             {{#unless pkgsinfo_icon}}
                                 <i class="fa fa-file"></i>
                             {{/unless}}
+                        {{/if}}
+                        {{name}}
+                        {{#if this.dom.display_name}}
+                        <span class="text-muted">
+                            - {{this.dom.display_name}}
                         </span>
-                    {{/if}}
+                        {{/if}}
+                    </div>
 
-                    <a href="{{url}}">
-                        <span title="{{name}}">
-                            {{name}}
-                            {{#if this.dom.display_name}}
-                            <span class="text-muted">
-                                - {{this.dom.display_name}}
-                            </span>
-                            {{/if}}
-                        </span>
-                    </a>
-                </td>
 
-                <td>
-                    {{#if is_leaf}}
-                    {{#each this.dom.catalogs}}
-                        <span class="label label-default">{{this}}</span>
-                    {{/each}}
-                    {{/if}}
-                </td>
+                    <div class="col-sm-4 hidden-xs">
+                        {{#if is_leaf}}
+                        {{#each this.dom.catalogs}}
+                            <span class="label label-default">{{this}}</span>
+                        {{/each}}
+                        {{/if}}
+                    </div>
 
-                <td>
-                    {{#if is_leaf}}
-                    <small class="text-muted" title="{{this.stat.mtime}}">
-                        {{timeago this.stat.mtime}}
-                    </small>
-                    {{/if}}
-                </td>
-            </tr>
+                    <div class="col-xs-4 text-right">
+                        {{#if is_leaf}}
+                        <small class="text-muted" title="{{this.stat.mtime}}">
+                            {{timeago this.stat.mtime}}
+                        </small>
+                        {{/if}}
+                    </div>
+                </div>
+            </a>
             {{/each}}
-            </tbody>
-            </table>
+        </div>
 
 
-            {{#unless session_get 'results_length'}}
+
+        {{#unless session_get 'results_length'}}
+        <div class="panel panel-default">
             <div class="panel-body">
                 {{#if session_get 'repo_filter'}}
                 Nothing in your repo matches
@@ -131,13 +98,14 @@
                 Weird, there doesn't seem to be any data here. o_0
                 {{/unless}}
             </div>
-            {{/unless}}
         </div>
+        {{/unless}}
 
     </div>
 
-    {{#if readme}}
     <div class="col-lg-4">
+
+        {{#if readme}}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h5><i class="fa fa-file-text"></i> README.md</h5>
@@ -146,8 +114,8 @@
                 {{#markdown}}{{readme}}{{/markdown}}
             </div>
         </div>
+        {{/if}}
     </div>
-    {{/if}}
 
 </div>
 </template>
