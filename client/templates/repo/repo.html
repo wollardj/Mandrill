@@ -31,37 +31,22 @@
             <a href="{{url}}" class="list-group-item has-delete-button">
                 <div class="row">
                     <div class="col-sm-4 col-xs-8">
-                        {{#unless is_protected}}
-                        <a
-                            href="#"
-                            class="
-                                mandrill-repo-delete
-                                {{#if session_get 'repo_edit_mode'}}
-                                    mandrill-repo-delete-visible
-                                {{/if}}"
-                        >
-                            Delete
-                        </a>
-                        {{/unless}}
-                        {{#unless is_leaf}}
-                        <i class="fa fa-folder text-info"></i>
-                        {{/unless}}
-                        {{#if is_leaf}}
-                            {{#if pkgsinfo_icon}}
-                                <img
-                                    src="{{pkgsinfo_icon}}"
-                                    class="repo_pkgicon" />
-                            {{/if}}
-                            {{#unless pkgsinfo_icon}}
-                                <i class="fa fa-file"></i>
+                        <span class="text-nowrap" style="overflow: auto">
+                            {{#unless is_leaf}}
+                            <i class="fa fa-folder text-info"></i>
                             {{/unless}}
-                        {{/if}}
-                        {{name}}
-                        {{#if this.dom.display_name}}
-                        <span class="text-muted">
-                            - {{this.dom.display_name}}
+                            {{#if is_leaf}}
+                                {{#if pkgsinfo_icon}}
+                                    <img
+                                        src="{{pkgsinfo_icon}}"
+                                        class="repo_pkgicon" />
+                                {{/if}}
+                                {{#unless pkgsinfo_icon}}
+                                    <i class="fa fa-file"></i>
+                                {{/unless}}
+                            {{/if}}
+                            {{name}}
                         </span>
-                        {{/if}}
                     </div>
 
 
@@ -75,9 +60,26 @@
 
                     <div class="col-xs-4 text-right">
                         {{#if is_leaf}}
-                        <small class="text-muted" title="{{this.stat.mtime}}">
-                            {{timeago this.stat.mtime}}
-                        </small>
+                            {{#unless is_protected}}
+                            <a
+                                href="#"
+                                class="
+                                    mandrill-repo-delete
+                                    {{#if session_get 'repo_edit_mode'}}
+                                        mandrill-repo-delete-visible
+                                    {{/if}}"
+                            >
+                                Delete
+                            </a>
+                            {{/unless}}
+                            <small
+                                class="text-muted text-nowrap repo-mtime
+                                    {{#if session_get 'repo_edit_mode'}}
+                                        mandrill-repo-delete-visible
+                                    {{/if}}"
+                                title="{{this.stat.mtime}}">
+                                {{timeago this.stat.mtime}}
+                            </small>
                         {{/if}}
                     </div>
                 </div>

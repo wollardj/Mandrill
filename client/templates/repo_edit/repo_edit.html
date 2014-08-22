@@ -7,8 +7,8 @@
         <div class="col-sm-9">
 
             <div class="row">
-                <div class="col-xs-9">
-                    <ol class="breadcrumb">
+                <div class="col-sm-9">
+                    <ol class="breadcrumb text-nowrap" style="overflow: auto">
                         {{#each breadcrumb}}
                         <li class="{{#if is_active}}active{{/if}}">
                             {{#unless is_active}}
@@ -19,9 +19,9 @@
                         {{/each}}
                     </ol>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <a
-                        class="btn btn-default btn-block"
+                        class="btn btn-default btn-block hidden-xs"
                         href="{{item_url}}"
                         download="{{item_filename}}"
                         title="Download {{item_filename}}"

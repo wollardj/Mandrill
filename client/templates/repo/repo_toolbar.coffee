@@ -20,8 +20,6 @@ Template.repo_toolbar.events {
         Toggle the display of the delete buttons for each row.
     ###
     'click #repo_edit': (event)->
-        event.preventDefault()
-        event.stopPropagation()
         $(event.target).blur()
         if Session.equals('repo_edit_mode', false)
             Session.set 'repo_edit_mode', true

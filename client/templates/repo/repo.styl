@@ -2,25 +2,40 @@ img.repo_pkgicon
     margin -10px 0 -10px -7px
     height 25px
 
+
+.repo-mtime
+    opacity 1
+    text-overflow ellipsis
+    z-index 0
+    transition all 200ms ease
+
+    &.mandrill-repo-delete-visible
+        opacity 0
+        transition all 200ms ease
+
+
 a.has-delete-button
     .row
         border-radius inherit
         div
+            position relative
             border-radius inherit
             .mandrill-repo-delete
                 color #ffffff
                 text-shadow 1px 1px 1px rgba(0, 0, 0, 0.3)
                 background-color #ee5f5b
                 display block
-                height 100%
-                float left
-                margin -10px 0 -10px -15px
+                position absolute
+                height inherit
+                right 0
+                margin -10px 0 -10px 0
                 padding 10px 0
-                border-top-left-radius inherit
-                border-bottom-left-radius inherit
+                border-top-right-radius inherit
+                border-bottom-right-radius inherit
                 overflow hidden
                 width 0px
                 transition all 200ms ease
+                z-index 10
 
                 &:hover
                     color white
@@ -31,5 +46,4 @@ a.has-delete-button
                 &.mandrill-repo-delete-visible
                     width 60px
                     padding 10px
-                    margin -10px 8px -10px -15px
                     transition all 200ms ease
