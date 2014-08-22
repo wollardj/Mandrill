@@ -8,8 +8,7 @@
 #
 @WatcherConfig = {
 	paths: []
-	ignoreCustomPatterns: /\/\.git\//
-	ignoreCommonPatterns: false
+	ignoreCommonPatterns: true
 	ignoreHiddenFiles: false
 
 
