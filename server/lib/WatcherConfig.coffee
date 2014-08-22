@@ -24,9 +24,7 @@
 			throw e
 
 		error: (err)->
-			# This function seems to get null passed to it quite a bit
-			if err?
-				console.error 'an error occured:', arguments
+			console.error 'an error occured:', arguments
 
 
 		watching: Meteor.bindEnvironment (err, watcherInstance)->
@@ -43,9 +41,10 @@
 				# so now we can harvest that information and start
 				# putting stuff in the database.
 				WatcherConfig.paths = WatchHandler.watcherPaths watcherInstance
-				console.log 'Processing', WatcherConfig.paths.length, 'files'
+				console.log 'Processing', WatcherConfig.paths.length, 'files...'
 				for path in WatcherConfig.paths
 					WatchHandler.processFile path
+				console.log "Done!"
 
 				# Make sure the files for the path are in the git repo for bug
 				# https://github.com/wollardj/Mandrill/issues/14

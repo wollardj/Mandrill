@@ -67,6 +67,7 @@ shell = Meteor.require 'shelljs'
 	#
 	processFile: Meteor.bindEnvironment (path)->
 		if shell.test('-f', path) is false
+			console.log 'Skipping non-file', path
 			return
 
 		repoType = WatchHandler.repoTypeForPath path
@@ -75,19 +76,22 @@ shell = Meteor.require 'shelljs'
 		# read the first 1024 bytes of the file to be used as a sample
 		# for determining if the entire file is text or binary,
 		buffer_size = if doc.stat.size > 1024 then 1024 else doc.stat.size
-		handle = fs.openSync path, 'r'
-		buffer = new Buffer(buffer_size)
-		fs.readSync handle, buffer, 0, buffer_size
-		fs.closeSync handle
-		# if the file is text (not binary) we'll try to parse it and
-		# store its contents in the database.
 		maybe_parseable = true
-		sample = buffer.toString('utf8', 0, buffer_size)
-		for i in [0...sample.length]
-			code = sample.charCodeAt(i)
-			if code is 65533 or code <= 8
-				maybe_parseable = false
-				break
+		if buffer_size > 0
+			handle = fs.openSync path, 'r'
+			buffer = new Buffer(buffer_size)
+			fs.readSync handle, buffer, 0, buffer_size
+			fs.closeSync handle
+			# if the file is text (not binary) we'll try to parse it and
+			# store its contents in the database.
+			sample = buffer.toString('utf8', 0, buffer_size)
+			for i in [0...sample.length]
+				code = sample.charCodeAt(i)
+				if code is 65533 or code <= 8
+					maybe_parseable = false
+					break
+		else
+			maybe_parseable = false
 
 
 
