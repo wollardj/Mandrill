@@ -194,25 +194,13 @@ Template.repo.dir_listing = ()->
 
 
 
-    # obtain all of the paths that match the current set of bread crumbs.
-    # e.g. search ALL the things.
-    timing = {}
-    profile = (key, start)->
-        timing[key] = Math.round(
-            (performance.now() - start) * 100
-        ) / 100 + 'ms'
-
     # First, we'll just fetch the matching records' path attributes and
     # reduce them into an object {filename: _id}. Only returning the path
     # attribute for the reduce is _much_ faster than asking for the entire
     # record when there are a lot of matches.
-    start = performance.now()
     prefetch = MunkiRepo.find(search_obj, {fields:{path: true}}).fetch()
         .reduce reduce, {}
-    profile 'prefetch', start
-    console.log prefetch
 
-    start = performance.now()
     search_opts.limit = 0
     search_obj = {'$or':[]}
     for key,val of prefetch
@@ -223,13 +211,8 @@ Template.repo.dir_listing = ()->
         results = MunkiRepo.find(search_obj, search_opts).fetch()
     else
         results = []
-    profile 'fetch', start
 
-    start = performance.now()
     results = results.map map
-    profile 'map', start
-
-    start = performance.now()
     results.sort (a, b)->
         # if a and b are the same type (leaf or not leaf) then we'll compare
         # their names. Otherwise, directories should be above files.
@@ -239,9 +222,7 @@ Template.repo.dir_listing = ()->
             1
         else
             -1
-    profile 'sort', start
     Session.set 'results_length', results.length
-    console.log timing
     results
 
 
