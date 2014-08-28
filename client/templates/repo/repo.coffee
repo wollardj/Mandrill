@@ -64,10 +64,8 @@ Template.repo.detect_readme = ()->
     path = Mandrill.path.concat(repo, url, 'README.md')
     readme = MunkiRepo.findOne({path: path})
     if readme?
-        console.log 'setting repo_readme = true'
         Session.set 'repo_readme', true
         Meteor.call 'getRawRepoItemContent', readme._id, (err, data)->
-            console.log 'setting repo_readme =', data
             Session.set 'repo_readme', data
             if err?
                 Mandrill.show.error err
