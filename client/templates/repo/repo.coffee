@@ -1,6 +1,10 @@
 Session.setDefault 'repo_filter', ''
 Session.setDefault 'repo_edit_mode', false
 
+# This can be false, true, or a string. False = no readme. True = loading.
+# String = the README.md contents
+Session.setDefault 'repo_readme', false
+
 
 
 ###
@@ -49,8 +53,9 @@ Template.repo.pkgsinfo_icon = ()->
     If there is a README.md file in the current directory, we'll fetch its
     raw contents.
 ###
-Template.repo.readme = ()->
+Template.repo.detect_readme = ()->
     # don't show the readme when there's an active search
+    Session.set 'repo_readme', false
     if Session.get('repo_filter') isnt ''
         return
 
@@ -58,8 +63,16 @@ Template.repo.readme = ()->
     url = Router.current().params.c
     path = Mandrill.path.concat(repo, url, 'README.md')
     readme = MunkiRepo.findOne({path: path})
-    if readme? and readme.raw?
-        readme.raw
+    if readme?
+        console.log 'setting repo_readme = true'
+        Session.set 'repo_readme', true
+        Meteor.call 'getRawRepoItemContent', readme._id, (err, data)->
+            console.log 'setting repo_readme =', data
+            Session.set 'repo_readme', data
+            if err?
+                Mandrill.show.error err
+
+    ''
 
 
 
@@ -96,7 +109,6 @@ Template.repo.is_protected = ()->
 
 
 Template.repo.dir_listing = ()->
-    Session.set 'repo_readme', ''
     repo = MandrillSettings.get 'munkiRepoPath'
     url = Router.current().params.c
     search_path = new RegExp '^' + Mandrill.path.concat(repo, url, '/')

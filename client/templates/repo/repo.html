@@ -10,7 +10,7 @@
 
 <div class="container-fluid">
 
-    <div class="{{#if readme}}col-lg-8{{/if}}{{#unless readme}}col-xs-12{{/unless}}">
+    <div class="{{#unless session_equals 'repo_readme' false}}col-lg-8{{/unless}}{{#if session_equals 'repo_readme' false}}col-xs-12{{/if}}">
 
         <ol class="breadcrumb text-nowrap" style="overflow: auto">
         {{#each breadcrumb}}
@@ -106,17 +106,26 @@
     </div>
 
     <div class="col-lg-4">
-
-        {{#if readme}}
+        {{detect_readme}}
+        {{#unless session_equals 'repo_readme' false}}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h5><i class="fa fa-file-text"></i> README.md</h5>
             </div>
             <div class="panel-body">
-                {{#markdown}}{{readme}}{{/markdown}}
+                {{#if session_equals 'repo_readme' true}}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
+                        <span class="sr-only">Loading data</span>
+                    </div>
+                </div>
+                {{/if}}
+                {{#unless session_equals 'repo_readme' true}}
+                {{#markdown}}{{session_get 'repo_readme'}}{{/markdown}}
+                {{/unless}}
             </div>
         </div>
-        {{/if}}
+        {{/unless}}
     </div>
 
 </div>
