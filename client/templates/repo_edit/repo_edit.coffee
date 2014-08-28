@@ -1,5 +1,7 @@
 Session.setDefault 'ace_is_ready', false
 Session.setDefault 'tab_git-logs', false
+Session.setDefault 'repo_item_loading_raw', false
+
 
 
 
@@ -45,22 +47,32 @@ Template.repo_edit.ace = ->
 
 
 Template.repo_edit.update_ace = ->
-	editor = Template.repo_edit.ace()
 	record = Router.current().data()
-	content = if record? and record.raw? then record.raw else ''
+	editor = Template.repo_edit.ace()
+
+	if record? and record._id?
+		Session.set 'repo_item_loading_raw', true
+		Meteor.call 'getRawRepoItemContent', record._id, (err, data)->
+			Session.set 'repo_item_loading_raw', false
+			editor = Template.repo_edit.ace()
+			if data? and editor?
+				editor.setReadOnly false
+				editor.setValue(data, -1)
+			else if err?
+				editor.setReadOnly true
+				Mandrill.show.error(err)
+			else
+				editor.setReadOnly true
+				editor.setValue("Editing files of this type in the browser isn't currently supported.", -1)
+
 	setTimeout ->
 		editor = Template.repo_edit.ace()
-		Mandrill.util.ace.detect_mode record.path, editor
+		if record? and editor?
+			Mandrill.util.ace.detect_mode record.path, editor
 		editor.setTheme 'ace/theme/tomorrow_night'
 		editor.getSession().setUseWrapMode true
 	, 50
-	if editor? and content?
-		console.log 'updating ace'
-		editor.setValue(content, -1)
-	else if content?
-		content
-	else
-		''
+	''
 
 Template.repo_edit.breadcrumb = ->
     Template.repo.breadcrumb()

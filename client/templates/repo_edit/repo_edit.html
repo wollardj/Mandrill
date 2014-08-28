@@ -32,24 +32,25 @@
                 </div>
             </div>
 
-            {{#if this.raw}}
+            {{#if session_get 'repo_item_loading_raw'}}
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
+                    <span class="sr-only">Loading data</span>
+                </div>
+            </div>
+            {{/if}}
+
+            {{#unless is_image}}
             <div class="panel panel-default">
                 <div id="aceEditor">{{update_ace}}</div>
             </div>
-            {{/if}}
+            {{/unless}}
 
             {{#if is_image}}
             <div class="text-center">
                 <img src="{{item_url}}"/>
             </div>
             {{/if}}
-            {{#unless this.raw}}
-                {{#unless is_image}}
-                <p class="text-center lead">
-                    {{item_filename}} cannot be edited in the browser.
-                </p>
-                {{/unless}}
-            {{/unless}}
         </div>
 
 

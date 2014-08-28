@@ -3,6 +3,14 @@ plist = Meteor.require 'plist-native'
 
 
 Meteor.methods {
+	'getRawRepoItemContent': (_id)->
+		item = MunkiRepo.findOne({_id: _id})
+		if item?
+			item.raw
+		else
+			''
+
+
 	'runMakeCatalogs': ->
 		repoPath = MandrillSettings.get 'munkiRepoPath', ''
 		insane = MandrillSettings.get 'makeCatalogsSanityIsDisabled', false
