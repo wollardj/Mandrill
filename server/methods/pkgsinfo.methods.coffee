@@ -1,5 +1,5 @@
-plist = Meteor.require 'plist-native'
-shell = Meteor.require 'shelljs'
+plist = Meteor.npmRequire 'plist-native'
+shell = Meteor.npmRequire 'shelljs'
 
 Meteor.methods {
 	'urlNameForPkginfo': (pkgName, pkgVersion)->
@@ -7,7 +7,7 @@ Meteor.methods {
 			{'dom.name': pkgName}
 			{'dom.version': pkgVersion}
 		]}
-		
+
 		if record? and record.urlName?
 			record.urlName
 
@@ -95,7 +95,7 @@ Meteor.methods {
 		record.urlName = record.path
 			.replace repoPath + 'pkgsinfo/', ''
 			.replace /\//g, '_'
-		
+
 		MunkiPkgsinfo.insert record
 		if GitBroker.gitIsEnabled() is true
 			GitBroker.add relativePath
@@ -135,7 +135,7 @@ Meteor.methods {
 				else
 					GitBroker.commit this.userId, relativePath,
 						'[Mandrill] Removed "' + relativePath + '"'
-				
+
 				MunkiManifests.remove {path: pkgsinfoPath}
 
 			# The file probably isn't under revision control

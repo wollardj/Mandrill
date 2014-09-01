@@ -1,4 +1,4 @@
-shell = Meteor.require 'shelljs'
+shell = Meteor.npmRequire 'shelljs'
 
 # prevent shelljs from echoing the output of each command
 # to the server console.

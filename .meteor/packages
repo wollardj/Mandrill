@@ -4,16 +4,20 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-npm
+arunoda:npm@0.2.6
 accounts-github
 accounts-google
 accounts-password
 accounts-ui
-ace-embed
-moment
+mrt:ace-embed@0.0.4
+mrt:moment@2.8.1
 coffeescript
-iron-router
+cmather:iron-router@0.8.2
 stylus
 showdown
-fontawesome4
-auto-nprogress
+chrismbeckett:fontawesome4@1.1.0
+mrt:auto-nprogress@0.2.8
+meteorhacks:npm
+
+
+npm-container

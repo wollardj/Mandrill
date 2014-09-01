@@ -1,14 +1,14 @@
-shell = Meteor.require 'shelljs'
-plist = Meteor.require 'plist-native'
+shell = Meteor.npmRequire 'shelljs'
+plist = Meteor.npmRequire 'plist-native'
 
 
 Meteor.methods {
 	'getRawRepoItemContent': (_id)->
 		item = MunkiRepo.findOne({_id: _id})
-		if item?
+		if item? and item.raw? and item.stat.size > 0
 			item.raw
 		else
-			''
+			false
 
 
 	'runMakeCatalogs': ->

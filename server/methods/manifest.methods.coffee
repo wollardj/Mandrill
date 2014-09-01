@@ -1,5 +1,5 @@
-plist = Meteor.require 'plist-native'
-shell = Meteor.require 'shelljs'
+plist = Meteor.npmRequire 'plist-native'
+shell = Meteor.npmRequire 'shelljs'
 
 shell.config.silent = true
 shell.config.fatal = false
@@ -39,7 +39,7 @@ Meteor.methods {
 		record.urlName = record.path
 			.replace repoPath + 'manifests/', ''
 			.replace /\//g, '_'
-		
+
 		MunkiManifests.insert record
 		if GitBroker.gitIsEnabled() is true
 			GitBroker.add relativePath

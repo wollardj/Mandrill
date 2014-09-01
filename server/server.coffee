@@ -1,4 +1,4 @@
-shell = Meteor.require 'shelljs'
+shell = Meteor.npmRequire 'shelljs'
 
 Meteor.startup ->
 	setupAfterPortIsBound = Meteor.bindEnvironment ->

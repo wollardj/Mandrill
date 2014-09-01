@@ -1,5 +1,5 @@
-plist = Meteor.require 'plist-native'
-shell = Meteor.require 'shelljs'
+plist = Meteor.npmRequire 'plist-native'
+shell = Meteor.npmRequire 'shelljs'
 shell.config.silent = true
 shell.config.fatal = false
 

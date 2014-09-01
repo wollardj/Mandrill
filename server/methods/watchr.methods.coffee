@@ -1,5 +1,5 @@
-watchr = Meteor.require('watchr')
-shell = Meteor.require('shelljs')
+watchr = Meteor.npmRequire 'watchr'
+shell = Meteor.npmRequire 'shelljs'
 MandrillWatchers = null
 
 

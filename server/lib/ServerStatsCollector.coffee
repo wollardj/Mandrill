@@ -1,5 +1,5 @@
-os = Meteor.require 'os'
-shell = Meteor.require 'shelljs'
+os = Meteor.npmRequire 'os'
+shell = Meteor.npmRequire 'shelljs'
 
 class @ServerStatsCollector
 	@collect: ->

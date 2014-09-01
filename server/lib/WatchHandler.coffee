@@ -1,6 +1,6 @@
-fs = Meteor.require 'fs'
-plist = Meteor.require 'plist-native'
-shell = Meteor.require 'shelljs'
+fs = Meteor.npmRequire 'fs'
+plist = Meteor.npmRequire 'plist-native'
+shell = Meteor.npmRequire 'shelljs'
 
 @CurrentWatcherPath = new Meteor.EnvironmentVariable()
 
