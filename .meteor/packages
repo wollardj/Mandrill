@@ -4,20 +4,20 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-arunoda:npm@0.2.6
 accounts-github
 accounts-google
 accounts-password
 accounts-ui
-mrt:ace-embed@0.0.4
 mrt:moment@2.8.1
 coffeescript
-cmather:iron-router@0.8.2
 stylus
 showdown
 chrismbeckett:fontawesome4@1.1.0
-mrt:auto-nprogress@0.2.8
 meteorhacks:npm
 
 
 npm-container
+daniel:auto-nprogress
+iron:router
+wollardj:ace
+
