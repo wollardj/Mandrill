@@ -1,7 +1,37 @@
-Session.setDefault 'ace_is_ready', false
 Session.setDefault 'tab_git-logs', false
 Session.setDefault 'repo_item_loading_raw', false
 
+
+
+Template.repo_edit.rendered = ->
+	editor = MandrillAce.getInstance()
+	editor.setTheme 'ace/theme/tomorrow_night'
+	editor.ace.getSession().setUseWrapMode true
+
+
+Template.repo_edit.update_ace = ->
+	editor = MandrillAce.getInstance()
+	record = Router.current().data()
+
+	if record?._id?
+		Session.set 'repo_item_loading_raw', true
+		Meteor.call 'getRawRepoItemContent', record._id, (err, data)->
+			editor.detectMode record.path
+			Session.set 'repo_item_loading_raw', false
+			if data isnt false
+				editor.setReadOnly false
+				editor.setValue(data, -1)
+
+			else if err? or data is false
+				editor.setReadOnly true
+				Mandrill.show.error(err)
+
+			else
+				editor.setReadOnly true
+				editor.setValue("Editing files of this type in the browser isn't currently supported.", -1)
+
+	# always return null so we don't start spitting things out to the browser
+	null
 
 
 
@@ -31,52 +61,6 @@ Template.repo_edit.file_size = ->
 		record.stat.size
 	else
 		0
-
-
-Template.repo_edit.ace = ->
-	unless Template.repo_edit._ReactiveAce
-		try
-			Template.repo_edit._ReactiveAce = new ReactiveAce 'aceEditor'
-			Template.repo_edit._ReactiveAce.setTheme 'ace/theme/tomorrow_night'
-			Template.repo_edit._ReactiveAce.ace.getSession().setUseWrapMode true
-			if Session.equals('ace_is_ready', false)
-				Session.set 'ace_is_ready', true
-		catch e
-			Session.set 'ace_is_ready', false
-			# let this fail silently since it will almost certainly
-			# fail to find #aceEditor until everything is rendered.
-
-	Template.repo_edit._ReactiveAce
-
-
-Template.repo_edit.update_ace = ->
-	record = Router.current().data()
-	editor = Template.repo_edit.ace()
-
-	if record? and record._id?
-		Session.set 'repo_item_loading_raw', true
-		Meteor.call 'getRawRepoItemContent', record._id, (err, data)->
-			Session.set 'repo_item_loading_raw', false
-			editor = Template.repo_edit.ace()
-			if editor?
-				if data isnt false
-					editor.setReadOnly false
-					editor.setValue(data, -1)
-
-				else if err? or data is false
-					editor.setReadOnly true
-					Mandrill.show.error(err)
-
-				else
-					editor.setReadOnly true
-					editor.setValue("Editing files of this type in the browser isn't currently supported.", -1)
-
-	setTimeout ->
-		editor = Template.repo_edit.ace()
-		if record? and editor?
-			Mandrill.util.ace.detect_mode record.path, editor.ace
-	, 250
-	''
 
 
 

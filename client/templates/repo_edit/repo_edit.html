@@ -42,7 +42,8 @@
 
             {{#unless is_image}}
             <div class="panel panel-default">
-                <div id="aceEditor">{{update_ace}}</div>
+                {{update_ace}}
+                {{> mandrill_ace}}
             </div>
             {{/unless}}
 
