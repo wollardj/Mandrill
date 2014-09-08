@@ -1,7 +1,7 @@
 ###
     Returns the url appropriate for navigating up to the parent (..) directory.
 ###
-Template.repo_toolbar.dot_dot_url = ()->
+Template.repo_toolbar.dot_dot_url = ->
     crumbs = Template.repo.breadcrumb()
     parent_crumb = crumbs[crumbs.length - 2]
     if parent_crumb? and parent_crumb.url?
@@ -10,6 +10,11 @@ Template.repo_toolbar.dot_dot_url = ()->
         # bail out of edit mode when we're at the root of the repo
         Session.set 'repo_edit_mode', false
         null
+
+
+
+Template.repo_toolbar.crumb = ->
+    Mandrill.path.concat Router.current().params.c, "/"
 
 
 
@@ -54,4 +59,24 @@ Template.repo_toolbar.events {
             event.stopPropagation()
             Session.set 'repo_filter', ''
             $(event.target).val('').blur()
+
+
+
+    # the modal which displays the new repo item form has appeared.
+    'shown.bs.modal .modal' : (event)->
+        crumb = Router.current().params.c
+        $(event.target).find('input').focus()
+        if /^\/*manifests/.test(crumb)
+            $('[data-tpl="manifest"]').click()
+        else if /^\/*pkgsinfo/.test(crumb)
+            $('[data-tpl="pkginfo"]').click()
+        else
+            $('[data-tpl="text"]').click()
+
+
+    # The user is selecting a template
+    'click #newRepoItemTpl > button': (event)->
+        event.preventDefault()
+        event.stopPropagation()
+        $(event.target).addClass('active').siblings().removeClass('active')
 }
