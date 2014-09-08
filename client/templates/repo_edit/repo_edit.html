@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            {{#if session_get 'repo_item_loading_raw'}}
+            {{#if waiting_on_server_response}}
             <div class="progress">
                 <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
                     <span class="sr-only">Loading data</span>
@@ -96,7 +96,11 @@
                 <div class="tab-pane fade" id="git-logs">
                     <h3 class="text-center">Git Logs</h3>
                     {{#unless session_get 'tab_git-logs'}}
-                    <p class="lead">Loading...</p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
+                            <span class="sr-only">Loading data</span>
+                        </div>
+                    </div>
                     {{/unless}}
                     {{#if session_get 'tab_git-logs'}}
                     {{#with session_get 'tab_git-logs'}}

@@ -17,7 +17,7 @@
                     {{subject}}
                 </h5>
                 {{#if body}}
-                <blockquote class="small">{{body}}</blockquote>
+                <blockquote class="small">{{#markdown}}{{body}}{{/markdown}}</blockquote>
                 {{/if}}
                 <small class="text-muted">
                     {{authorName}} authored

@@ -43,7 +43,7 @@ Meteor.methods {
 		Atomically overwrites the file at path with the contents of body.
 		If path doesn't exist, it will be created.
 	###
-	'filePutContents': (path, body)->
+	'filePutContents': (path, body, commitSubject='', commitBody='')->
 		repoPath = GitBroker.git().repoPath
 
 		Mandrill.user.canModifyPath this.userId, path, true
@@ -72,12 +72,14 @@ Meteor.methods {
 		if GitBroker.gitIsEnabled() is true
 			if /^\?\?/.test(GitBroker.status(path)[0]) is true
 				GitBroker.add path
-				GitBroker.commit this.userId, path,
-					'[Mandrill] Importing previously untracked file "' +
+				commitSubject ?= 'Importing previously untracked file "' +
 					GitBroker.relativePathForFile(path) + '"'
+				GitBroker.commit this.userId, path, commitSubject, commitBody
+
 			else
-				GitBroker.commit this.userId, path, '[Mandrill] Modified "' +
+				commitSubject ?= '[Mandrill] Modified "' +
 					GitBroker.relativePathForFile(path) + '"'
+				GitBroker.commit this.userId, path, commitSubject, commitBody
 
 		{
 			atomicPath: atomic,
@@ -85,7 +87,7 @@ Meteor.methods {
 		}
 
 
-	'filePutContentsUsingObject': (path, obj)->
+	'filePutContentsUsingObject': (path, obj, commitSubject='', commitBody='')->
 		xml = plist.buildString obj
-		Meteor.call 'filePutContents', path, xml
+		Meteor.call 'filePutContents', path, xml, commitSubject, commitBody
 }

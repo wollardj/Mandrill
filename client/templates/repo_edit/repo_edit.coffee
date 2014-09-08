@@ -57,7 +57,7 @@ Template.repo_edit.item_filename = ->
 
 Template.repo_edit.file_size = ->
 	record = Router.current().data()
-	if record? and record.stat? and record.stat.size?
+	if record?.stat?.size?
 		record.stat.size
 	else
 		0
@@ -66,6 +66,12 @@ Template.repo_edit.file_size = ->
 
 Template.repo_edit.breadcrumb = ->
     Template.repo.breadcrumb()
+
+
+Template.repo_edit.waiting_on_server_response = ->
+	loading = Session.get 'repo_item_loading_raw'
+	saving = Session.get 'save_in_progress'
+	saving is true or loading is true
 
 
 
