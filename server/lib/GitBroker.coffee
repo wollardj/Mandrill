@@ -115,12 +115,20 @@ class @GitBroker
 
 	@commit: Meteor.bindEnvironment (committerId, path, subject, body, force)->
 
+		# Since escaping strings for bash and other shells is very difficult,
+		# I'm opting to use a commit message file instead. Sure it's a little
+		# slower, but it should prevent a multitude of sins.
+		atomic = shell.tempdir() + '/' + path.split('/').reverse()[0]
+		commitMessage = subject + "\n\n" + body
+		commitMessage.to atomic
+		if shell.error()?
+			throw new Meteor.Error 500, shell.error()
+
 		git = GitBroker.git()
 		commitArgs = [
 			'commit'
 			'--author', GitBroker.authorString(committerId, force)
-			'-m', (subject or '')
-			'-m', (body or '')
+			'-F', atomic
 			path
 		]
 
@@ -134,6 +142,9 @@ class @GitBroker
 			git.exec 'config', 'user.email', 'noreply@localhost.com'
 			results = git.exec.apply git, commitArgs
 
+
+		# clean up the temp commit message file
+		shell.rm atomic
 		results
 
 	, (e)->
