@@ -37,5 +37,5 @@ Template.repo_edit_tabs_git_commit.events {
                 else
                     subjectField.val('')
                     bodyField.val('')
-                    MandrillAce.setValue(documentText)
+                    MandrillAce.getInstance().setValue(documentText, -1)
 }

@@ -22,7 +22,7 @@ Template.repo_edit.update_ace = ->
 				editor.setReadOnly false
 				editor.setValue(data, -1)
 
-			else if err? or data is false
+			else if err?
 				editor.setReadOnly true
 				Mandrill.show.error(err)
 

@@ -4,9 +4,12 @@ plist = Meteor.npmRequire 'plist-native'
 
 Meteor.methods {
 	'getRawRepoItemContent': (_id)->
-		item = MunkiRepo.findOne({_id: _id})
-		if item? and item.raw? and item.stat.size > 0
+		patterns = Mandrill.user.accessPatternsFilter this.userId, {_id: _id}
+		item = MunkiRepo.findOne patterns
+		if item?.raw? and item?.stat.size > 0
 			item.raw
+		else if item?.stat.size is 0
+			''
 		else
 			false
 

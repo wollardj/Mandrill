@@ -17,6 +17,13 @@
                         id="newRepoItemPath"
                         class="form-control"
                         value="{{crumb}}" />
+                    {{#if session_equals 'creating_new_repo_item' true}}
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
+                            <span class="sr-only">Loading data</span>
+                        </div>
+                    </div>
+                    {{/if}}
                 </div>
                 <div class="modal-footer">
                     <div class="pull-left btn-group" id="newRepoItemTpl">
@@ -39,7 +46,7 @@
                             Pkginfo
                         </button>
                     </div>
-                    <button type="button" class="btn btn-primary">
+                    <button id="newRepoItemCreate" type="button" class="btn btn-primary">
                         <i class="fa fa-plus-square"></i>
                         Create It
                     </button>

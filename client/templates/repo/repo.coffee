@@ -248,16 +248,21 @@ Template.repo.events {
         event.stopPropagation()
         event.preventDefault()
 
+        $(event.target).addClass('hidden')
+
         # If this record represents a directory, we'll need to delete each
         # file container within it - client-side code isn't allowed to
         # delete files without specifying the _id.
+        crumb = Router.current().params.c
+        name = $(event.target).data('repo-item-name')
         path = MandrillSettings.get 'munkiRepoPath'
-        path = Mandrill.path.concat path, this.url.replace(/^\?c=\/*/, '')
+        path = Mandrill.path.concat path, crumb, name
         records = MunkiRepo.find({path: new RegExp('^' + path)}).fetch()
         for it in records
             MunkiRepo.remove {_id: it._id}
 
         Meteor.call 'unlink', path, (err)->
             if err?
+                $(event.target).removeClass('hidden')
                 Mandrill.show.error(err)
 }

@@ -1,3 +1,33 @@
+REPO_TPL_MANIFEST = {
+    catalogs: []
+    included_manifests: []
+    managed_installs: []
+    managed_uninstalls: []
+    managed_updates: []
+    optional_installs: []
+}
+
+REPO_TPL_PKGINFO = {
+    _metadata: {
+        created_by: Meteor.user.username
+        creation_date: new Date()
+        mandrill_version: Mandrill.version
+        user_agent: window.navigator.userAgent
+    }
+    catalogs: ['dev']
+    name: ''
+    display_name: ''
+    version: ''
+    installer_type: 'nopkg'
+    installcheck_script: "#!/bin/bash\n\necho 'Do good things here.'"
+    notes: ''
+    unattended_install: true
+}
+
+
+Session.setDefault 'creating_new_repo_item', false
+
+
 ###
     Returns the url appropriate for navigating up to the parent (..) directory.
 ###
@@ -79,4 +109,40 @@ Template.repo_toolbar.events {
         event.preventDefault()
         event.stopPropagation()
         $(event.target).addClass('active').siblings().removeClass('active')
+
+
+    # The user clicked the create button on the new repo item form
+    'click #newRepoItemCreate': (event)->
+        event.preventDefault()
+        event.stopPropagation()
+        tpl = $('#newRepoItemModal button.active').data('tpl')
+        path = $('#newRepoItemPath').val()
+        data = if tpl is 'manifest' then REPO_TPL_MANIFEST else if tpl is 'pkginfo' then REPO_TPL_PKGINFO else ''
+        remoteCall = if data is '' then 'filePutContents' else 'filePutContentsUsingObject'
+
+        fullPath = Mandrill.path.concat(
+            MandrillSettings.get('munkiRepoPath')
+            path
+        )
+
+        # if the path specified already exists, let's just redirect the user
+        # to that record instead of potentially destroying data.
+        existingItem = MunkiRepo.findOne({path: fullPath})
+        if existingItem?
+            $('#newRepoItemModal').modal('hide')
+            Meteor.setTimeout ->
+                Router.go('repo_edit', null, {query:'c=' + path})
+            , 250
+        else
+            Session.set 'creating_new_repo_item', true
+            Meteor.call remoteCall, fullPath, data, 'Created ' + _.last(Mandrill.path.components(fullPath)), (err, data)->
+                Session.set 'creating_new_repo_item', false
+                $('#newRepoItemModal').modal('hide')
+                if err?
+                    Mandrill.show.error(err)
+                else
+                    Meteor.setTimeout ->
+                        Router.go('repo_edit', null, {query:'c=' + path})
+                    , 250
+
 }
