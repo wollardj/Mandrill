@@ -31,7 +31,7 @@ class @GitBroker
 		repoPath = MandrillSettings.get 'munkiRepoPath', '/'
 		gitignore = Mandrill.path.concat repoPath, '.gitignore'
 		if not shell.test '-e', gitignore
-			"*.DS_Store\npkgs/\n*.swp\n".to gitignore
+			"*.DS_Store\ncatalogs/\npkgs/\n*.swp\n".to gitignore
 
 
 
@@ -113,7 +113,7 @@ class @GitBroker
 
 
 
-	@commit: Meteor.bindEnvironment (committerId, path, subject, body, force)->
+	@commit: Meteor.bindEnvironment (committerId, path, subject, body='', force)->
 
 		# Since escaping strings for bash and other shells is very difficult,
 		# I'm opting to use a commit message file instead. Sure it's a little
