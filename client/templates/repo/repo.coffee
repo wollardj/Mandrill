@@ -265,4 +265,6 @@ Template.repo.events {
             if err?
                 $(event.target).removeClass('hidden')
                 Mandrill.show.error(err)
+            else
+                Mandrill.show.success 'File Deleted', name + ' is no more.'
 }
