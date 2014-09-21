@@ -3,7 +3,7 @@ Template.accountsAccess.rendered = ->
 
 
 Template.accountsAccess.munkiRepoPath = ->
-	MandrillSettings.get 'munkiRepoPath', ''
+	Munki.repoPath()
 
 
 Template.accountsAccess.readOnlyIsChecked = ->

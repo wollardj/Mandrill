@@ -5,6 +5,5 @@ class @RepoRouter extends AppRouter
 class @RepoEditRouter extends AppRouter
   template: 'repo_edit'
   data: ->
-      path = MandrillSettings.get 'munkiRepoPath'
-      path = Mandrill.path.concat path, this.params.c
+      path = Mandrill.path.concat Munki.repoPath(), this.params.c
       MunkiRepo.findOne {path: path}

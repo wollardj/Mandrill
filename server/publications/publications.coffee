@@ -5,6 +5,13 @@ Meteor.publish 'MandrillSettings', ->
 		[]
 
 
+# begin publications from the munki package
+Meteor.publish 'MunkiSettings', ->
+	if Mandrill.user.isValid(this.userId) is true
+		MunkiSettings.find()
+	else
+		[]
+
 Meteor.publish 'MunkiRepo', (query, opts)->
 	filter = Mandrill.user.accessPatternsFilter this.userId, query
 	opts = if not opts then {} else opts
@@ -15,6 +22,16 @@ Meteor.publish 'MunkiRepo', (query, opts)->
 			raw: false
 		}
 	MunkiRepo.find filter, opts
+
+
+Meteor.publish 'MunkiLogs', ->
+	if Mandrill.user.isValid(this.userId) is true
+		MunkiLogs.find()
+
+
+# end publications from the munki package
+
+
 
 Meteor.publish 'ServerStats', ->
 	ServerStats.find {}, {sort: {collectedDate: -1}}

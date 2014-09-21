@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "plist-native": {
+      "version": "0.3.1",
+      "dependencies": {
+        "libxmljs": {
+          "version": "0.10.0",
+          "dependencies": {
+            "bindings": {
+              "version": "1.1.1"
+            },
+            "nan": {
+              "version": "1.1.2"
+            }
+          }
+        }
+      }
+    },
+    "shelljs": {
+      "version": "0.3.0"
+    }
+  }
+}

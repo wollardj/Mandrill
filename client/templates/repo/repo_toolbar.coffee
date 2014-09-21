@@ -121,7 +121,7 @@ Template.repo_toolbar.events {
         remoteCall = if data is '' then 'filePutContents' else 'filePutContentsUsingObject'
 
         fullPath = Mandrill.path.concat(
-            MandrillSettings.get('munkiRepoPath')
+            Munki.repoPath()
             path
         )
 

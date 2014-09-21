@@ -38,14 +38,11 @@ Template.repo.breadcrumb = ()->
     for its icon.
 ###
 Template.repo.pkgsinfo_icon = ()->
-    repo_url = MandrillSettings.get('SoftwareRepoURL')
-    if this._id? and this.icon_name?
-        Mandrill.path.concat_relative repo_url, 'icons', this.icon_file
-
-    else if this._id? and this.dom? and this.dom.name?
+    if this.icon_file?
+        icon = MunkiRepo.findOne {_id: this._id}
+    else if this.dom?.name?
         icon = MunkiRepo.findOne {icon_name: this.dom.name}
-        if icon?
-            Mandrill.path.concat_relative repo_url, 'icons', icon.icon_file
+    icon?.url()
 
 
 
@@ -59,7 +56,7 @@ Template.repo.detect_readme = ()->
     if Session.get('repo_filter') isnt ''
         return
 
-    repo = MandrillSettings.get 'munkiRepoPath'
+    repo = Munki.repoPath()
     url = Router.current().params.c
     path = Mandrill.path.concat(repo, url, 'README.md')
     readme = MunkiRepo.findOne({path: path})
@@ -107,7 +104,7 @@ Template.repo.is_protected = ()->
 
 
 Template.repo.dir_listing = ()->
-    repo = MandrillSettings.get 'munkiRepoPath'
+    repo = Munki.repoPath()
     url = Router.current().params.c
     search_path = new RegExp '^' + Mandrill.path.concat(repo, url, '/')
     repo_filter = Session.get 'repo_filter'
@@ -119,6 +116,7 @@ Template.repo.dir_listing = ()->
             'stat': true
             'icon_name': true
             'icon_file': true
+            'dom.name': true
             'dom.version': true
             'dom.catalogs': true
         }
@@ -192,6 +190,7 @@ Template.repo.dir_listing = ()->
                 record.icon_file = it.icon_file
             if it.stat?
                 record.stat = it.stat
+            record.repoUrl = it.url()
             record.url = Router.path 'repo_edit', {}, {
                 query: 'c=' + it.path.replace(repo, '')
             }
@@ -255,8 +254,7 @@ Template.repo.events {
         # delete files without specifying the _id.
         crumb = Router.current().params.c
         name = $(event.target).data('repo-item-name')
-        path = MandrillSettings.get 'munkiRepoPath'
-        path = Mandrill.path.concat path, crumb, name
+        path = Mandrill.path.concat Munki.repoPath(), crumb, name
         records = MunkiRepo.find({path: new RegExp('^' + path)}).fetch()
         for it in records
             MunkiRepo.remove {_id: it._id}

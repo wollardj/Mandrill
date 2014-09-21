@@ -1,26 +1,26 @@
 <template name="repo_edit_tabs_info">
     <div class="row">
         <div class="col-xs-6 text-right"><strong>Size</strong></div>
-        <div class="col-xs-6">{{formatBytes size}}</div>
+        <div class="col-xs-6">{{formatBytes stat.size}}</div>
     </div>
     <div class="row">
         <div class="col-xs-6 text-right"><strong>Mode</strong></div>
-        <div class="col-xs-6">{{statMode2octal mode}}</div>
+        <div class="col-xs-6">{{statMode2octal stat.mode}}</div>
     </div>
     <div class="row">
         <div class="col-xs-6 text-right"><strong>Owner</strong></div>
-        <div class="col-xs-6">{{uid}}</div>
+        <div class="col-xs-6">{{stat.uid}}</div>
     </div>
     <div class="row">
         <div class="col-xs-6 text-right"><strong>Modified</strong></div>
         <div class="col-xs-6">
-            <abbr title="{{mtime}}">{{timeago mtime}}</abbr>
+            <abbr title="{{mtime}}">{{timeago stat.mtime}}</abbr>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-6 text-right"><strong>Accessed</strong></div>
         <div class="col-xs-6">
-            <abbr title="{{atime}}">{{timeago atime}}</abbr>
+            <abbr title="{{atime}}">{{timeago stat.atime}}</abbr>
         </div>
     </div>
 
@@ -28,7 +28,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <input class="form-control input-sm" type="text" value="{{repo_item_url}}" />
+            <input class="form-control input-sm" type="text" value="{{munkiItemUrl this}}" />
         </div>
     </div>
 </template>

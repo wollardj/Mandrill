@@ -13,7 +13,7 @@ shell = Meteor.npmRequire 'shelljs'
 	# Returns one of 'catalog', 'manifest', 'pkgsinfo', 'icons', or 'unknown'
 	# depending on which subdirectory within the repo the file is found.
 	repoTypeForPath: Meteor.bindEnvironment (aPath)->
-		repo = MandrillSettings.get 'munkiRepoPath', ''
+		repo = Munki.repoPath()
 
 		if repo isnt ''
 			WatchHandler.repoPath = repo
@@ -106,7 +106,7 @@ shell = Meteor.npmRequire 'shelljs'
 
 		# add some metadata about the files in the /icons dir
 		if repoType is 'icons'
-			repo_path = MandrillSettings.get('munkiRepoPath')
+			repo_path = Munki.repoPath()
 			icons_path = Mandrill.path.concat(repo_path, 'icons/')
 			doc.icon_file = path.replace(icons_path, '')
 			doc.icon_name = Mandrill.path.concat_relative(

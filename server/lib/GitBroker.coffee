@@ -20,7 +20,7 @@ class @GitBroker
 
 
 	@relativePathForFile: Meteor.bindEnvironment (aFile)->
-		repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+		repoPath = Munki.repoPath()
 		aFile.replace repoPath, ''
 	, (e)->
 		throw e
@@ -28,7 +28,7 @@ class @GitBroker
 
 
 	@createDotGitIgnoreIfNeeded: Meteor.bindEnvironment ->
-		repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+		repoPath = Munki.repoPath()
 		gitignore = Mandrill.path.concat repoPath, '.gitignore'
 		if not shell.test '-e', gitignore
 			"*.DS_Store\ncatalogs/\npkgs/\n*.swp\n".to gitignore
@@ -57,7 +57,7 @@ class @GitBroker
 
 	@git: Meteor.bindEnvironment ->
 		settings = MandrillSettings.findOne()
-		new Git settings.munkiRepoPath, settings.gitBinaryPath
+		new Git Munki.repoPath(), settings.gitBinaryPath
 	, (e)->
 		throw e
 

@@ -24,7 +24,9 @@ class @AppRouter extends RouteController
 				Meteor.subscribe('MandrillSettings')
 				Meteor.subscribe('MandrillAccounts')
 				Meteor.subscribe('ServerStats')
+				Meteor.subscribe('MunkiSettings')
 				Meteor.subscribe('MunkiRepo')
+				Meteor.subscribe('MunkiLogs')
 			]
 		else
 			# Return an empty array if no one is logged in.

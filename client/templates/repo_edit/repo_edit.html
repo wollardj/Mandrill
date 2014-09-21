@@ -2,6 +2,7 @@
     <div class="mandrill-header">
         <h2>Munki Repo</h2>
     </div>
+    {{update_ace}}
     <div class="container-fluid">
 
         <div class="col-sm-9">
@@ -22,7 +23,7 @@
                 <div class="col-sm-3">
                     <a
                         class="btn btn-default btn-block hidden-xs"
-                        href="{{item_url}}"
+                        href="{{munkiItemUrl this}}"
                         download="{{item_filename}}"
                         title="Download {{item_filename}}"
                     >
@@ -40,23 +41,29 @@
             </div>
             {{/if}}
 
-            {{#unless is_image}}
+            {{#if session_equals 'repo_edit_tpl' 'ace'}}
             <div class="panel panel-default">
-                {{update_ace}}
                 {{> mandrill_ace}}
             </div>
-            {{/unless}}
+            {{/if}}
 
-            {{#if is_image}}
+            {{#if session_equals 'repo_edit_tpl' 'image'}}
             <div class="text-center">
                 <img src="{{item_url}}"/>
             </div>
+            {{/if}}
+
+            {{#if session_equals 'repo_edit_tpl' 'manifest'}}
+                {{#with dom}}
+                {{>repo_edit_form_manifest}}
+                {{/with}}
             {{/if}}
         </div>
 
 
         <div class="col-sm-3">
 
+            {{session_get 'repo_edit_tpl'}}
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active">
                     <a href="#git-commit" data-toggle="tab">
@@ -87,9 +94,7 @@
 
                 <div class="tab-pane fade" id="info">
                     <h3 class="text-center">Info</h3>
-                    {{#with this.stat}}
                     {{> repo_edit_tabs_info}}
-                    {{/with}}
                 </div>
 
 

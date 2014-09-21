@@ -1,4 +1,5 @@
 Session.setDefault 'tab_git-logs', false
+Session.setDefault 'repo_edit_tpl', 'ace'
 Session.setDefault 'repo_item_loading_raw', false
 
 
@@ -9,11 +10,34 @@ Template.repo_edit.rendered = ->
 	editor.ace.getSession().setUseWrapMode true
 
 
+
 Template.repo_edit.update_ace = ->
 	editor = MandrillAce.getInstance()
+	editor.setTheme 'ace/theme/tomorrow_night'
+	editor.ace?.getSession().setUseWrapMode true
 	record = Router.current().data()
 
-	if record?._id?
+	# Template selection logic
+	crumb = Router.current().params.c
+	useRaw = Router.current().params.hash is 'raw'
+	tpl = 'ace'
+	if record and not useRaw
+		if record.isCatalog()
+			tpl = 'catalog'
+		else if record.isIcon()
+			tpl = 'image'
+		else if record.isPkginfo()
+			tpl = 'pkginfo'
+		else if record.isManifest()
+			tpl = 'manifest'
+		else if record.isBinary()
+			tpl = 'binary'
+
+	Session.set 'repo_edit_tpl', tpl
+	# end template selection logic
+
+
+	if record?._id? and tpl is 'ace'
 		Session.set 'repo_item_loading_raw', true
 		Meteor.call 'getRawRepoItemContent', record._id, (err, data)->
 			editor.detectMode record.path
@@ -35,15 +59,8 @@ Template.repo_edit.update_ace = ->
 
 
 
-Template.repo_edit.is_image = ->
-	crumb = Router.current().params.c
-	if crumb?
-		Mandrill.path.is_image crumb
-
-
-
 Template.repo_edit.item_url = ->
-	url = MandrillSettings.get 'SoftwareRepoURL'
+	url = Munki.repoUrl()
 	crumb = Router.current().params.c
 	if url? and crumb?
 		Mandrill.path.concat_relative url, crumb
@@ -98,7 +115,7 @@ Template.repo_edit.events {
 		Session.set 'tab_git-logs', false
 		if tab is 'git-logs'
 			crumb = Router.current().params.c
-			path = MandrillSettings.get 'munkiRepoPath'
+			path = Munki.repoPath()
 			path = Mandrill.path.concat path, crumb
 			Meteor.call 'git-log', path, (error, result)->
 				Session.set 'tab_git-logs', {

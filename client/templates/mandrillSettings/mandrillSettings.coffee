@@ -93,7 +93,7 @@ Template.mandrillSettings.events {
 			value += '/'
 			$('#munkiRepoPath').val value
 
-		MandrillSettings.set 'munkiRepoPath', value
+		Munki.repoPath value
 
 		Meteor.call 'updateWatchr'
 
@@ -108,7 +108,7 @@ Template.mandrillSettings.events {
 		if /\/$/.test(url) is false
 			url += '/'
 			$('#SoftwareRepoURL').val url
-		MandrillSettings.set 'SoftwareRepoURL', url
+		Munki.repoUrl url
 
 
 	'click #makecatalogs': (event)->
@@ -120,13 +120,12 @@ Template.mandrillSettings.events {
 			if err?
 				Mandrill.show.error err
 			else
-				Mandrill.show.success 'Processed ' + data.logs.length + ' files',
-					' Found ' + data.errors.length + ' warnings or errors.' +
+				warnings = MunkiLogs.find({session:data, type:'warning'}).fetch()
+				Mandrill.show.success 'Catalogs have been generated.',
+					' Found ' + warnings.length + ' warnings or errors.' +
 					' Open your browser console to view the output.'
-				for log in data.logs
-					console.log log
-				for error in data.errors
-					console.warn error
+				for log in warnings
+					console.warn log.msg
 
 
 	'click #rebuildCaches': (event)->

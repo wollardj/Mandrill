@@ -1,6 +1,5 @@
 Meteor.startup ->
 
-
 	UI.registerHelper 'session_get', (key)->
 		Session.get key
 

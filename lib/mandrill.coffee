@@ -1,13 +1,13 @@
-@Mandrill = {
+class @Mandrill
 
-	version: '0.8.0'
+	@version: '0.8.0'
 
 	# a namespace for client-side subscriptions
-	subs: {}
+	@subs: {}
 
 
 	# methods for handling strings as paths
-	path: {
+	@path: {
 		components: (a_string)->
 			a_string
 				.replace(/^\/*/, '') # remove leading '/'
@@ -41,7 +41,7 @@
 	}
 
 
-	tpl: {
+	@tpl: {
 		activateTooltips: ->
 			items = $('[data-toggle]')
 			for item in items
@@ -53,7 +53,7 @@
 					}
 	}
 
-	show: {
+	@show: {
 		error: (e)->
 			code = e.error
 			reason = e.reason
@@ -112,7 +112,7 @@
 
 
 
-	util: {
+	@util: {
 
 		# Activates the typeahead plugin for the given selector and
 		# converts the wrapping span's `display` to 'block' from
@@ -191,6 +191,12 @@
 				m.slice(0, 1) + '\\"'
 			)
 			'"' + ret + '"'
+
+		uuidgen: ->
+			'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace /[xy]/g, (c)->
+				r = Math.random()*16|0
+				v = if c is 'x' then r else r&0x3|0x8
+				v.toString(16).toUpperCase()
 
 		generateRandomString: (length)->
 			chars = '0123456789abcdefghijklmnopqrstuvwxyz' +
@@ -301,7 +307,7 @@
 
 
 
-	user: {
+	@user: {
 
 		# Returns the user-specific preferences dictionary for the current user
 		prefs: ->
@@ -379,7 +385,7 @@
 					'mandrill.isAdmin': 1,
 					'mandrill.accessPatterns': 1
 				}}
-			repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+			repoPath = Munki.repoPath()
 
 			filter = {'$or':[]}
 
@@ -415,7 +421,7 @@
 				'mandrill.isAdmin': 1,
 				'mandrill.accessPatterns': 1
 			}}
-			repoPath = MandrillSettings.get 'munkiRepoPath', '/'
+			repoPath = Munki.repoPath()
 
 			# No user = no access
 			if not user? or not userId?
@@ -445,4 +451,3 @@
 					'Sorry, that path is read-only for your account.'
 			return false
 	}
-}

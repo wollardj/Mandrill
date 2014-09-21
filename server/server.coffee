@@ -67,8 +67,11 @@ Meteor.startup ->
 
 
 	# Setup some default settings
-	if not MandrillSettings.get('munkiRepoPath')?
-		MandrillSettings.set 'munkiRepoPath', '/Users/Shared/munki_repo/'
+	if not Munki.repoPath()?
+		Munki.repoPath('/Users/Shared/munki_repo/')
+	if not Munki.repoUrl()?
+		Munki.repoUrl('http://localhost/munki/')
+
 	if not MandrillSettings.get('gitIsEnabled')?
 		# Enable git by default if the git binary is found in PATH
 		if shell.which('git')?

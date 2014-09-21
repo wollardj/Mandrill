@@ -11,7 +11,7 @@ Meteor.methods {
 	# In otherwords, this is a way to purge and refresh the manifests and
 	# other repo data from Mandrill's database.
 	'updateWatchr': (gracefull)->
-		repoPath = MandrillSettings.get 'munkiRepoPath'
+		repoPath = Munki.repoPath()
 		gracefull = gracefull or false
 
 		if gracefull is false
@@ -29,7 +29,7 @@ Meteor.methods {
 				watcher.close()
 
 		if not repoPath?
-			console.log 'munkiRepoPath was not defined'
+			console.log 'Munki.repoPath() is empty!'
 			{}
 		else
 
