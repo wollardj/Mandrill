@@ -1,0 +1,51 @@
+div.mandrill-grid
+
+    div.media
+        padding 15px
+        height 90px
+        min-height 90px
+
+    @media (min-width: 992px)
+        div.row:nth-child(even)
+            div.media
+                background-color #222
+
+    div.row
+        div.media
+            border-width 1px
+            border-style solid
+
+            h5
+            p.munki-condition
+                height 1.5em
+                white-space nowrap
+                overflow hidden
+                text-overflow ellipsis
+
+        @media (max-width: 991px)
+            div.media
+                border-color #222
+
+        @media (min-width: 992px)
+            div.mandrill-grid-col:not(:first-of-type)
+                div.media
+                    border-top-color #333
+                    border-right-color #111
+                    border-bottom-color #111
+                    border-left-color #333
+            div.mandrill-grid-col:first-of-type
+                div.media:first-child
+                    border-top-color #333
+                    border-right-color #111
+                    border-bottom-color #111
+                    border-left-color #111
+
+            div.mandrill-grid-col:not(:first-of-type):not(:last-of-type)
+                margin 0
+                padding 0
+            div.mandrill-grid-col:first-of-type
+                margin 0
+                padding 0 0 0 15px
+            div.mandrill-grid-col:last-of-type
+                margin 0
+                padding 0 15px 0 0

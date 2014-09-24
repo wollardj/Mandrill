@@ -48,6 +48,55 @@ class Munki
             MunkiLogs.remove({session:lastLog.session})
 
 
+    # Compares two version strings and returns values appropriate for
+    # sorting; -1, 0, 1
+    @versionCompare: (v1='', v2='', options)->
+        lexicographical = false
+        zeroExtend = true
+        v1parts = v1.split('.')
+        v2parts = v2.split('.')
+
+        if options?
+            if options.lexicographical?
+                lexicographical = true
+            if options.zeroExtend?
+                zeroExtend = true
+
+        isValidPart = (x)->
+            if lexicographical is true
+                /^\d+[A-Za-z]*$/.test(x)
+            else
+                /^\d+$/.test(x)
+
+        if not v1parts.every(isValidPart) or not v2parts.every(isValidPart)
+            return NaN
+
+        if zeroExtend is true
+            while v1parts.length < v2parts.length
+                v1parts.push("0")
+            while v2parts.length < v1parts.length
+                v2parts.push("0")
+
+        if lexicographical is false
+            v1parts = v1parts.map(Number)
+            v2parts = v2parts.map(Number)
+
+        for obj,i in v1parts
+            if v2parts.length is i
+                return 1
+
+            if v1parts[i] is v2parts[i]
+                continue
+            else if v1parts[i] > v2parts[i]
+                return 1
+            else
+                return -1
+
+        if v1parts.length != v2parts.length
+            return -1
+        return 0
+
+
     @makeCatalogs: (sanityCheck=true)->
         if Meteor.isClient is true
             throw new Meteor.Error 403, 'Munki.makeCatalogs() may only be called by server code.'

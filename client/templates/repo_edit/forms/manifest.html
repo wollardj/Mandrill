@@ -1,38 +1,58 @@
 <template name="repo_edit_form_manifest">
 
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#refm_installs" data-toggle="tab">Installs</a></li>
-        <li><a href="#refm_uninstalls" data-toggle="tab">Uninstalls</a></li>
-        <li><a href="#refm_optional_installs" data-toggle="tab">Optional Installs</a></li>
-        <li><a href="#refm_updates" data-toggle="tab">Updates</a></li>
-        <li><a href="#refm_catalogs" data-toggle="tab">Catalogs</a></li>
-        <li><a href="#refm_included_manifests" data-toggle="tab">Included Manifests</a></li>
-        <li><a href="#refm_conditions" data-toggle="tab">Conditions</a></li>
-    </ul>
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="btn-group btn-group-justified">
+                <a href="#refm_installs" class="btn btn-primary" data-toggle="tab">
+                    Installs
+                </a>
+                <a href="#refm_uninstalls" class="btn btn-primary" data-toggle="tab">
+                    Uninstalls
+                </a>
+                <a href="#refm_optional_installs" class="btn btn-primary" data-toggle="tab">
+                    Optional Installs
+                </a>
+                <a href="#refm_updates" class="btn btn-primary" data-toggle="tab">
+                    Updates
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="btn-group btn-group-sm btn-group-justified">
+                <a href="#refm_catalogs" class="btn btn-default" data-toggle="tab">
+                    Catalogs
+                </a>
+                <a href="#refm_included_manifests" class="btn btn-default" data-toggle="tab">
+                    Included Manifests
+                </a>
+                <a href="#refm_conditions" class="btn btn-default" data-toggle="tab">
+                    Conditions
+                </a>
+            </div>
+        </div>
+    </div>
 
     <div class="tab-content">
-        <div class="tab-pane active" id="refm_installs">
-            <div class="table-responsive">
-                <table class="table table-condensed table-striped">
-                    <thead>
-                        <tr>
-                            <th>Package</th>
-                            <th>Condition</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each managedInstalls}}
-                        <tr>
-                            <td>
-                                {{>munki_pkg_icon pkg=pkg size="sm"}}
-                                {{pkg}}
-                            </td>
-                            <td>{{condition}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+        <div class="tab-pane active mandrill-grid" id="refm_installs">
+            {{#each managedInstalls}}
+            <div class="row">
+                {{#each this}}
+                    <div class="mandrill-grid-col col-md-4">
+                        <div class="media {{#unless pkg}}hidden-sm{{/unless}}">
+                            {{#if pkg}}
+                            <div class="pull-left">
+                                {{>munki_pkg_icon pkg=pkg size="md"}}
+                            </div>
+                            <div class="media-body">
+                                <h5 class="media-heading">{{munki_pkg_display_name pkg}}</h5>
+                                <p class="small text-muted munki-condition">{{condition}}</p>
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                {{/each}}
             </div>
+            {{/each}}
         </div>
 
         <div class="tab-pane" id="refm_uninstalls">uninstalls</div>
