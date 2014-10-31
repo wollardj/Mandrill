@@ -7,15 +7,17 @@ Template.me.destroyed = ->
 	Session.set 'changingPassword', null
 
 
-Template.me.formIsDisabled = ->
-	if Session.get('changePasswordFormIsReady') isnt true
-		'disabled'
-	else
-		''
+Template.me.helpers {
+	formIsDisabled: ->
+		if Session.get('changePasswordFormIsReady') isnt true
+			'disabled'
+		else
+			''
 
 
-Template.me.changingPassword = ->
-	Session.get 'changingPassword'
+	changingPassword: ->
+		Session.get 'changingPassword'
+}
 
 
 
@@ -58,7 +60,7 @@ Template.me.events {
 		currentIsEmpty = currentField.val() is ''
 		newIsEmpty     = newField.val() is ''
 		passwordsMatch  = newField.val() is verifyField.val()
-		
+
 		Session.set 'changePasswordFormIsReady', newIsEmpty is false and
 			currentIsEmpty is false and
 			passwordsMatch is true

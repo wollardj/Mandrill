@@ -1,98 +1,82 @@
 Session.setDefault 'runningMakeCatalogs', false
 Session.setDefault 'munki_repo_item_count', '...'
 
+Template.appNavbar.helpers {
 
-Template.appNavbar.routeIsActive = (aRoute) ->
-	current_router = Router.current()
-	if current_router? and current_router.route?
-		routerName = Router.current().route.name
-	if routerName? and routerName is aRoute
-		'active'
-	else
-		''
+	routeIsActive: (aRoute) ->
+		current_router = Router.current()
+		if current_router? and current_router.route?
+			routerName = Router.current().route.name
+		if routerName? and routerName is aRoute
+			'active'
+		else
+			''
 
+	munki_repo_item_count: ->
+		mr = MandrillStats.findOne('munki_repo')
+		if mr?
+			mr.count
+		else
+			'...'
 
+	manifestErrorsCount: ->
+		stats = RepoStats.findOne 'manifestErrors'
+		if stats? and stats.count
+			stats.count
+		else
+			0
 
-Template.appNavbar.munki_repo_item_count = ->
-	mr = MandrillStats.findOne('munki_repo')
-	if mr?
-		mr.count
-	else
-		'...'
-
-
-
-
-Template.appNavbar.manifestErrorsCount = ->
-	stats = RepoStats.findOne 'manifestErrors'
-	if stats? and stats.count
-		stats.count
-	else
-		0
-
-
-
-Template.appNavbar.installsCount = ->
-	stats = RepoStats.findOne 'pkgsinfo'
-	if stats? and stats.count
-		stats.count
-	else
-		0
+	installsCount: ->
+		stats = RepoStats.findOne 'pkgsinfo'
+		if stats? and stats.count
+			stats.count
+		else
+			0
 
 
-
-Template.appNavbar.installsErrorsCount = ->
-	stats = RepoStats.findOne 'pkgsinfoErrors'
-	if stats? and stats.count
-		stats.count
-	else
-		0
-
+	installsErrorsCount: ->
+		stats = RepoStats.findOne 'pkgsinfoErrors'
+		if stats? and stats.count
+			stats.count
+		else
+			0
 
 
-Template.appNavbar.catalogsCount = ->
-	stats = RepoStats.findOne 'catalogs'
-	if stats? and stats.count
-		stats.count
-	else
-		0
+	catalogsCount: ->
+		stats = RepoStats.findOne 'catalogs'
+		if stats? and stats.count
+			stats.count
+		else
+			0
 
 
-
-Template.appNavbar.catalogsErrorsCount = ->
-	stats = RepoStats.findOne 'catalogErrors'
-	if stats? and stats.count
-		stats.count
-	else
-		0
-
+	catalogsErrorsCount: ->
+		stats = RepoStats.findOne 'catalogErrors'
+		if stats? and stats.count
+			stats.count
+		else
+			0
 
 
-Template.appNavbar.makeCatalogsIsEnabled = ->
-	MandrillSettings.get 'makeCatalogsIsEnabled', false
+	loggedInUserDisplayName: ->
+		act = Meteor.users.findOne()
+		if act? and act.profile? and act.profile.name?
+			act.profile.name
+		else
+			'??'
 
 
-
-Template.appNavbar.loggedInUserDisplayName = ->
-	act = Meteor.users.findOne()
-	if act? and act.profile? and act.profile.name?
-		act.profile.name
-	else
-		'??'
+	runningMakeCatalogs: ->
+		Session.get 'runningMakeCatalogs'
 
 
-
-Template.appNavbar.runningMakeCatalogs = ->
-	Session.get 'runningMakeCatalogs'
-
-
-
-Template.appNavbar.makecatalogsCommand = ->
-	insane = MandrillSettings.get 'makeCatalogsSanityIsDisabled', false
-	if insane is true
-		'makecatalogs -f'
-	else
-		'makecatalogs'
+	makecatalogsCommand: ->
+		insane = MandrillSettings.get 'makeCatalogsSanityIsDisabled', false
+		if insane is true
+			'makecatalogs -f'
+		else
+			'makecatalogs'
+}
 
 
 

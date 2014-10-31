@@ -1,9 +1,11 @@
-Template.loginServicesGoogle.clientId = ->
-	data = Accounts.loginServiceConfiguration.findOne {service: 'google'}
-	if data? and data.clientId?
-		data.clientId
-	else
-		''
+Template.loginServicesGoogle.helpers {
+	clientId: ->
+		data = Accounts.loginServiceConfiguration.findOne {service: 'google'}
+		if data? and data.clientId?
+			data.clientId
+		else
+			''
+}
 
 
 Template.loginServicesGoogle.events {

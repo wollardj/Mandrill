@@ -14,10 +14,9 @@ class @AppRouter extends RouteController
 
 	waitOn: ->
 		user = Meteor.user()
-		isLoggedIn = user?
 		isAdmin = user? and user.mandrill? and user.mandrill.isAdmin is true
 
-		if isLoggedIn is true
+		if user?
 			# Setup global data subscriptions once the user has logged in.
 			return [
 				Meteor.subscribe('MandrillStats')
@@ -33,21 +32,19 @@ class @AppRouter extends RouteController
 			[]
 
 
-	onBeforeAction: (pause)->
-
+	onBeforeAction: ->
 		user = Meteor.user()
-		isLoggedIn = user?
 		isAdmin = user? and user.mandrill? and user.mandrill.isAdmin is true
 
-		if isLoggedIn is true
+		if user?
 			# If this is an admin-only route, but the user isn't an admin,
 			# we'll redirect them to the 'home' route.
 			if isAdmin is false and this.adminOnly is true
-				this.redirect 'home'
-				pause()
+				this.render 'notFound'
+			else
+				this.next()
 
 		# No one is logged in, so display the login page instead.
 		# This won't change the URL.
 		else
 			this.render 'login'
-			pause()

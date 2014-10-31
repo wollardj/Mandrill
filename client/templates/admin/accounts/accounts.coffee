@@ -1,63 +1,62 @@
-Template.accounts.accounts = ->
-	Meteor.users.find({}, {
-		sort: {
-			'mandrill.is_admin': -1,
-			'profile.name': 1
-		}
-	})
+Template.accounts.helpers {
+
+	accounts: ->
+		Meteor.users.find({}, {
+			sort: {
+				'mandrill.is_admin': -1,
+				'profile.name': 1
+			}
+		})
+
+
+	rendered: ->
+		Mandrill.tpl.activateTooltips()
+
+
+	emailAddresses: ->
+		emails = []
+		emails.push e.address for e in this.emails
+		emails.join(', ')
 
 
 
-Template.accounts.rendered = ->
-	Mandrill.tpl.activateTooltips()
+	accessPatternsCount: ->
+		patt = this.mandrill.accessPatterns or []
+		"#{patt.length} rule" + (if patt.length isnt 1 then 's' else '')
 
 
-Template.accounts.emailAddresses = ->
-	emails = []
-	emails.push e.address for e in this.emails
-	emails.join(', ')
+	isLoggedIn: ->
+		this.services and
+			this.services.resume and
+			this.services.resume.loginTokens and
+			this.services.resume.loginTokens.length > 0
 
 
-
-Template.accounts.accessPatternsCount = ->
-	patt = this.mandrill.accessPatterns or []
-	"#{patt.length} rule" + (if patt.length isnt 1 then 's' else '')
+	isBanned: ->
+		this.mandrill.isBanned
 
 
-Template.accounts.isLoggedIn = ->
-	this.services and
-		this.services.resume and
-		this.services.resume.loginTokens and
-		this.services.resume.loginTokens.length > 0
+	isCurrentUser: ->
+		Meteor.userId() is this._id
 
 
-Template.accounts.isBanned = ->
-	this.mandrill.isBanned
+	loginServicesIcons: ->
+		icons = ''
+		name = if this.profile and this.profile.name then this.profile.name else this.username
 
+		icons += '<i data-toggle="tooltip" title="' + name +
+			' has a local account" class="fa fa-user"></i>'
 
+		if this.services and this.services.google
+			icons += ' <i data-toggle="tooltip" title="' + name +
+				' has logged in using Google" class="fa fa-google"></i>'
 
-Template.accounts.isCurrentUser = ->
-	Meteor.userId() is this._id
+		if this.services and this.services.github
+			icons += ' <i data-toggle="tooltip" title="' + name +
+				' has logged in using Github" class="fa fa-github"></i>'
 
-
-
-Template.accounts.loginServicesIcons = ->
-	icons = ''
-	name = if this.profile and this.profile.name then this.profile.name else this.username
-
-	icons += '<i data-toggle="tooltip" title="' + name +
-		' has a local account" class="fa fa-user"></i>'
-
-	if this.services and this.services.google
-		icons += ' <i data-toggle="tooltip" title="' + name +
-			' has logged in using Google" class="fa fa-google"></i>'
-
-	if this.services and this.services.github
-		icons += ' <i data-toggle="tooltip" title="' + name +
-			' has logged in using Github" class="fa fa-github"></i>'
-
-	new Handlebars.SafeString(icons)
-
+		new Handlebars.SafeString(icons)
+}
 
 
 
@@ -65,7 +64,7 @@ Template.accounts.events {
 
 
 
-	#/// ---- editing emails ---- ///
+	# ---- editing emails ----
 	'click td.edit-email': (event)->
 		target = $(event.target).closest('td')
 		span = target.find 'span'
@@ -84,19 +83,19 @@ Template.accounts.events {
 		span = target.find 'span'
 		textarea = target.find 'textarea'
 
-		#// Clean up the email list.
+		# Clean up the email list.
 		for email in textarea.val().split(/[, ]/g)
 			do (email) ->
 				if email.search(/^[^@]*@[^@]*$/) is 0
-					#// We should be preserving the verified state, but
-					#// it' not quite as important to Mandrill as it would be
-					#// to a public-facing social media site. Plust there's no
-					#// UI mechanism for sending verification emails yet.
+					# We should be preserving the verified state, but
+					# it' not quite as important to Mandrill as it would be
+					# to a public-facing social media site. Plust there's no
+					# UI mechanism for sending verification emails yet.
 					cleanedEmails.push {address: email, verified: false}
 		cleanedEmails
 
 
-		#// Commit the new email list back to the database.
+		# Commit the new email list back to the database.
 		Meteor.users.update {_id: this._id}, {'$set':{'emails': cleanedEmails}}
 
 		_emailAddressExists = (service, emails)->
@@ -107,7 +106,7 @@ Template.accounts.events {
 					break
 			found
 
-		#// Look for orphaned service accounts and remove them.
+		# Look for orphaned service accounts and remove them.
 		for own key, value of this.services
 			if key is 'password' or key is 'resume'
 				continue
@@ -118,19 +117,19 @@ Template.accounts.events {
 				obj.$unset[path] = '';
 				Meteor.users.update {_id: record._id}, obj
 
-		#// Reset the page
+		# Reset the page
 		textarea.addClass 'hidden'
 		span.removeClass 'hidden'
 
 
 
 
-	#/// ---- managing user state ---- ///
+	# ---- managing user state ----
 
 
 
 
-	'click a.glyphicon-trash': (event)->
+	'click a.fa-trash-o': (event)->
 		event.stopPropagation()
 		event.preventDefault()
 
@@ -151,9 +150,9 @@ Template.accounts.events {
 					' has been logged out of all browser sessions.'
 
 
-	#//
-	#// Ban the selected user as long as it's not the current admin.
-	#//
+	###
+		Ban the selected user as long as it's not the current admin.
+	###
 	'click button.ban-user': ->
 		if Meteor.userId() is this._id
 			return
@@ -186,10 +185,10 @@ Template.accounts.events {
 			)
 
 
-	#//
-	#// Inverts the selected accounts admin status, as long as it's not
-	#// the account of the current admin.
-	#//
+	###
+		Inverts the selected accounts admin status, as long as it's not
+		the account of the current admin.
+	###
 	'click button[data-toggle-admin]': (event)->
 		event.stopPropagation()
 		event.preventDefault()
@@ -209,9 +208,9 @@ Template.accounts.events {
 			}
 
 
-	#//
-	#// Re-routes the admin to /accounts/access/<user-id>
-	#//
+	###
+		Re-routes the admin to /accounts/access/<user-id>
+	###
 	'click button[data-show-access]': (event)->
 		event.stopPropagation()
 		event.preventDefault()
@@ -219,7 +218,7 @@ Template.accounts.events {
 
 
 
-	#/// ---- adding a new account ---- ///
+	# ---- adding a new account ----
 
 
 	'submit form': (event)->

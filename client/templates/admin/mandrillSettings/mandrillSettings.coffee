@@ -1,41 +1,44 @@
 Session.setDefault 'runningMakeCatalogs', false
 
-Template.mandrillSettings.settings = ->
-	MandrillSettings.findOne()
+Template.mandrillSettings.helpers {
 
-Template.mandrillSettings.munkiRepoPathClass = ->
-	settings = MandrillSettings.findOne()
-	if settings.munkiRepoPathIsValid is true
-		'has-success'
-	else
-		'has-error'
+	settings: ->
+		MandrillSettings.findOne()
 
-
-Template.mandrillSettings.makecatalogsIsChecked = ->
-	settings = MandrillSettings.findOne()
-	if settings? and settings.makeCatalogsIsEnabled is true then 'checked'
+	munkiRepoPathClass: ->
+		settings = MandrillSettings.findOne()
+		if settings.munkiRepoPathIsValid is true
+			'has-success'
+		else
+			'has-error'
 
 
-Template.mandrillSettings.makecatalogsDisableSanityIsChecked = ->
-	settings = MandrillSettings.findOne()
-	if settings? and settings.makeCatalogsSanityIsDisabled is true then 'checked'
+	makecatalogsIsChecked: ->
+		settings = MandrillSettings.findOne()
+		if settings? and settings.makeCatalogsIsEnabled is true then 'checked'
 
 
-Template.mandrillSettings.gitIsChecked = ->
-	settings = MandrillSettings.findOne()
-	if settings? and settings.gitIsEnabled is true then 'checked'
+	makecatalogsDisableSanityIsChecked: ->
+		settings = MandrillSettings.findOne()
+		if settings? and settings.makeCatalogsSanityIsDisabled is true then 'checked'
 
 
-Template.mandrillSettings.munkiRepoPathFeedbackIcon = ->
-	settings = MandrillSettings.findOne()
-	if settings.munkiRepoPathIsValid is true
-		'check'
-	else
-		'exclamation-triangle'
+	gitIsChecked: ->
+		settings = MandrillSettings.findOne()
+		if settings? and settings.gitIsEnabled is true then 'checked'
 
 
-Template.mandrillSettings.runningMakeCatalogs = ->
-	Session.get 'runningMakeCatalogs'
+	munkiRepoPathFeedbackIcon: ->
+		settings = MandrillSettings.findOne()
+		if settings.munkiRepoPathIsValid is true
+			'check'
+		else
+			'exclamation-triangle'
+
+
+	runningMakeCatalogs: ->
+		Session.get 'runningMakeCatalogs'
+}
 
 
 Template.mandrillSettings.events {
@@ -47,7 +50,7 @@ Template.mandrillSettings.events {
 		MandrillSettings.set 'gitIsEnabled', value
 
 		if value is true
-			#// initialize the repo if needed.
+			# initialize the repo if needed.
 			Meteor.call 'git-init'
 
 

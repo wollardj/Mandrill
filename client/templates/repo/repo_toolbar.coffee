@@ -28,23 +28,27 @@ REPO_TPL_PKGINFO = {
 Session.setDefault 'creating_new_repo_item', false
 
 
-###
-    Returns the url appropriate for navigating up to the parent (..) directory.
-###
-Template.repo_toolbar.dot_dot_url = ->
-    crumbs = Template.repo.breadcrumb()
-    parent_crumb = crumbs[crumbs.length - 2]
-    if parent_crumb? and parent_crumb.url?
-        parent_crumb.url
-    else
-        # bail out of edit mode when we're at the root of the repo
-        Session.set 'repo_edit_mode', false
-        null
+Template.repo_toolbar.helpers {
+
+    ###
+        Returns the url appropriate for navigating up to the parent (..)
+        directory.
+    ###
+    dot_dot_url: ->
+        crumbs = Template.repo.__helpers.get('breadcrumb')()
+        parent_crumb = crumbs[crumbs.length - 2]
+        if parent_crumb? and parent_crumb.url?
+            parent_crumb.url
+        else
+            # bail out of edit mode when we're at the root of the repo
+            Session.set 'repo_edit_mode', false
+            null
 
 
 
-Template.repo_toolbar.crumb = ->
-    Mandrill.path.concat Router.current().params.c, "/"
+    crumb: ->
+        Mandrill.path.concat Router.current().params.query.c, "/"
+}
 
 
 
@@ -94,7 +98,7 @@ Template.repo_toolbar.events {
 
     # the modal which displays the new repo item form has appeared.
     'shown.bs.modal .modal' : (event)->
-        crumb = Router.current().params.c
+        crumb = Router.current().params.query.c
         $(event.target).find('input').focus()
         if /^\/*manifests/.test(crumb)
             $('[data-tpl="manifest"]').click()

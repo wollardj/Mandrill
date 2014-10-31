@@ -1,9 +1,11 @@
-Template.loginServicesGithub.clientId = ->
-	data = Accounts.loginServiceConfiguration.findOne {service: 'github'}
-	if data? and data.clientId?
-		data.clientId
-	else
-		''
+Template.loginServicesGithub.helpers {
+	clientId: ->
+		data = Accounts.loginServiceConfiguration.findOne {service: 'github'}
+		if data? and data.clientId?
+			data.clientId
+		else
+			''
+}
 
 
 Template.loginServicesGithub.events {

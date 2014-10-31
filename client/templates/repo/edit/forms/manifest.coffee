@@ -27,10 +27,12 @@ repo_edit_form_manifest_columnize = (theArray, cols=3)->
     result
 
 
-Template.repo_edit_form_manifest.managedInstalls = ->
-    data = Router.current().data()
-    result = repo_edit_form_manifest_flatten data.dom, 'managed_installs'
-    repo_edit_form_manifest_columnize result
+Template.repo_edit_form_manifest.helpers {
+    managedInstalls: ->
+        data = Router.current().data()
+        result = repo_edit_form_manifest_flatten data.dom, 'managed_installs'
+        repo_edit_form_manifest_columnize result
+}
 
 
 Template.repo_edit_form_manifest.events {

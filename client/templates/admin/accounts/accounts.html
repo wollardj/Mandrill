@@ -45,7 +45,7 @@
 								{{/unless}}
 							</button>
 							{{#unless mandrill.isAdmin}}
-							<button type="button" data-toggle="tooltip" data-placement="right" title="<nobr>Edit {{username}}'s file access</nobr>" class="btn
+							<button type="button" data-toggle="tooltip" data-placement="right" title="Edit {{username}}'s file access" class="btn
 								{{#if mandrill.accessPatterns.length}}btn-default{{/if}}
 								{{#unless mandrill.accessPatterns.length}}btn-warning{{/unless}}" data-show-access="true">
 								<i class="fa fa-pencil-square-o"></i> {{accessPatternsCount}}

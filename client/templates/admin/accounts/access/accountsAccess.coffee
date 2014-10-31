@@ -1,20 +1,22 @@
-Template.accountsAccess.rendered = ->
-	Mandrill.tpl.activateTooltips()
+Template.accountsAccess.helpers {
+	rendered: ->
+		Mandrill.tpl.activateTooltips()
 
 
-Template.accountsAccess.munkiRepoPath = ->
-	Munki.repoPath()
+	munkiRepoPath: ->
+		Munki.repoPath()
 
 
-Template.accountsAccess.readOnlyIsChecked = ->
-	if this.readonly is true
-		'checked'
+	readOnlyIsChecked: ->
+		if this.readonly is true
+			'checked'
+}
 
 
 
 Template.accountsAccess.events {
 
-	#// Add a new pattern, as long as it's not empty
+	# Add a new pattern, as long as it's not empty
 	'submit form': (event)->
 		event.stopPropagation()
 		event.preventDefault()
@@ -36,7 +38,7 @@ Template.accountsAccess.events {
 			}
 		})
 
-		#// reset the form
+		# reset the form
 		$pattField.val('');
 		$pattField.focus();
 		$roField.attr('checked', false);

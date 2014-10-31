@@ -5,10 +5,11 @@ Router.configure {
 }
 
 
-Router.onBeforeAction (pause)->
+Router.onBeforeAction ->
 	if Meteor.loggingIn()
 		this.render 'loading'
-		pause()
+	else
+		this.next()
 
 
 
@@ -20,12 +21,12 @@ Router.map ->
 	}
 
 	this.route 'repo', {
-		path: '/repo/'
+		path: '/munki/'
 		controller: 'RepoRouter'
 	}
 
 	this.route 'repo_edit', {
-		path: 'repo/edit/'
+		path: '/munki/edit/'
 		controller: 'RepoEditRouter'
 
 	}
@@ -40,27 +41,22 @@ Router.map ->
 	#// --- Admin Routes --- //
 
 	this.route 'accounts', {
-		path: '/accounts',
+		path: '/admin/accounts',
 		controller: 'AccountsRouter'
 	}
 
 	this.route 'accounts-access', {
-		path: '/accounts/access/:_id',
+		path: '/admin/accounts/access/:_id',
 		controller: 'AccountsAccessRouter'
 	}
 
-	this.route 'othertools', {
-		path: '/othertools',
-		controller: 'OtherToolsRouter'
-	}
-
 	this.route 'login-services', {
-		path: '/login-services',
+		path: '/admin/loginServices',
 		controller: 'LoginServicesRouter'
 	}
 
 	this.route 'mandrill-settings', {
-		path: '/mandrill-settings',
+		path: '/admin/mandrill/settings',
 		controller: 'MandrillSettingsRouter'
 	}
 

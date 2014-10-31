@@ -1,12 +1,15 @@
 Session.setDefault 'save_in_progress', false
 
-Template.repo_edit_tabs_git_commit.hasChanges = ->
-    MandrillAce.getInstance().hasChanges()
+
+Template.repo_edit_tabs_git_commit.helpers {
+    hasChanges: ->
+        MandrillAce.getInstance().hasChanges()
 
 
-Template.repo_edit_tabs_git_commit.item_filename = ->
-    crumb = Router.current().params.c
-    _.last crumb.split('/')
+    item_filename: ->
+        crumb = Router.current().params.query.c
+        _.last crumb.split('/')
+}
 
 
 Template.repo_edit_tabs_git_commit.events {
