@@ -21,10 +21,12 @@ Package.onUse(function(api) {
         ], 'client');
     api.addFiles([
             'munki.coffee',
+            'MunkiManifest.coffee',
             'collections.coffee'
         ], ['client', 'server']);
 
     api.export('Munki')
+    api.export('MunkiManifest')
     api.export('MunkiRepo')
     api.export('MunkiSettings')
     api.export('MunkiLogs')

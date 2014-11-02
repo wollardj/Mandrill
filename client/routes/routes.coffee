@@ -28,11 +28,10 @@ Router.map ->
 	this.route 'repo_edit', {
 		path: '/munki/edit/'
 		controller: 'RepoEditRouter'
-
 	}
 
 	this.route 'me', {
-		path: '/me',
+		path: '/whoami',
 		controller: 'MeRouter'
 	}
 

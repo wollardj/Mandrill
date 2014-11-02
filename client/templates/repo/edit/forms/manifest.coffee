@@ -1,41 +1,96 @@
-repo_edit_form_manifest_flatten = (dom, domKey, result=[])->
-    condition = dom.condition
+manifest_flatten = (obj, result=[], conditions=[])->
+    keysWeCareAbout = [
+        'managed_installs'
+        'managed_uninstalls'
+        'managed_updates'
+        'optional_installs'
+    ]
 
-    for key,val of dom[domKey]
-        result.push {pkg: val, condition: condition}
+    for key,val of obj # top-level keys; managed_installs, etc.
 
-    if dom.conditional_items?
-        for item in dom.conditional_items
-            repo_edit_form_manifest_flatten item, domKey, result
-    result.sort (a,b)->
-        a.pkg.localeCompare(b.pkg)
+        if key in keysWeCareAbout
 
+            for item in val # installer items
+                result.push {
+                    pkg: item
+                    installType: key
+                    conditions: conditions
+                }
 
-repo_edit_form_manifest_columnize = (theArray, cols=3)->
-    result = []
-    colArray = []
-    for item in theArray
-        if colArray.length < cols
-            colArray.push item
-        else
-            result.push colArray
-            colArray = [item]
-    if colArray.length > 0 and colArray.length < cols
-        while colArray.length < cols
-            colArray.push {}
-        result.push colArray
+        else if key is 'conditional_items'
+
+            for cond_item in val
+
+                if conditions.length > 0
+                    # array.slize(0) clones the array; no passing pointers!!
+                    tmp_cond = conditions.slice(0)
+                    tmp_cond.push cond_item.condition
+
+                else
+                    tmp_cond = [cond_item.condition]
+
+                manifest_flatten cond_item, result, tmp_cond
     result
 
 
+Template.repo_edit_form_manifest.rendered = ->
+    data = Router.current().data()
+    MunkiRepo.update {_id: data._id}, {
+        '$set': {
+            draft: {
+                author: Meteor.user()._id,
+                dom: data.dom
+            }
+        }
+    }
+
+
 Template.repo_edit_form_manifest.helpers {
-    managedInstalls: ->
-        data = Router.current().data()
-        result = repo_edit_form_manifest_flatten data.dom, 'managed_installs'
-        repo_edit_form_manifest_columnize result
+
+    flatManifest: ->
+        data = MunkiRepo.findOne {_id: Router.current().data()._id}
+        if data?.draft?.dom?
+            ret = manifest_flatten data.draft.dom
+            ret.sort (a,b)->
+                a.pkg.localeCompare(b.pkg)
+        else
+            []
+
+
+    typeMnemonic: (type)->
+        type.replace('_', ' ').replace('managed', 'always').replace(/s$/, '').replace('optional', 'user may')
+
+
+    isManagedInstall: ->
+        if this.installType is 'managed_installs' then 'selected'
+
+
+    isManagedUpdate: ->
+        if this.installType is 'managed_updates' then 'selected'
+
+
+    isManagedUninstall: ->
+        if this.installType is 'managed_uninstalls' then 'selected'
+
+
+    isOptionalInstall: ->
+        if this.installType is 'optional_installs' then 'selected'
 }
 
 
 Template.repo_edit_form_manifest.events {
-    'click .media-heading': (event)->
-        console.log this
+    'click [data-manifest="install-type"] a': (event)->
+        event.preventDefault()
+        data = MunkiRepo.findOne({_id: Router.current().data()._id})
+        manifest = new MunkiManifest(data.draft.dom)
+        newInstallType = $(event.target).attr('href').replace(/^#/, '')
+        manifest.changeInstallType(
+            this.pkg
+            this.installType
+            newInstallType
+            this.conditions
+        )
+        MunkiRepo.update {_id: data._id}, {
+            '$set': {'draft.dom': manifest.manifestObject}
+        }
 }

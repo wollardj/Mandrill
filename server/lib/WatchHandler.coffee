@@ -62,6 +62,9 @@ shell = Meteor.npmRequire 'shelljs'
 	#		dom:  [Object],	// the parsed object structure
 	#		raw:  [String],	// the raw text of the file
 	#		path: [String],	// the full path to the file on disk
+	#		stat: [Object], // fs stats for the file
+	#		icon_file: [String]
+	#		icon_name: [String]
 	#		err:  [String],	// Only present to indicate parsing errors.
 	# }
 	#
@@ -119,10 +122,7 @@ shell = Meteor.npmRequire 'shelljs'
 		# document or documents, it/they are updated. If not,
 		# the information is inserted as a new document.
 
-		MunkiRepo.upsert {path: doc.path}, doc,
-			(err)->
-				if err?
-					console.error err
+		MunkiRepo.upsert {path: path}, doc
 	, (e)->
 		throw e
 
