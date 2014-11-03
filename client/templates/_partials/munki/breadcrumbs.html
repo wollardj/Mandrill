@@ -1,0 +1,14 @@
+<template name="munkiBreadcrumbs">
+    <ol class="breadcrumb text-nowrap" style="overflow: auto">
+    {{#each breadcrumb}}
+        <li class="{{#if is_active}}active{{/if}}">
+            {{#if is_active}}
+                {{name}}
+            {{/if}}
+            {{#unless is_active}}
+            <a href="{{url}}">{{name}}</a>
+            {{/unless}}
+        </li>
+    {{/each}}
+    </ol>
+</template>

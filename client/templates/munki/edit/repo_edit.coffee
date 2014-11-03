@@ -79,11 +79,6 @@ Template.repo_edit.helpers {
 			0
 
 
-
-	breadcrumb: ->
-	    Template.repo.__helpers.get('breadcrumb')()
-
-
 	waiting_on_server_response: ->
 		loading = Session.get 'repo_item_loading_raw'
 		saving = Session.get 'save_in_progress'

@@ -7,32 +7,6 @@ Session.setDefault 'repo_readme', false
 
 
 Template.repo.helpers {
-    ###
-        Produces an array of strings used to generate the breadcrumb navigation.
-    ###
-    breadcrumb: ()->
-        params_c = Router.current().params.query.c
-        crumbs = [{name: 'Munki', url: Router.path 'repo', is_active: false}]
-        if params_c?
-            url = []
-            crumbs.push part for part in Mandrill.path.components(params_c).map (it)->
-                url.push it
-                {
-                    name: it
-                    url: Router.path 'repo', {}, {query: "c=" + url.join('/')}
-                    is_active: false
-                }
-
-            # make the last item in the array the 'active' breadcrumb
-            crumbs[crumbs.length - 1].is_active = true
-        else if Session.equals('repo_filter', '')
-            # since there is no 'c' parameter, we'll make our faux root item
-            # the 'active' breadcrumb
-            crumbs[0].is_active = true
-
-        crumbs
-
-
 
     ###
         If the given record is_leaf and it happens to be a pkgsinfo item, we'll
@@ -73,16 +47,6 @@ Template.repo.helpers {
 
 
 
-    record_is_type: (a_type)->
-        colspan = Template.repo.colspan.apply this
-
-        switch a_type
-            when 'manifests' then ret = colspan is 2
-            when 'pkgsinfo' then ret = colspan is 0
-            else ret = false
-        ret
-
-
     ###
         Determines if the given item is a protected directory. A protected
         directory is one expected by Munki; catalogs, manifests, pkgs, pkgsinfo,
@@ -111,9 +75,7 @@ Template.repo.helpers {
                 'stat': true
                 'icon_name': true
                 'icon_file': true
-                'dom.name': true
-                'dom.version': true
-                'dom.catalogs': true
+                'dom': true
             }
         }
 
@@ -186,9 +148,15 @@ Template.repo.helpers {
                 if it.stat?
                     record.stat = it.stat
                 record.repoUrl = it.url()
-                record.url = Router.path 'repo_edit', {}, {
-                    query: 'c=' + it.path.replace(repo, '')
-                }
+
+                if it.isManifest()
+                    record.url = Router.path 'munkiEditManifest', {}, {
+                        query: 'c=' + it.path.replace(repo, '')
+                    }
+                else
+                    record.url = Router.path 'repo_edit', {}, {
+                        query: 'c=' + it.path.replace(repo, '')
+                    }
             else
                 record.url = Router.path 'repo', {}, {
                     query: 'c=' + Mandrill.path.concat(url, record.name)

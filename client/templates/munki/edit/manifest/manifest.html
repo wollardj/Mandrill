@@ -1,0 +1,92 @@
+<template name="munkiEditManifest">
+
+    <div class="mandrill-header">
+        <h2>Munki Repo - Manifest Editor</h2>
+        {{>munkiBreadcrumbs}}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="btn-group btn-group-sm btn-group-justified">
+                <a href="#refm_catalogs" class="btn btn-default" data-toggle="tab">
+                    Catalogs
+                </a>
+                <a href="#refm_included_manifests" class="btn btn-default" data-toggle="tab">
+                    Included Manifests
+                </a>
+                <a href="#refm_conditions" class="btn btn-default" data-toggle="tab">
+                    Conditions
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane fade in active mandrill-grid" id="refm_installs">
+            <table class="table table-condensed table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Item</th>
+                    <th>Condition(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each flatManifest}}
+            <tr class="{{#if isManagedUninstall}}danger{{/if}}{{#if isOptionalInstall}}success{{/if}}{{#if isManagedUpdate}}info{{/if}}">
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown">
+                        {{typeMnemonic installType}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" data-manifest="install-type">
+                            <li class="{{#if isManagedInstall}}active{{/if}}">
+                                <a href="#managed_installs">
+                                    {{typeMnemonic 'managed_installs'}}
+                                </a>
+                            </li>
+                            <li class="{{#if isManagedUpdate}}active{{/if}}">
+                                <a href="#managed_updates">
+                                    {{typeMnemonic 'managed_updates'}}
+                                </a>
+                            </li>
+                            <li class="{{#if isManagedUninstall}}active{{/if}}">
+                                <a href="#managed_uninstalls">
+                                    {{typeMnemonic 'managed_uninstalls'}}
+                                </a>
+                            </li>
+                            <li class="{{#if isOptionalInstall}}active{{/if}}">
+                                <a href="#optional_installs">
+                                    {{typeMnemonic 'optional_installs'}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    {{>munki_pkg_icon pkg=pkg size="xs"}}
+                    {{munki_pkg_display_name pkg}}
+                </td>
+                <td>
+                    {{#if conditions}}
+                    <ul>
+                    {{#each conditions}}
+                        <li>{{this}}</li>
+                    {{/each}}
+                    </ul>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="refm_uninstalls">uninstalls</div>
+        <div class="tab-pane fade" id="refm_optional_installs">optinal installs</div>
+        <div class="tab-pane fade" id="refm_updates">updates</div>
+        <div class="tab-pane fade" id="refm_catalogs">catalogs</div>
+        <div class="tab-pane fade" id="refm_included_manifests">included manifests</div>
+        <div class="tab-pane fade" id="refm_conditions">conditions</div>
+    </div>
+</template>

@@ -76,6 +76,16 @@ Router.route 'repo_edit', {
 }
 
 
+Router.route 'munkiEditManifest', {
+	path: '/munki/edit/manifest'
+	template: 'munkiEditManifest'
+	waitOn: -> Meteor.subscribe 'MunkiRepo'
+	data: ->
+		path = Mandrill.path.concat Munki.repoPath(), this.params.query.c
+		MunkiRepo.findOne {path: path}
+}
+
+
 Router.route 'me', {
 	path: '/whoami'
 	template: 'me'

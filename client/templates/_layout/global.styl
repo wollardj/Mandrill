@@ -31,6 +31,17 @@ body
 		small, .small
 			color rgba(255, 255, 255, 0.8)
 
+	ol.breadcrumb
+		background transparent
+		border-width 0
+		margin 0
+		padding 0
+		&>li+li:before
+			padding 0
+			content '/'
+		&>.active
+			color rgba(255, 255, 255, 0.8)
+
 
 
 p.app-footer
