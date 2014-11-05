@@ -1,0 +1,256 @@
+<template name="mandrillConditionsButton">
+
+    <button type="button" class="
+        {{#if class}}{{class}}{{/if}}
+        {{#unless class}}btn btn-default{{/unless}}" data-toggle="modal" data-target="#mandrillConditionsButtonModal">
+        <i class="fa fa-cogs"></i>
+        {{#if label}}{{label}}{{/if}}
+        {{#unless label}}Edit Conditions{{/unless}}
+    </button>
+    <div class="modal fade" id="mandrillConditionsButtonModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                    <h4 class="modal-title">Global Conditions Editor</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-7">
+
+                        <!-- hidden tab controls to make Bootstrap happy-->
+                        <ul class="hidden" id="mcbTabControls">
+                            <li>
+                                <a href="#mcbTabDefault" data-toggle="tab">
+                                    Default
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#mcbTabNamed" data-toggle="tab">
+                                    Named
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#mcbTabUnnamed" data-toggle="tab">
+                                    Unnamed
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#mcbTabEditMode" data-toggle="tab">
+                                    Edit Mode
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- end making bootstrap happy; resume sadness-->
+
+                        <p class="small text-muted">
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active"
+                                     id="mcbTabDefault">
+                                    <i class="  fa
+                                                fa-info-circle
+                                                fa-3x
+                                                pull-left"></i>
+                                    {{#if conditions.length}}
+                                    This list of {{conditions.length}}
+                                    condition(s) is purely for auto-complete
+                                    suggestions and display purposes; no
+                                    manifests will be harmed no matter what you
+                                    do here. All Mandrill users use this same
+                                    list. We've populated it with some examples
+                                    to get you started.
+                                    {{/if}}
+                                    {{#unless conditions.length}}
+                                    You don't appear to have any conditions yet.
+                                    Never fear, you've got some options. You can
+                                    scan your own repo for conditions using the
+                                    button below, or we can
+                                    <a href="#" data-mcbBtn="addExamples">
+                                    provide some examples</a>.
+                                    {{/unless}}
+                                </div>
+                                <div class="tab-pane fade" id="mcbTabEditMode">
+                                    <i class="  fa
+                                                fa-exclamation-triangle
+                                                fa-3x
+                                                text-danger
+                                                pull-left"></i>
+                                    You're in edit mode, which means clicking
+                                    the shiny red button beside any record will
+                                    delete it - no questions asked. Fear not,
+                                    this won't remove conditions from any
+                                    manifests that might use the matching
+                                    condition.
+                                </div>
+                                <div class="tab-pane fade" id="mcbTabNamed">
+                                    <i class="  fa
+                                                fa-info-circle
+                                                fa-3x
+                                                pull-left"></i>
+                                    {{#if conditions.length}}
+                                    Showing those fortunate
+                                    {{conditions.length}} condition(s) which
+                                    have been given a name.
+                                    {{/if}}
+                                    {{#unless conditions.length}}
+                                    You haven't named a single condition. You
+                                    even deleted the examples we gave you :'(
+                                    {{/unless}}
+                                </div>
+                                <div class="tab-pane fade" id="mcbTabUnnamed">
+                                    <i class="  fa
+                                                fa-info-circle
+                                                fa-3x
+                                                pull-left"></i>
+                                    {{#if conditions.length}}
+                                    Showing the poor {{conditions.length}}
+                                    conditions that still haven't been given a
+                                    name.
+                                    {{/if}}
+                                    {{#unless conditions.length}}
+                                    You've already named all of your conditions!
+                                    Good for you! \m/
+                                    {{/unless}}
+                                </div>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="btn-group btn-group-sm">
+                            <button class=" btn
+                                            btn-default
+                                            {{#if editModeActive}}
+                                                active
+                                            {{/if}}"
+                                    type="buton"
+                                    data-mcbBtn="edit">
+                                Edit Mode
+                            </button>
+                        </div>
+
+                        <div class="btn-group btn-group-sm pull-right">
+                            <button class=" btn
+                                            btn-default
+                                            {{#if viewModeAll}}active{{/if}}"
+                                    data-mcbView='all'>
+                                <i class="fa fa-eye"></i>
+                                All
+                            </button>
+                            <button class=" btn
+                                            btn-default
+                                            {{#if viewModeNamed}}active{{/if}}"
+                                    data-mcbView='named'>
+                                Named
+                            </button>
+                            <button class=" btn
+                                            btn-default
+                                            {{#if viewModeUnnamed}}
+                                                active
+                                            {{/if}}"
+                                    data-mcbView='unnamed'>
+                                Unnamed
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="  table
+                                table-condensed
+                                table-striped
+                                table-bordered">
+                {{#unless editModeActive}}
+                    {{#if viewModeAll}}
+                    <thead>
+                    <tr>
+                        <th>
+                            <div class="col-sm-4">
+                                <input
+                                    type="text"
+                                    id="mcbNewName"
+                                    class="form-control input-sm"
+                                    placeholder="'test' is in its hostname"
+                                    value="{{name}}" />
+                            </div>
+                            <div class="col-sm-6">
+                                <textarea   id="mcbNewCondition"
+                                            class=" text-fixed-width
+                                                    form-control
+                                                    input-sm"
+                                            placeholder="hostname LIKE '*test*'"></textarea>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button"
+                                        class=" btn
+                                                btn-block
+                                                btn-success
+                                                btn-sm"
+                                        data-mcbBtn="new">
+                                    <i class="fa fa-plus"></i>
+                                    <span class="visible-xs">
+                                        Add the new condition
+                                    </span>
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    {{/if}}
+                {{/unless}}
+                <tbody>
+                {{#each conditions}}
+                    <tr>
+                        <td>
+                            <div class="col-sm-4">
+                                {{#if editModeActive}}
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-btn">
+                                        <button class=" btn
+                                                        btn-danger"
+                                                type="button"
+                                                data-mcbBtn="delete">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </span>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="{{name}}{{#unless name}}{{condition}}{{/unless}}"
+                                        value="{{name}}" />
+                                </div>
+                                {{/if}}
+                                {{#unless editModeActive}}
+                                <input
+                                    type="text"
+                                    class="form-control input-sm"
+                                    placeholder="{{name}}{{#unless name}}{{condition}}{{/unless}}"
+                                    value="{{name}}" />
+                                {{/unless}}
+                            </div>
+                            <div class="col-sm-8">
+                                <textarea class="text-fixed-width form-control input-sm">{{condition}}</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                {{/each}}
+                </tbody>
+                </table>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default btn-sm"
+                            data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            title="Scan all manifests for additional conditions."
+                            data-mcbBtn="scanForConditions">
+                        <i class="fa fa-refresh"></i>
+                        Scan for more conditions
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</template>

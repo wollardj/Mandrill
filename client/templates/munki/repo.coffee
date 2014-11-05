@@ -1,24 +1,36 @@
 Session.setDefault 'repo_filter', ''
 Session.setDefault 'repo_edit_mode', false
+Session.setDefault 'repoSearchLimit', 50
 
 # This can be false, true, or a string. False = no readme. True = loading.
 # String = the README.md contents
 Session.setDefault 'repo_readme', false
 
 
+Template.repo.rendered = ->
+    Session.set 'repoSearchLimit', 50
+    Template.repo.currentDirListing = []
+
+
 Template.repo.helpers {
+    ###
+        Takes a guess at whether or not there might be more results to show.
+    ###
+    moreResultsPossible: ->
+        Session.get('results_length') == Session.get('repoSearchLimit')
 
     ###
         If the given record is_leaf and it happens to be a pkgsinfo item, we'll
         look for its icon.
     ###
+    hasIcon: ->
+        this.icon_name? or this.isPkginfo()
     pkgsinfo_icon: ->
         if this.icon_file?
             icon = MunkiRepo.findOne {_id: this._id}
         else if this.dom?.name?
             icon = MunkiRepo.findOne {icon_name: this.dom.name}
         icon?.url()
-
 
 
     ###
@@ -70,12 +82,23 @@ Template.repo.helpers {
         files = []
         search_obj = {path: search_path}
         search_opts = {
+            #limit: Session.get 'repoSearchLimit'
             fields: {
                 path: true
-                'stat': true
+                'stat.mtime': true
                 'icon_name': true
                 'icon_file': true
-                'dom': true
+                'dom.name': true
+                'dom.version': true
+                # items to satisfy the isManifest() method of the MunkiRepo
+                # records.
+                'dom.managed_installs': true
+                'dom.managed_uninstalls': true
+                'dom.managed_updates': true
+                'dom.optional_installs': true
+                'dom.included_manifests': true
+                'dom.catalogs': true
+                'dom.conditional_items': true
             }
         }
 
@@ -85,10 +108,10 @@ Template.repo.helpers {
         # into the search_obj
         if repo_filter
             search_obj = {'$and':[search_obj]}
-            filter_regexp = new RegExp('.*' + repo_filter + '.*', 'i')
+            filter_regexp = new RegExp(repo_filter, 'i')
             search_obj['$and'].push {
                 '$or': [
-                    {path: filter_regexp}
+                    {path: new RegExp('/^' + repo + '.*' + filter_regexp)}
                     {'dom.name': filter_regexp}
                     {'dom.display_name': filter_regexp}
                     {'dom.version': filter_regexp}
@@ -103,24 +126,47 @@ Template.repo.helpers {
 
 
         # function used to reduce() the results of each query
-        reduce = (file_list, it)->
-            # If there's a filter (search) we'll want the relative path of each
-            # result so the user knows where each file lives.
-            name = it.path.replace search_path, ''
-            if not repo_filter
-                name = name.replace(/^\/*/, '').split('/')[0]
-            if not file_list[name]?
-                file_list[name] = it._id
-            file_list
+        reduce = (prevRet, it, index, origArray)->
+            if not prevRet.push?
+                prevRet = [prevRet]
+
+            localRepo = Mandrill.path.concat(
+                repo
+                Router.current().params.query.c
+            ) + '/'
+
+            prefix = it.path.match(new RegExp('^' + localRepo + '[^\/]*'))[0]
+
+            if prefix is it.path
+                prefixReg = new RegExp('^' + prefix + '$')
+            else
+                prefixReg = new RegExp('^' + prefix + '\/')
+
+            found = false
+            for record in prevRet
+                if record.path.match(prefixReg)
+                    found = true
+                    break
+
+            if not found
+                prevRet.push(it)
+            prevRet
+
+
 
 
         map = (it)->
-            record = {}
+            record = it
 
             # If there's a filter (search) we'll want the relative path of each
             # result so the user knows where each file lives.
             record.name = it.path.replace search_path, ''
             if not repo_filter
+                path = Mandrill.path.concat(
+                    repo
+                    Router.current().params.query.c
+                ) + '/'
+
                 record.name = record.name.replace(/^\/*/, '').split('/')[0]
 
             if repo_filter
@@ -134,55 +180,40 @@ Template.repo.helpers {
                 # concatenating the repo path, cookie crumb url (if any), and
                 # the current record.name value and then testing to see if the
                 # result matches it.path
-                full_component_path = Mandrill.path.concat(repo, url, record.name)
-                record.is_leaf = it.path is full_component_path.replace(/\/*$/, '')
+                full_component_path = Mandrill.path.concat(
+                    repo
+                    url
+                    record.name
+                )
+
+                record.is_leaf = it.path is full_component_path.replace(
+                    /\/*$/
+                    ''
+                )
+
                 if record.is_leaf is true
                     record._id = it._id
 
             if record.is_leaf is true
-                if it.dom?
-                    record.dom = it.dom
-                if it.icon_name? and it.icon_file?
-                    record.icon_name = it.icon_name
-                    record.icon_file = it.icon_file
-                if it.stat?
-                    record.stat = it.stat
                 record.repoUrl = it.url()
 
                 if it.isManifest()
-                    record.url = Router.path 'munkiEditManifest', {}, {
+                    record.editUrl = Router.path 'munkiEditManifest', {}, {
                         query: 'c=' + it.path.replace(repo, '')
                     }
                 else
-                    record.url = Router.path 'repo_edit', {}, {
+                    record.editUrl = Router.path 'repo_edit', {}, {
                         query: 'c=' + it.path.replace(repo, '')
                     }
             else
-                record.url = Router.path 'repo', {}, {
+                record.editUrl = Router.path 'repo', {}, {
                     query: 'c=' + Mandrill.path.concat(url, record.name)
                 }
             record
 
 
-
-
-        # First, we'll just fetch the matching records' path attributes and
-        # reduce them into an object {filename: _id}. Only returning the path
-        # attribute for the reduce is _much_ faster than asking for the entire
-        # record when there are a lot of matches.
-        prefetch = MunkiRepo.find(search_obj, {fields:{path: true}}).fetch()
-            .reduce reduce, {}
-
-        search_opts.limit = 0
-        search_obj = {'$or':[]}
-        for key,val of prefetch
-            search_opts.limit++
-            search_obj['$or'].push {'_id': val}
-
-        if search_obj['$or']? and search_obj['$or'].length
-            results = MunkiRepo.find(search_obj, search_opts).fetch()
-        else
-            results = []
+        results = MunkiRepo.find(search_obj, search_opts).fetch()
+        results = results.reduce reduce, []
 
         results = results.map map
         results.sort (a, b)->
@@ -229,4 +260,13 @@ Template.repo.events {
                 Mandrill.show.error(err)
             else
                 Mandrill.show.success 'File Deleted', name + ' is no more.'
+
+
+    ###
+        The user opted to increase the search limit by 25
+    ###
+    'click [data-load="more"]': (event)->
+        event.preventDefault()
+        #event.stopPropagation()
+        Session.set 'repoSearchLimit', Session.get('repoSearchLimit') + 25
 }

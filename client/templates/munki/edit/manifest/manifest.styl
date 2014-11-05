@@ -1,0 +1,11 @@
+ul.munki-manifest-conditions
+
+    li:first-child:before
+        content 'IF '
+        font-weight lighter
+        font-family "Courier New", "Lucida Console"
+
+    li:not(:first-child):before
+        content 'AND '
+        font-weight lighter
+        font-family "Courier New", "Lucida Console"

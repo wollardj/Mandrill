@@ -48,6 +48,7 @@ livedata@1.0.11
 localstorage@1.0.1
 logging@1.0.5
 mandrill:ace@1.0.2
+mandrill@0.8.0
 markdown@1.0.2
 meteor-platform@1.2.0
 meteor@1.1.3
@@ -55,6 +56,8 @@ meteorhacks:async@1.0.0
 meteorhacks:npm@1.2.0
 minifiers@1.1.2
 minimongo@1.0.5
+mizzao:build-fetcher@0.2.0
+mizzao:jquery-ui@1.11.2
 mobile-status-bar@1.0.1
 mongo@1.0.8
 mrt:moment@2.8.1

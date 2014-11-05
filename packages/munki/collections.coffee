@@ -22,7 +22,7 @@ MunkiRepo = new Mongo.Collection 'munki_repo', {transform: (doc)->
 
     doc.isPkginfo = ->
         d = this.dom
-        d? and (d.name? or d.version? or d.display_name?)
+        not this.isCatalog() and d?.name?
 
     doc.isManifest = ->
         d = this.dom

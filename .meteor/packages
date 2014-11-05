@@ -20,5 +20,6 @@ npm-container
 daniel:auto-nprogress
 iron:router
 mandrill:ace
+mandrill
 munki
-
+mizzao:jquery-ui

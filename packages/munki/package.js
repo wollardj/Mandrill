@@ -1,6 +1,7 @@
 Package.describe({
-  summary: "Logic and templates for Munki repos",
-  version: "0.0.1"
+    name: 'munki',
+    summary: "Logic and templates for Munki repos",
+    version: "0.0.1"
 });
 
 Npm.depends({
@@ -9,7 +10,7 @@ Npm.depends({
 })
 
 Package.onUse(function(api) {
-    api.versionsFrom('METEOR@0.9.2.2');
+    api.versionsFrom('1.0');
     api.use('coffeescript');
     api.use('meteorhacks:npm');
     api.use('standard-app-packages');

@@ -52,7 +52,8 @@ Template.repo_toolbar.events {
             val = ''
         Template.repo.filter_timeout = setTimeout ()->
             Session.set 'repo_filter', val
-        , 150
+            Session.set 'repoSearchLimit', 50
+        , 400
 
     ###
         When the user presses the escape key while focus is on the search field,

@@ -15,7 +15,7 @@
 
         <div class="list-group">
             {{#each dir_listing}}
-            <a href="{{url}}" class="list-group-item has-delete-button">
+            <a href="{{editUrl}}" class="list-group-item has-delete-button">
                 <div class="row">
                     <div class="col-sm-4 col-xs-8">
                         <span class="text-nowrap" style="overflow: auto">
@@ -23,12 +23,15 @@
                             <i class="fa fa-folder text-info"></i>
                             {{/unless}}
                             {{#if is_leaf}}
-                                {{#if pkgsinfo_icon}}
-                                    <img
-                                        src="{{pkgsinfo_icon}}"
-                                        class="repo_pkgicon" />
+                                {{#if hasIcon}}
+                                    {{#if icon_name}}
+                                    {{>munki_pkg_icon pkg=icon_name size='sm'}}
+                                    {{/if}}
+                                    {{#if dom.name}}
+                                    {{>munki_pkg_icon pkg=dom.name size='sm'}}
+                                    {{/if}}
                                 {{/if}}
-                                {{#unless pkgsinfo_icon}}
+                                {{#unless hasIcon}}
                                     <i class="fa fa-file"></i>
                                 {{/unless}}
                             {{/if}}
@@ -73,6 +76,19 @@
                 </div>
             </a>
             {{/each}}
+            {{#if moreResultsPossible}}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p class="lead text-center">
+                        Showing {{session_get 'results_length'}} results, but
+                        there <em>might</em> be more.
+                        <button type="button" class="btn btn-default" data-load="more">
+                            Load 25 More
+                        </button>
+                    </p>
+                </div>
+            </div>
+            {{/if}}
         </div>
 
 
@@ -104,7 +120,7 @@
                 {{#if session_equals 'repo_readme' true}}
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
-                        <span class="sr-only">Loading data</span>
+                        <span class="sr-only">Loading README.md...</span>
                     </div>
                 </div>
                 {{/if}}

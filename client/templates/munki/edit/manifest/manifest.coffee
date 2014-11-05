@@ -43,6 +43,10 @@ Template.munkiEditManifest.rendered = ->
             }
         }
     }
+    $('.sortable').sortable {
+        placeholder: 'list-group-item list-group-item-info'
+    }
+    $('.sortable').disableSelection()
 
 
 Template.munkiEditManifest.helpers {
