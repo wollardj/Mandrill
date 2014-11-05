@@ -95,7 +95,9 @@
                                     {{/if}}
                                     {{#unless conditions.length}}
                                     You haven't named a single condition. You
-                                    even deleted the examples we gave you :'(
+                                    didn't want to use our
+                                    <a href="#" data-mcbBtn="addExamples">
+                                    built-in examples</a>.? :'(
                                     {{/unless}}
                                 </div>
                                 <div class="tab-pane fade" id="mcbTabUnnamed">
@@ -243,7 +245,7 @@
                         Close
                     </button>
                     <button type="button"
-                            class="btn btn-primary btn-sm"
+                            class="btn btn-primary btn-sm pull-left"
                             title="Scan all manifests for additional conditions."
                             data-mcbBtn="scanForConditions">
                         <i class="fa fa-refresh"></i>

@@ -101,14 +101,14 @@ class MandrillConditions
     @byCondition: (condition)->
         for c in @all()
             if c.condition is condition
-                return c.name
+                return c
         false
 
 
     @byName: (name)->
         for c in @all()
             if c.name is name
-                return c.condition
+                return c
         false
 
 

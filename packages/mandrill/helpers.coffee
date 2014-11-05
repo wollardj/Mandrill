@@ -1,4 +1,9 @@
 Meteor.startup ->
     UI.registerHelper 'mandrillConditionsByName', (condition)->
-        name = Mandrill.conditions.byCondition condition
-        name || condition
+        cond = Mandrill.conditions.byCondition condition
+        if cond?.name?
+            cond.name
+        else if cond?
+            cond.condition
+        else
+            ''

@@ -108,9 +108,23 @@ Template.mandrillConditionsButton.events {
     'click [data-mcbBtn="new"]': (event)->
         name = $('#mcbNewName').val()
         condition = $('#mcbNewCondition').val()
+
+        existingCond = MandrillConditions.byName(name)
+
         if not condition
             alert "I'll make you a deal. If you _define_ your condition, I won't force you to name it."
             $('#mcbNewCondition').focus()
+
+        else if existingCond and existingCond.condition isnt condition
+            alert('You already have another condition with that name.')
+            $('#mcbNewName').focus()
+
+        else if MandrillConditions.byCondition(condition)
+            existingCond = MandrillConditions.byCondition(condition)
+            alert('You\'ve already defined that condition and called it "' +
+                existingCond.name + '"')
+            $('#mcbNewCondition').focus()
+
         else
             MandrillConditions.add condition, name
             $('#mcbNewName').val('')
@@ -130,10 +144,16 @@ Template.mandrillConditionsButton.events {
         if not newName or newName is ''
             newName = this.condition
 
-        $(event.target).blur().val('')
-        MandrillConditions.add this.condition, newName
-        if Session.equals 'mandrillConditionsButtonViewMode', 'unnamed'
-            $('#mandrillConditionsButtonModal input[type="text"]:first').focus()
+        existingCondition = MandrillConditions.byName(newName)
+
+        if existingCondition and existingCondition.condition isnt this.condition
+            alert('You already have a condition with the same.')
+
+        else
+            $(event.target).blur().val('')
+            MandrillConditions.add this.condition, newName
+            if Session.equals 'mandrillConditionsButtonViewMode', 'unnamed'
+                $('#mandrillConditionsButtonModal input[type="text"]:first').focus()
 
 
     # The user modified the condition of a...condition
