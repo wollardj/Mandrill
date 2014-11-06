@@ -1,3 +1,6 @@
+Session.setDefault 'memViewMode', 'all'
+
+
 manifest_flatten = (obj, result=[], conditions=[])->
     keysWeCareAbout = [
         'managed_installs'
@@ -83,7 +86,20 @@ Template.munkiEditManifest.helpers {
             items = manifest_flatten data.draft.dom
             items.sort (a,b)->
                 a.pkg.localeCompare(b.pkg)
-        items
+        viewMode = Session.get 'memViewMode'
+        ret = []
+        if viewMode isnt 'all'
+            for item in items
+                if item.installType is viewMode
+                    ret.push item
+        else
+            ret = items
+
+        ret
+
+
+    viewTypeIs: (type)->
+        Session.equals 'memViewMode', type
 
 
     typeMnemonic: (type)->
@@ -122,4 +138,9 @@ Template.munkiEditManifest.events {
         MunkiRepo.update {_id: data._id}, {
             '$set': {'draft.dom': manifest.manifestObject}
         }
+
+
+
+    'click [data-memView="all"], click [data-memView="managed_installs"], click [data-memView="managed_updates"], click [data-memView="managed_uninstalls"], click [data-memView="optional_installs"]': (event)->
+        Session.set 'memViewMode', $(event.target).data("memview")
 }

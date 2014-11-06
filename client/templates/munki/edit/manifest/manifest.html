@@ -9,17 +9,30 @@
     <div class="container-fluid">
         <div class="btn-toolbar">
             <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-default">All</button>
-                <button type="button" class="btn btn-default">
+                <button type="button"
+                        class="btn btn-default {{#if viewTypeIs 'all'}}active{{/if}}"
+                        data-memView="all">
+                    <i class="fa fa-eye"></i>
+                    All
+                </button>
+                <button type="button"
+                        class="btn btn-default {{#if viewTypeIs 'managed_installs'}}active{{/if}}"
+                        data-memView="managed_installs">
                     Installs
                 </button>
-                <button type="button" class="btn btn-default">
+                <button type="button"
+                        class="btn btn-default {{#if viewTypeIs 'managed_updates'}}active{{/if}}"
+                        data-memView="managed_updates">
                     Updates
                 </button>
-                <button type="button" class="btn btn-default">
+                <button type="button"
+                        class="btn btn-default {{#if viewTypeIs 'optional_installs'}}active{{/if}}"
+                        data-memView="optional_installs">
                     Optionals
                 </button>
-                <button type="button" class="btn btn-default">
+                <button type="button"
+                        class="btn btn-default {{#if viewTypeIs 'managed_uninstalls'}}active{{/if}}"
+                        data-memView="managed_uninstalls">
                     Uninstalls
                 </button>
             </div>
