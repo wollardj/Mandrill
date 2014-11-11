@@ -14,6 +14,10 @@ body
 
 
 
+.sortable
+	cursor move
+
+
 .mandrill-header
 	text-align center
 	box-shadow inset 0px -10px 10px -10px rgba(0,0,0,0.7)
@@ -32,13 +36,18 @@ body
 			color rgba(255, 255, 255, 0.8)
 
 	ol.breadcrumb
-		background transparent
+		background-color rgba(0,0,0,0.1)
+		box-shadow inset 1px 1px 5px rgba(0,0,0,0.5)
 		border-width 0
 		margin 0
-		padding 0
+		padding 2px
 		&>li+li:before
 			padding 0
 			content '/'
+
+		li a
+			color rgba(255, 255, 255, 1.0)
+
 		&>.active
 			color rgba(255, 255, 255, 0.8)
 
