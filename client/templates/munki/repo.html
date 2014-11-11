@@ -5,11 +5,10 @@
 </div>
 
 
-{{>repo_toolbar}}
-
-<hr />
-
 <div class="container-fluid">
+    {{>repo_toolbar}}
+
+    <hr />
 
     <div class="{{#unless session_equals 'repo_readme' false}}col-lg-8{{/unless}}{{#if session_equals 'repo_readme' false}}col-xs-12{{/if}}">
 

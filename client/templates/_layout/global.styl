@@ -2,7 +2,8 @@
 
 
 body
-	padding 50px 0 0 0
+	background-color whitesmoke
+	padding 50px 0 47px 0
 
 
 
@@ -17,13 +18,23 @@ body
 .sortable
 	cursor move
 
+.mandrill-header + *
+	background-color white
+	margin 118px 0 0 0
+	padding-top 15px
+	box-shadow 0 -2px 15px rgba(0,0,0,0.5)
+	position relative
+	z-index 200
 
 .mandrill-header
 	text-align center
-	box-shadow inset 0px -10px 10px -10px rgba(0,0,0,0.7)
-	margin 0 0 15px 0
-	padding 15px
+	margin -50px 0 0 0
+	padding 65px 15px 15px 15px
+	position fixed
+	width 100%
+	min-height 167px
 	background header_bg_color
+	z-index 100
 
 	h1, h2, h3, h4, h5, h6
 		color #fff
@@ -55,7 +66,12 @@ body
 
 p.app-footer
 	font-family 'Lato', sans-serif
-	font-weight 300
+	padding-top 15px
+	height 47px
+	position fixed
+	bottom -15px
+	width 100%
+	z-index 100
 
 
 
