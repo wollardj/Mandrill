@@ -107,12 +107,13 @@ shell = Meteor.npmRequire 'shelljs'
 			catch e
 				doc.err = e.toString()
 
+
 		# add some metadata about the files in the /icons dir
 		if repoType is 'icons'
 			repo_path = Munki.repoPath()
 			icons_path = Mandrill.path.concat(repo_path, 'icons/')
 			doc.icon_file = path.replace(icons_path, '')
-			doc.icon_name = Mandrill.path.concat_relative(
+			doc.icon_name = Mandrill.path.concatRelative(
 				doc.icon_file.split('.')[0]
 			)
 
