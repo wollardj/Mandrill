@@ -79,6 +79,7 @@ service-configuration@1.0.2
 session@1.0.4
 sha@1.0.1
 showdown@1.0.2
+sortable-list-group@0.8.0
 spacebars-compiler@1.0.3
 spacebars@1.0.3
 srp@1.0.1

@@ -22,4 +22,5 @@ iron:router
 mandrill:ace
 mandrill
 munki
+sortable-list-group
 mizzao:jquery-ui
