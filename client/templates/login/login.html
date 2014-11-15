@@ -1,11 +1,6 @@
 <template name="login">
 	<div class="login-body">
 		<div class="form-login-container">
-			{{#if loggingIn}}
-			{{> bubbleLoader}}
-			{{/if}}
-
-			{{#unless loggingIn}}
 			<h2>
 				<img src="/ManDfav.png"/>andrill <small>v{{mandrillVersion}}</small>
 			</h2>
@@ -54,7 +49,6 @@
 				</button>
 				{{/if}}
 			</form>
-			{{/unless}}
 		</div>
 	</div>
 </template>

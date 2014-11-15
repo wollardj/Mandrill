@@ -35,10 +35,12 @@
 					</div>
 
 					{{#if runningMakeCatalogs}}
-						{{> bubbleLoader}}
+						<i class="fa fa-circle-o-notch fa-spin"></i>
 					{{/if}}
 					{{#unless runningMakeCatalogs}}
-					<button id="makecatalogs" class="btn btn-default">
+					<button type="button"
+							id="makecatalogs"
+							class="btn btn-default">
 						makecatalogs
 					</button>
 					{{/unless}}
@@ -98,7 +100,9 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Mandrill Options</div>
 				<div class="panel-body">
-					<button id="rebuildCaches" class="btn btn-default btn-block">
+					<button type="button"
+							id="rebuildCaches"
+							class="btn btn-default btn-block">
 						Rebuild Repo Caches
 					</button>
 					<span class="help-block">
