@@ -58,7 +58,6 @@ Template.munkiEditManifest.helpers {
 
     manifestCatalogs: ->
         data = Router.current().data()
-        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
         if data?.draft?.dom?
             manifest = new MunkiManifest data.draft.dom
             manifest.catalogs()
@@ -67,7 +66,6 @@ Template.munkiEditManifest.helpers {
 
     includedManifests: ->
         data = Router.current().data()
-        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
         if data?.draft?.dom?.included_manifests?.push?
             data.draft.dom.included_manifests
         else
@@ -76,7 +74,6 @@ Template.munkiEditManifest.helpers {
     availableCatalogs: ->
         ret = []
         data = Router.current().data()
-        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
 
         if not data?.draft?.dom?
             return ret
@@ -93,7 +90,6 @@ Template.munkiEditManifest.helpers {
 
     manifestItems: ->
         data = Router.current().data()
-        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
         items = []
         if data?.draft?.dom?
             items = manifest_flatten data.draft.dom
@@ -170,7 +166,7 @@ Template.munkiEditManifest.helpers {
 Template.munkiEditManifest.events {
     'click [data-manifest="install-type"] a': (event)->
         event.preventDefault()
-        data = MunkiRepo.findOne({_id: Router.current().data()._id})
+        data = Router.current().data()
         manifest = new MunkiManifest(data.draft.dom)
         newInstallType = $(event.target).attr('href').replace(/^#/, '')
         manifest.changeInstallType(
@@ -195,7 +191,7 @@ Template.munkiEditManifest.events {
     'click [data-memCatalogs="cat"]': (event)->
         event.stopPropagation()
         event.preventDefault()
-        data = MunkiRepo.findOne({_id: Router.current().data()._id})
+        data = Router.current().data()
         manifest = new MunkiManifest(data.draft.dom)
         if this.active is true
             manifest.removeCatalog(this.catalog)

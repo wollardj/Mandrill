@@ -219,7 +219,8 @@
 
                         <div class="col-sm-4 col-xs-8">
                             <span class="munki-manifest-pkgName">
-                                {{>munki_pkg_icon pkg=pkg size="xs"}}
+                                <img src="{{pathFor 'munki.iconUrl' name=pkg}}"
+                                    width="20px"/>
                                 {{munki_pkg_display_name pkg}}
                             </span>
                         </div>
