@@ -43,7 +43,7 @@ Template.serverStatusDialog.helpers {
 			if status.status is 'waiting'
 				'Lost Connection To Server'
 			else if status.status is 'connecting'
-				'Connecting'
+				'Connecting...'
 			else
 				''
 		else
@@ -60,14 +60,14 @@ Template.serverStatusDialog.helpers {
 		now = Session.get 'statusDialogMomentTimer'
 		if status? and status.status?
 			if status.status is 'connecting'
-				new Handlebars.SafeString '<span class="fa fa-clock-o"></span>'
+				new Handlebars.SafeString '<span class="fa fa-circle-o-notch fa-spin"></span>'
 			else if status.status is 'offline'
 				'offline'
 			else if status.status is 'waiting'
 				countdown = Meteor.status().retryTime
 				new Handlebars.SafeString 'We\'ll try again in ' +
 					moment(countdown).countdown().toString() +
-					'<br />Attempts so far: ' + Meteor.status().retryCount
+					'<br /><span class="small">Attempts so far: ' + Meteor.status().retryCount + '</span>'
 			else if status.status is 'failed'
 				'Connect Failed'
 			else

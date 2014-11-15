@@ -1,12 +1,20 @@
 <template name="serverStatusDialog">
 	{{watchConnectionStatus}}
 	<div id="meteor_connection_status_dialog"
-		class="mandrill-dialog mandrill-warning text-center small elastic {{className}}">
-		{{#if title}}<h4>{{title}}</h4>{{/if}}
-		{{body}}
+		class="alert alert-warning mandrill-dialog text-center elastic {{className}}">
+		{{#if title}}<h5>{{title}}</h5>{{/if}}
+		{{#unless title}}<h5>Test Title</h5>{{/unless}}
+		<p>
+			{{body}}
+			{{#unless body}}Lorem Ipsum and whatnot.{{/unless}}
+		</p>
 		{{#if isWaiting}}
-			<br />
-			<button class="btn btn-primary btn-sm" id="meteorRetryNowButton">Retry Now</button>
+		<p>
+			<button class="btn btn-primary btn-xs"
+					id="meteorRetryNowButton">
+				Retry Now
+			</button>
+		</p>
 		{{/if}}
 	</div>
 </template>
