@@ -5,98 +5,239 @@
         {{>munkiBreadcrumbs}}
     </div>
 
-
     <div class="container-fluid">
-        <div class="btn-toolbar">
-            <div class="btn-group btn-group-sm">
-                <button type="button"
-                        class="btn btn-default {{#if viewTypeIs 'all'}}active{{/if}}"
-                        data-memView="all">
-                    <i class="fa fa-eye"></i>
-                    All
-                </button>
-                <button type="button"
-                        class="btn btn-default {{#if viewTypeIs 'managed_installs'}}active{{/if}}"
-                        data-memView="managed_installs">
-                    Installs
-                </button>
-                <button type="button"
-                        class="btn btn-default {{#if viewTypeIs 'managed_updates'}}active{{/if}}"
-                        data-memView="managed_updates">
-                    Updates
-                </button>
-                <button type="button"
-                        class="btn btn-default {{#if viewTypeIs 'optional_installs'}}active{{/if}}"
-                        data-memView="optional_installs">
-                    Optionals
-                </button>
-                <button type="button"
-                        class="btn btn-default {{#if viewTypeIs 'managed_uninstalls'}}active{{/if}}"
-                        data-memView="managed_uninstalls">
-                    Uninstalls
-                </button>
+
+        <div class="col-sm-3">
+
+            <div class="panel-group">
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h5 class="panel-title">
+                            Admin Notes
+                            <button class="btn btn-default btn-xs pull-right {{#if editingAdminNotes}}active{{/if}}"
+                                    data-memBtn="editAdminNotes">
+                                <i class="fa
+                                    {{#if draft.dom.admin_notes}}
+                                        fa-pencil
+                                    {{/if}}
+                                    {{#unless draft.dom.admin_notes}}
+                                        fa-plus
+                                    {{/unless}}"></i>
+                            </button>
+                        </h5>
+                    </div>
+                    {{#if editingAdminNotes}}
+                    <textarea   class="form-control"
+                                data-memEdit="adminNotes"
+                                placeholder="`Markdown` is _so_ cool here."
+                    >{{draft.dom.admin_notes}}</textarea>
+                    {{/if}}
+                    {{#unless editingAdminNotes}}
+                        {{#if draft.dom.admin_notes}}
+                        <div class="panel-body small">
+                            {{#markdown}}{{draft.dom.admin_notes}}{{/markdown}}
+                        </div>
+                        {{/if}}
+                    {{/unless}}
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Catalogs
+                            <span class="badge badge-default">
+                                {{manifestCatalogs.length}}
+                            </span>
+                            <span class="pull-right">
+                                <div class="btn-group btn-group-xs">
+                                    <button type="button"
+                                            class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
+                                        <i class="fa fa-pencil"></i>
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {{#each availableCatalogs}}
+                                        <li>
+                                            <a href="#" data-memCatalogs="cat">
+                                                <i class="fa fa-{{#if active}}check-{{/if}}square-o"></i>
+                                                {{catalog}}
+                                            </a>
+                                        </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            </span>
+                        </h4>
+                    </div>
+                    {{>sortableListGroup
+                        args=manifestCatalogs
+                        dataSort="catalogs"}}
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Included Manifests
+                            <span class="badge badge-default">
+                                {{draft.dom.included_manifests.length}}
+                            </span>
+                            <button type="button"
+                                    class="btn btn-default btn-xs pull-right">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                        </h4>
+                    </div>
+                    {{>sortableListGroup
+                        args=includedManifests
+                        dataSort="included_manifests"}}
+                </div>
             </div>
 
-            <div class="btn-group btn-group-sm">
-                {{>mandrillConditionsButton}}
-            </div>
         </div>
-        <div class="list-group">
-            {{#each flatManifest}}
-            <div class="list-group-item row
-                {{#if isOptionalInstall}}list-group-item-success{{/if}}
-                {{#if isManagedUninstall}}list-group-item-danger{{/if}}
-                {{#if isManagedUpdate}}list-group-item-info{{/if}}
-                ">
-                <div class="col-sm-2 col-xs-4 text-right">
+
+
+
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-xs-4">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown">
-                            {{typeMnemonic installType}}
+                        <button type="button"
+                                class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown">
+                            <i class="fa fa-eye"></i>
+                            <span class="hidden-xs">
+                                {{currentViewModeName}}
+                            </span>
                             <i class="fa fa-caret-down"></i>
                         </button>
-                        <ul class="dropdown-menu" role="menu" data-manifest="install-type">
-                            <li class="{{#if isManagedInstall}}active{{/if}}">
-                                <a href="#managed_installs">
-                                    {{typeMnemonic 'managed_installs'}}
+                        <ul class="dropdown-menu">
+                            <li class="{{#if viewTypeIs 'all'}}active{{/if}}">
+                                <a href="#" data-memView="all">
+                                    All
                                 </a>
                             </li>
-                            <li class="{{#if isManagedUpdate}}active{{/if}}">
-                                <a href="#managed_updates">
-                                    {{typeMnemonic 'managed_updates'}}
+                            <li class="{{#if viewTypeIs 'managed_installs'}}
+                                    active{{/if}}">
+                                <a href="#" data-memView="managed_installs">
+                                    Installs
                                 </a>
                             </li>
-                            <li class="{{#if isManagedUninstall}}active{{/if}}">
-                                <a href="#managed_uninstalls">
-                                    {{typeMnemonic 'managed_uninstalls'}}
+                            <li class="{{#if viewTypeIs 'managed_updates'}}
+                                    active{{/if}}">
+                                <a href="#" data-memView="managed_updates">
+                                    Updates
                                 </a>
                             </li>
-                            <li class="{{#if isOptionalInstall}}active{{/if}}">
-                                <a href="#optional_installs">
-                                    {{typeMnemonic 'optional_installs'}}
+                            <li class="{{#if viewTypeIs 'optional_installs'}}
+                                    active{{/if}}">
+                                <a href="#" data-memView="optional_installs">
+                                    Optionals
+                                </a>
+                            </li>
+                            <li class="{{#if viewTypeIs 'managed_uninstalls'}}
+                                    active{{/if}}">
+                                <a href="#" data-memView="managed_uninstalls">
+                                    Uninstalls
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="{{#if viewTypeIs 'conditionals'}}
+                                    active{{/if}}">
+                                <a href="#" data-memView="conditionals">
+                                    Conditional Items
+                                </a>
+                            </li>
+                            <li class="{{#if viewTypeIs 'unconditionals'}}
+                                    active{{/if}}">
+                                <a href="#" data-memView="unconditionals">
+                                    Unconditional Items
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-
-                <div class="col-sm-4 col-xs-8">
-                    {{>munki_pkg_icon pkg=pkg size="xs"}}
-                    {{munki_pkg_display_name pkg}}
+                <div class="col-xs-4 text-center">
+                    <h4>
+                        {{manifestItems.length}} item(s)
+                    </h4>
                 </div>
-
-                <div class="col-sm-6 col-xs-12">
-                    {{#if conditions}}
-                    <ul class="list-group small sortable munki-manifest-conditions">
-                    {{#each conditions}}
-                        <li class="list-group-item" title="{{this}}">
-                            {{mandrillConditionsByName this}}
-                        </li>
-                    {{/each}}
-                    </ul>
-                    {{/if}}
+                <div class="col-xs-4">
+                    {{>mandrillConditionsButton
+                        class="btn btn-default pull-right"
+                        labelClass="hidden-xs"}}
                 </div>
             </div>
-            {{/each}}
+            <div class="container-fluid">
+                <div class="list-group munki-manifest-list-group">
+                    {{#each manifestItems}}
+                    <div class="list-group-item row
+                        {{#if isOptionalInstall}}list-group-item-success{{/if}}
+                        {{#if isManagedUninstall}}list-group-item-danger{{/if}}
+                        {{#if isManagedUpdate}}list-group-item-info{{/if}}
+                        ">
+                        <div class="col-sm-2 col-xs-4 text-right">
+                            <div class="btn-group">
+                                <button type="button"
+                                        class="btn btn-link btn-sm
+                                            dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    {{typeMnemonic installType}}
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <ul class="dropdown-menu"
+                                    role="menu"
+                                    data-manifest="install-type">
+                                    <li class="{{#if isManagedInstall}}
+                                            active{{/if}}">
+                                        <a href="#managed_installs">
+                                            {{typeMnemonic 'managed_installs'}}
+                                        </a>
+                                    </li>
+                                    <li class="{{#if isManagedUpdate}}
+                                            active{{/if}}">
+                                        <a href="#managed_updates">
+                                            {{typeMnemonic 'managed_updates'}}
+                                        </a>
+                                    </li>
+                                    <li class="{{#if isManagedUninstall}}
+                                            active{{/if}}">
+                                        <a href="#managed_uninstalls">
+                                            {{typeMnemonic 'managed_uninstalls'}}
+                                        </a>
+                                    </li>
+                                    <li class="{{#if isOptionalInstall}}
+                                            active{{/if}}">
+                                        <a href="#optional_installs">
+                                            {{typeMnemonic 'optional_installs'}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-8">
+                            <span class="munki-manifest-pkgName">
+                                {{>munki_pkg_icon pkg=pkg size="xs"}}
+                                {{munki_pkg_display_name pkg}}
+                            </span>
+                        </div>
+
+                        <div class="col-sm-6 col-xs-12">
+                            {{#if conditions}}
+                            {{>sortableListGroup
+                                args=namedConditions
+                                cssClass="small munki-manifest-conditions"
+                                titleKey="condition"
+                                displayKey="name"
+                                dataSort="conditions"}}
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
         </div>
     </div>
 

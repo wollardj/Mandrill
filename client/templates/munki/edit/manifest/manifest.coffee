@@ -1,4 +1,5 @@
 Session.setDefault 'memViewMode', 'all'
+Session.setDefault 'memEditModes', {adminNotes: false, includedManifests: false}
 
 
 manifest_flatten = (obj, result=[], conditions=[])->
@@ -25,7 +26,7 @@ manifest_flatten = (obj, result=[], conditions=[])->
             for cond_item in val
 
                 if conditions.length > 0
-                    # array.slize(0) clones the array; no passing pointers!!
+                    # array.slice(0) clones the array; no passing pointers!!
                     tmp_cond = conditions.slice(0)
                     tmp_cond.push cond_item.condition
 
@@ -46,41 +47,53 @@ Template.munkiEditManifest.rendered = ->
             }
         }
     }
-    $('.sortable').sortable {
-        placeholder: 'list-group-item list-group-item-info'
-    }
-    $('.sortable').disableSelection()
 
 
 Template.munkiEditManifest.helpers {
 
-    ###
-        Produces an array of strings used to generate the breadcrumb navigation.
-    ###
-    breadcrumb: ()->
-        params_c = Router.current().params.query.c
-        crumbs = [{name: 'Munki', url: Router.path 'repo', is_active: false}]
-        if params_c?
-            url = []
-            crumbs.push part for part in Mandrill.path.components(params_c).map (it)->
-                url.push it
-                {
-                    name: it
-                    url: Router.path 'repo', {}, {query: "c=" + url.join('/')}
-                    is_active: false
-                }
 
-            # make the last item in the array the 'active' breadcrumb
-            crumbs[crumbs.length - 1].is_active = true
-        else if Session.equals('repo_filter', '')
-            # since there is no 'c' parameter, we'll make our faux root item
-            # the 'active' breadcrumb
-            crumbs[0].is_active = true
+    editingAdminNotes: ->
+        Session.get('memEditModes').adminNotes
 
-        crumbs
 
-    flatManifest: ->
-        data = MunkiRepo.findOne {_id: Router.current().data()._id}
+    manifestCatalogs: ->
+        data = Router.current().data()
+        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
+        if data?.draft?.dom?
+            manifest = new MunkiManifest data.draft.dom
+            manifest.catalogs()
+        else
+            []
+
+    includedManifests: ->
+        data = Router.current().data()
+        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
+        if data?.draft?.dom?.included_manifests?.push?
+            data.draft.dom.included_manifests
+        else
+            []
+
+    availableCatalogs: ->
+        ret = []
+        data = Router.current().data()
+        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
+
+        if not data?.draft?.dom?
+            return ret
+
+        manifest = new MunkiManifest data.draft.dom
+
+        for cat in MunkiManifest.availableCatalogs()
+            if manifest.catalogs().indexOf(cat) < 0
+                ret.push {catalog:cat, active: false}
+            else
+                ret.push {catalog:cat, active: true}
+        ret
+
+
+    manifestItems: ->
+        data = Router.current().data()
+        # data = MunkiRepo.findOne {_id: Router.current().data()._id}
         items = []
         if data?.draft?.dom?
             items = manifest_flatten data.draft.dom
@@ -88,9 +101,17 @@ Template.munkiEditManifest.helpers {
                 a.pkg.localeCompare(b.pkg)
         viewMode = Session.get 'memViewMode'
         ret = []
-        if viewMode isnt 'all'
+        if viewMode not in ['all', 'conditionals', 'unconditionals']
             for item in items
                 if item.installType is viewMode
+                    ret.push item
+        else if viewMode is 'conditionals'
+            for item in items
+                if item.conditions.length > 0
+                    ret.push item
+        else if viewMode is 'unconditionals'
+            for item in items
+                if item.conditions.length == 0
                     ret.push item
         else
             ret = items
@@ -98,12 +119,35 @@ Template.munkiEditManifest.helpers {
         ret
 
 
+    namedConditions: ->
+        conditions = []
+        for condition in this.conditions
+            cond = Mandrill.munki.conditions.byCondition condition
+            conditions.push cond
+
+        conditions
+
+
     viewTypeIs: (type)->
         Session.equals 'memViewMode', type
 
+    currentViewModeName: ->
+        switch Session.get 'memViewMode'
+            when 'managed_installs' then 'Installs'
+            when 'managed_updates' then 'Updates'
+            when 'managed_uninstalls' then 'Uninstalls'
+            when 'optional_installs' then 'Optionals'
+            when 'conditionals' then 'Conditional Items'
+            when 'unconditionals' then 'Unconditional Items'
+            else
+                'All'
+
 
     typeMnemonic: (type)->
-        type.replace('_', ' ').replace('managed', 'always').replace(/s$/, '').replace('optional', 'user may')
+        type.replace('_', ' ')
+            .replace('managed', '')
+            .replace(/s$/, '')
+            .replace('optional', 'user may')
 
 
     isManagedInstall: ->
@@ -141,6 +185,64 @@ Template.munkiEditManifest.events {
 
 
 
-    'click [data-memView="all"], click [data-memView="managed_installs"], click [data-memView="managed_updates"], click [data-memView="managed_uninstalls"], click [data-memView="optional_installs"]': (event)->
+    'click [data-memView="all"], click [data-memView="managed_installs"], click [data-memView="managed_updates"], click [data-memView="managed_uninstalls"], click [data-memView="optional_installs"], click [data-memView="conditionals"], click [data-memView="unconditionals"]': (event)->
         Session.set 'memViewMode', $(event.target).data("memview")
+        # setupSortables()
+
+
+
+    # Adds/removes catalogs from the draft manifest
+    'click [data-memCatalogs="cat"]': (event)->
+        event.stopPropagation()
+        event.preventDefault()
+        data = MunkiRepo.findOne({_id: Router.current().data()._id})
+        manifest = new MunkiManifest(data.draft.dom)
+        if this.active is true
+            manifest.removeCatalog(this.catalog)
+        else
+            manifest.insertCatalogAt(this.catalog)
+
+        MunkiRepo.update {_id: data._id}, {
+            '$set': {'draft.dom': manifest.manifestObject}
+        }
+
+
+    # displays/hides the admin notes edit field.
+    'click [data-memBtn="editAdminNotes"]': (event)->
+        event.preventDefault()
+
+        obj = Session.get 'memEditModes'
+        obj.adminNotes = !obj.adminNotes
+        Session.set 'memEditModes', obj
+        if obj.adminNotes is true
+            Meteor.setTimeout ->
+                $('[data-memedit="adminNotes"]').focus()
+            , 50
+
+    # update the admin notes for the draft.
+    'blur change [data-memEdit="adminNotes"], change [data-memEdit="adminNotes"]': (event)->
+        MunkiRepo.update {_id: Router.current().data()._id}, {
+            '$set': {'draft.dom.admin_notes': $(event.target).val()}
+        }
+
+
+    'groupSorted [data-sort="catalogs"]': (event)->
+        data = Router.current().data()
+        catalogs = event.originalEvent.detail.args.map (it)->
+            it.display
+
+        if data?.draft?.dom?
+            MunkiRepo.update {_id: data._id}, {
+                '$set': {'draft.dom.catalogs': catalogs}
+            }
+
+    'groupSorted [data-sort="included_manifests"]': (event)->
+        data = Router.current().data()
+        manifests = event.originalEvent.detail.args.map (it)->
+            it.display
+
+        if data?.draft?.dom?
+            MunkiRepo.update {_id: data._id}, {
+                '$set': {'draft.dom.included_manifests': manifests}
+            }
 }

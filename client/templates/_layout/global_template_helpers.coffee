@@ -79,7 +79,7 @@ Meteor.startup ->
 
 
 	UI.registerHelper 'meteorVersion', ->
-		Meteor.release
+		Meteor.release.replace /^METEOR@/, ''
 
 	UI.registerHelper 'absoluteUrl', ->
 		Meteor.absoluteUrl()
