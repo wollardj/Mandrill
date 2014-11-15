@@ -2,13 +2,46 @@ Session.setDefault 'tab_git-logs', false
 Session.setDefault 'repo_edit_tpl', 'ace'
 Session.setDefault 'repo_item_loading_raw', false
 
+
+reLoadGitLogs = ->
+	crumb = Router.current().params.query.c
+	path = Munki.repoPath()
+	path = Mandrill.path.concat path, crumb
+	Meteor.call 'git-log', path, (error, result)->
+		Session.set 'tab_git-logs', {
+			error: error
+			logs: result
+		}
+
+
 Template.repo_edit.rendered = ->
 	editor = MandrillAce.getInstance()
 	editor.setTheme 'ace/theme/tomorrow_night'
 	editor?.ace?.getSession().setUseWrapMode true
+	reLoadGitLogs()
 
 
 Template.repo_edit.helpers {
+
+
+	formModeUrl: ->
+		crumb = Router.current().params.query.c
+		record = Router.current().data()
+		routerName = ''
+		if record?
+			if record.isCatalog()
+				routerName = 'catalog'
+			# else if record.isIcon()
+			#	routerName = 'image'
+			#else if record.isPkginfo()
+			#	routerName = 'pkginfo'
+			else if record.isManifest()
+				routerName = 'munkiEditManifest'
+			#else if record.isBinary()
+			#	tpl = 'binary'
+
+			Router.path routerName, {}, {query:'c=' + crumb}
+
 
 	update_ace: ->
 		editor = MandrillAce.getInstance()
@@ -16,27 +49,8 @@ Template.repo_edit.helpers {
 		editor.ace?.getSession().setUseWrapMode true
 		record = Router.current().data()
 
-		# Template selection logic
-		crumb = Router.current().params.query.c
-		useRaw = Router.current().params.hash is 'raw'
-		tpl = 'ace'
-		if record and not useRaw
-			if record.isCatalog()
-				tpl = 'catalog'
-			else if record.isIcon()
-				tpl = 'image'
-			else if record.isPkginfo()
-				tpl = 'pkginfo'
-			else if record.isManifest()
-				tpl = 'manifest'
-			else if record.isBinary()
-				tpl = 'binary'
 
-		Session.set 'repo_edit_tpl', tpl
-		# end template selection logic
-
-
-		if record?._id? and tpl is 'ace'
+		if record?._id?
 			Session.set 'repo_item_loading_raw', true
 			Meteor.call 'getRawRepoItemContent', record._id, (err, data)->
 				editor.detectMode record.path
@@ -88,17 +102,8 @@ Template.repo_edit.helpers {
 
 Template.repo_edit.events {
 
-	#
-	# Return the user to the parent directory when the cancel button is
-	# clicked.
-	#
-	'click #git-cancel': (event)->
-		event.preventDefault()
-		event.stopPropagation()
-
-		parent_path = _.initial Router.current().params.query.c.split('/')
-		url = Router.path 'repo', {}, {query: 'c=' + parent_path.join('/')}
-		Router.go url
+	'click #switch-to-form-mode-btn': (event)->
+		$(event.target).find('i').addClass('fa-spin')
 
 
 	###
@@ -108,12 +113,5 @@ Template.repo_edit.events {
 		tab = $(event.target).attr('href').replace(/^#/, '')
 		Session.set 'tab_git-logs', false
 		if tab is 'git-logs'
-			crumb = Router.current().params.query.c
-			path = Munki.repoPath()
-			path = Mandrill.path.concat path, crumb
-			Meteor.call 'git-log', path, (error, result)->
-				Session.set 'tab_git-logs', {
-					error: error
-					logs: result
-				}
+			reLoadGitLogs()
 }

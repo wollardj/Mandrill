@@ -1,7 +1,7 @@
 <template name="munkiEditManifest">
 
     <div class="mandrill-header">
-        <h2>Munki Repo - Manifest Editor</h2>
+        <h2>Manifest Editor</h2>
         {{>munkiBreadcrumbs}}
     </div>
 
@@ -102,6 +102,11 @@
         <div class="col-sm-9">
             <div class="row">
                 <div class="col-xs-4">
+                    <a href="{{repoEditUrl}}"
+                        class="btn btn-default"
+                        title="Switch to text mode.">
+                        <i class="fa fa-code"></i>
+                    </a>
                     <div class="btn-group">
                         <button type="button"
                                 class="btn btn-default dropdown-toggle"

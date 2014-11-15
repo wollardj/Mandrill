@@ -52,6 +52,10 @@ Template.munkiEditManifest.rendered = ->
 Template.munkiEditManifest.helpers {
 
 
+    repoEditUrl: ->
+        crumb = Router.current().params.query.c
+        Router.path 'repo_edit', {}, {query:'c='+crumb}
+
     editingAdminNotes: ->
         Session.get('memEditModes').adminNotes
 

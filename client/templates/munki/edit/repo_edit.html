@@ -1,120 +1,102 @@
 <template name="repo_edit">
     <div class="mandrill-header">
-        <h2>Munki Repo</h2>
+        <h2>Text Editor</h2>
+        {{>munkiBreadcrumbs}}
     </div>
     {{update_ace}}
     <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
 
-        <div class="col-sm-9">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="active">
+                        <a href="#git-logs" data-toggle="tab">
+                            <i class="fa fa-history"></i> Git Logs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#info" data-toggle="tab">
+                            <i class="fa fa-info"></i> Info
+                        </a>
+                    </li>
+                </ul>
 
-            <div class="row">
-                <div class="col-sm-9">
-                    <ol class="breadcrumb text-nowrap" style="overflow: auto">
-                        {{#each breadcrumb}}
-                        <li class="{{#if is_active}}active{{/if}}">
-                            {{#unless is_active}}
-                            <a href="{{url}}">{{name}}</a>
-                            {{/unless}}
-                            {{#if is_active}}{{name}}{{/if}}
-                        </li>
-                        {{/each}}
-                    </ol>
+
+                <div class="tab-content">
+
+                    <div class="tab-pane fade in active" id="git-logs">
+                        {{#unless session_get 'tab_git-logs'}}
+                        <p class="text-center">
+                            <br />
+                            <i class="fa fa-spinner fa-4x fa-spin text-muted"></i>
+                        </p>
+                        {{/unless}}
+                        {{#if session_get 'tab_git-logs'}}
+                        {{#with session_get 'tab_git-logs'}}
+                            {{> repo_edit_tabs_git_logs}}
+                        {{/with}}
+                        {{/if}}
+                    </div>
+
+                    <div class="tab-pane fade" id="info">
+                        <br />
+                        {{> repo_edit_tabs_info}}
+                    </div>
                 </div>
-                <div class="col-sm-3">
-                    <a
-                        class="btn btn-default btn-block hidden-xs"
-                        href="{{munkiItemUrl this}}"
-                        download="{{item_filename}}"
-                        title="Download {{item_filename}}"
-                    >
-                        <i class="fa fa-cloud-download"></i>
-                        {{formatBytes file_size}}
-                    </a>
+
+            </div>
+
+
+            <div class="col-sm-9">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a href="{{formModeUrl}}"
+                            id="switch-to-form-mode-btn"
+                            class="btn btn-default active"
+                            title="Switch to form mode.">
+                            <i class="fa fa-code"></i>
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a
+                            class="btn btn-default hidden-xs pull-right"
+                            href="{{munkiItemUrl this}}"
+                            download="{{item_filename}}"
+                            title="Download {{item_filename}}"
+                        >
+                            <i class="fa fa-cloud-download"></i>
+                            {{formatBytes file_size}}
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-            {{#if waiting_on_server_response}}
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
-                    <span class="sr-only">Loading data</span>
+                {{#if waiting_on_server_response}}
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
+                        <span class="sr-only">Loading data</span>
+                    </div>
                 </div>
-            </div>
-            {{/if}}
+                {{/if}}
 
-            {{#if session_equals 'repo_edit_tpl' 'ace'}}
-            <div class="panel panel-default">
-                {{> mandrill_ace}}
-            </div>
-            {{/if}}
+                {{#unless session_equals 'repo_edit_tpl' 'image'}}
+                <div class="panel panel-default">
+                    {{> mandrill_ace}}
+                </div>
+                {{/unless}}
 
-            {{#if session_equals 'repo_edit_tpl' 'image'}}
-            <div class="text-center">
-                <img src="{{item_url}}"/>
+                {{#if session_equals 'repo_edit_tpl' 'image'}}
+                <div class="text-center">
+                    <img src="{{item_url}}"/>
+                </div>
+                {{/if}}
             </div>
-            {{/if}}
-
-            {{#if session_equals 'repo_edit_tpl' 'manifest'}}
-                {{#with dom}}
-                {{>repo_edit_form_manifest}}
-                {{/with}}
-            {{/if}}
         </div>
 
-
-        <div class="col-sm-3">
-
-            {{session_get 'repo_edit_tpl'}}
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active">
-                    <a href="#git-commit" data-toggle="tab">
-                        <i class="fa fa-floppy-o"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#info" data-toggle="tab">
-                        <i class="fa fa-info"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#git-logs" data-toggle="tab">
-                        <i class="fa fa-history"></i>
-                    </a>
-                </li>
-            </ul>
-
-
-            <div class="tab-content">
-
-
-                <div class="tab-pane fade in active" id="git-commit">
-                    <h3 class="text-center">Commit Changes</h3>
-                    {{> repo_edit_tabs_git_commit}}
-                </div>
-
-
-                <div class="tab-pane fade" id="info">
-                    <h3 class="text-center">Info</h3>
-                    {{> repo_edit_tabs_info}}
-                </div>
-
-
-                <div class="tab-pane fade" id="git-logs">
-                    <h3 class="text-center">Git Logs</h3>
-                    {{#unless session_get 'tab_git-logs'}}
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped active"  role="progressbar" style="width: 100%">
-                            <span class="sr-only">Loading data</span>
-                        </div>
-                    </div>
-                    {{/unless}}
-                    {{#if session_get 'tab_git-logs'}}
-                    {{#with session_get 'tab_git-logs'}}
-                        {{> repo_edit_tabs_git_logs}}
-                    {{/with}}
-                    {{/if}}
-                </div>
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3">
+                {{> repo_edit_tabs_git_commit}}
             </div>
-
         </div>
     </div>
 </template>
