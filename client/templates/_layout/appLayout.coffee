@@ -3,6 +3,6 @@ Template.appLayout.events {
         $('nav.appNavbar').addClass('appNavbarHidden')
 
 
-    'hide.bs.modal .modal': (event)->
+    'hidden.bs.modal .modal': (event)->
         $('nav.appNavbar').removeClass('appNavbarHidden')
 }
