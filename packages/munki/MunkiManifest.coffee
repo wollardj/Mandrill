@@ -22,6 +22,49 @@ class MunkiManifest
             @insertItem(name, installType, newConditions)
 
 
+    @availableCatalogs: ->
+        catalogs = []
+        items = MunkiRepo.find(
+            {'dom.catalogs':{'$exists': true}}
+            {fields: {'dom.catalogs': true}}
+        ).fetch()
+
+        for item in items
+            if item.dom?.catalogs?
+                for catalog in item.dom.catalogs
+                    if catalogs.indexOf(catalog) < 0
+                        catalogs.push catalog
+        catalogs.sort()
+
+
+    catalogs: ->
+        catalogs = @manifestObject.catalogs
+        if catalogs?.push? then catalogs else []
+
+
+    insertCatalogAt: (catalog, position=-1)->
+        dom = @manifestObject
+        dom.catalogs ?= []
+
+        # If the catalog is already present, remove it first.
+        @removeCatalog(catalog)
+
+        # make sure the position is sane and set it to what would result in a
+        # push() if it isn't.
+        if position < 0 or position > dom.catalogs.length
+            position = dom.catalogs.length
+
+        dom.catalogs.splice position, 0, catalog
+        dom.catalogs[position] is catalog
+
+    removeCatalog: (catalog)->
+        idx = @manifestObject.catalogs.indexOf(catalog)
+        if idx >= 0
+            @manifestObject.catalogs.splice(idx, 1)
+
+        @manifestObject.catalogs.indexOf(catalog) is -1
+
+
     insertItem: (name, installType, conditions=[])->
         dom = @manifestObject
 

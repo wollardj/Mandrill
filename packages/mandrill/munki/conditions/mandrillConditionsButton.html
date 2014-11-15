@@ -4,8 +4,10 @@
         {{#if class}}{{class}}{{/if}}
         {{#unless class}}btn btn-default{{/unless}}" data-toggle="modal" data-target="#mandrillConditionsButtonModal">
         <i class="fa fa-cogs"></i>
-        {{#if label}}{{label}}{{/if}}
-        {{#unless label}}Edit Conditions{{/unless}}
+        <span class="{{labelClass}}">
+            {{#if label}}{{label}}{{/if}}
+            {{#unless label}}Edit Conditions{{/unless}}
+        </span>
     </button>
     <div class="modal fade" id="mandrillConditionsButtonModal">
         <div class="modal-dialog modal-lg">

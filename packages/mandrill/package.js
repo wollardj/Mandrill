@@ -10,11 +10,11 @@ Package.onUse(function(api) {
     api.use('standard-app-packages');
     api.addFiles([
             'helpers.coffee',
-            'conditions/mandrillConditionsButton.html',
-            'conditions/mandrillConditionsButton.coffee'
+            'munki/conditions/mandrillConditionsButton.html',
+            'munki/conditions/mandrillConditionsButton.coffee'
         ], 'client');
     api.addFiles([
-            'conditions/MandrillConditions.coffee',
+            'munki/conditions/MandrillConditions.coffee',
             'mandrill.coffee'
         ], ['client', 'server']);
 

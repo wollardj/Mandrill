@@ -2,7 +2,9 @@ class Mandrill
 
     @version: '0.8.0'
 
-    @conditions: MandrillConditions
+    @munki: {
+        conditions: MandrillConditions
+    }
 
 
     # methods for handling strings as paths
