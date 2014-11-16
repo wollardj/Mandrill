@@ -7,7 +7,6 @@ standard-app-packages
 accounts-github
 accounts-google
 accounts-password
-accounts-ui
 mrt:moment@2.8.1
 coffeescript
 stylus
