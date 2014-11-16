@@ -92,8 +92,6 @@ Template.repo_toolbar.events {
 
     # The user clicked the create button on the new repo item form
     'click #newRepoItemCreate': (event)->
-        event.preventDefault()
-        event.stopPropagation()
         tpl = $('#newRepoItemModal button.active').data('tpl')
         path = $('#newRepoItemPath').val()
         data = if tpl is 'manifest' then REPO_TPL_MANIFEST else if tpl is 'pkginfo' then REPO_TPL_PKGINFO else ''
@@ -111,7 +109,7 @@ Template.repo_toolbar.events {
             $('#newRepoItemModal').modal('hide')
             Meteor.setTimeout ->
                 Router.go('repo_edit', null, {query:'c=' + path})
-            , 250
+            , 500
         else
             Session.set 'creating_new_repo_item', true
             Meteor.call remoteCall, fullPath, data, 'Created ' + _.last(Mandrill.path.components(fullPath)), (err, data)->
@@ -122,6 +120,6 @@ Template.repo_toolbar.events {
                 else
                     Meteor.setTimeout ->
                         Router.go('repo_edit', null, {query:'c=' + path})
-                    , 250
+                    , 500
 
 }
