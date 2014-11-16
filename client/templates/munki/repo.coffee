@@ -25,12 +25,9 @@ Template.repo.helpers {
     ###
     hasIcon: ->
         this.icon_name? or this.isPkginfo()
+
     pkgsinfo_icon: ->
-        if this.icon_file?
-            icon = MunkiRepo.findOne {_id: this._id}
-        else if this.dom?.name?
-            icon = MunkiRepo.findOne {icon_name: this.dom.name}
-        icon?.url()
+        Router.path 'munki.iconUrl', {name: this.dom.name}
 
 
     ###
@@ -242,24 +239,28 @@ Template.repo.events {
         event.stopPropagation()
         event.preventDefault()
 
-        $(event.target).addClass('hidden')
+        target = $(event.target)
 
         # If this record represents a directory, we'll need to delete each
         # file container within it - client-side code isn't allowed to
         # delete files without specifying the _id.
-        crumb = Router.current().params.query.c
-        name = $(event.target).data('repo-item-name')
-        path = Mandrill.path.concat Munki.repoPath(), crumb, name
-        records = MunkiRepo.find({path: new RegExp('^' + path)}).fetch()
-        for it in records
-            MunkiRepo.remove {_id: it._id}
+        name = _.last this.path.split('/')
+        _id = this._id
 
-        Meteor.call 'unlink', path, (err)->
-            if err?
-                $(event.target).removeClass('hidden')
-                Mandrill.show.error(err)
-            else
-                Mandrill.show.success 'File Deleted', name + ' is no more.'
+        if name? and _id?
+            originalContent = target.html()
+            target.addClass 'text-center'
+                .html '<i class="fa fa-cog fa-spin"></i>'
+            Meteor.call 'unlink', this.path, (err)->
+                if err?
+                    target.removeClass 'text-center'
+                        .html originalContent
+                    Mandrill.show.error(err)
+                else
+                    MunkiRepo.remove {_id: _id}
+                    Mandrill.show.success 'File Deleted', name + ' is no more.'
+        else
+            Mandrill.show.error(new Meteor.Error('', 'Some information was missing. Nothing was deleted.'))
 
 
     ###
