@@ -11,6 +11,9 @@ shell.config.silent = true
 
 class @Git
 	constructor: (@repo, gitPath)->
+		if not shell.test '-d', @repo
+			throw new Meteor.Error 'Git cannot find the specified path "' +
+				@repo + '"'
 		@gitCmd = gitPath or shell.which('git')
 
 
