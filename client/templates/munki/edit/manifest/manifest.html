@@ -7,7 +7,7 @@
 
     <div class="container-fluid">
 
-        <div class="col-sm-3">
+        <div class="col-md-3">
 
             <div class="panel-group">
 
@@ -99,85 +99,94 @@
 
 
 
-        <div class="col-sm-9">
-            <div class="row">
-                <div class="col-xs-4">
-                    <a href="{{repoEditUrl}}"
-                        class="btn btn-default"
-                        title="Switch to text mode.">
-                        <i class="fa fa-code"></i>
-                    </a>
-                    <div class="btn-group">
-                        <button type="button"
-                                class="btn btn-default dropdown-toggle"
-                                data-toggle="dropdown">
-                            <i class="fa fa-eye"></i>
-                            <span class="hidden-xs">
-                                {{currentViewModeName}}
-                            </span>
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li class="{{#if viewTypeIs 'all'}}active{{/if}}">
-                                <a href="#" data-memView="all">
-                                    All
-                                </a>
-                            </li>
-                            <li class="{{#if viewTypeIs 'managed_installs'}}
-                                    active{{/if}}">
-                                <a href="#" data-memView="managed_installs">
-                                    Installs
-                                </a>
-                            </li>
-                            <li class="{{#if viewTypeIs 'managed_updates'}}
-                                    active{{/if}}">
-                                <a href="#" data-memView="managed_updates">
-                                    Updates
-                                </a>
-                            </li>
-                            <li class="{{#if viewTypeIs 'optional_installs'}}
-                                    active{{/if}}">
-                                <a href="#" data-memView="optional_installs">
-                                    Optionals
-                                </a>
-                            </li>
-                            <li class="{{#if viewTypeIs 'managed_uninstalls'}}
-                                    active{{/if}}">
-                                <a href="#" data-memView="managed_uninstalls">
-                                    Uninstalls
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="{{#if viewTypeIs 'conditionals'}}
-                                    active{{/if}}">
-                                <a href="#" data-memView="conditionals">
-                                    Conditional Items
-                                </a>
-                            </li>
-                            <li class="{{#if viewTypeIs 'unconditionals'}}
-                                    active{{/if}}">
-                                <a href="#" data-memView="unconditionals">
-                                    Unconditional Items
-                                </a>
-                            </li>
-                        </ul>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading container-fluid">
+                    <div class="col-xs-4">
+                        <div class="btn-group">
+                            <a href="{{repoEditUrl}}"
+                                class="btn btn-default"
+                                title="Switch to text mode.">
+                                <i class="fa fa-code"></i>
+                            </a>
+                            <button type="button"
+                                    class="btn btn-default dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <i class="fa fa-eye"></i>
+                                <span class="hidden-xs">
+                                    {{currentViewModeName}}
+                                </span>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li class="{{#if viewTypeIs 'all'}}
+                                        active{{/if}}">
+                                    <a href="#" data-memView="all">
+                                        All
+                                    </a>
+                                </li>
+                                <li class="{{#if viewTypeIs 'managed_installs'}}
+                                        active{{/if}}">
+                                    <a href="#" data-memView="managed_installs">
+                                        Installs
+                                    </a>
+                                </li>
+                                <li class="{{#if viewTypeIs 'managed_updates'}}
+                                        active{{/if}}">
+                                    <a href="#" data-memView="managed_updates">
+                                        Updates
+                                    </a>
+                                </li>
+                                <li class="
+                                        {{#if viewTypeIs 'optional_installs'}}
+                                        active
+                                        {{/if}}">
+                                    <a href="#"
+                                            data-memView="optional_installs">
+                                        Optionals
+                                    </a>
+                                </li>
+                                <li class="
+                                        {{#if viewTypeIs 'managed_uninstalls'}}
+                                        active
+                                        {{/if}}">
+                                    <a href="#"
+                                            data-memView="managed_uninstalls">
+                                        Uninstalls
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="{{#if viewTypeIs 'conditionals'}}
+                                        active{{/if}}">
+                                    <a href="#" data-memView="conditionals">
+                                        Conditional Items
+                                    </a>
+                                </li>
+                                <li class="{{#if viewTypeIs 'unconditionals'}}
+                                        active{{/if}}">
+                                    <a href="#" data-memView="unconditionals">
+                                        Unconditional Items
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-4 text-center">
-                    <h4>
-                        {{manifestItems.length}} item(s)
-                    </h4>
-                </div>
-                <div class="col-xs-4">
-                    {{>mandrillConditionsButton
-                        class="btn btn-default pull-right"
-                        labelClass="hidden-xs"}}
-                </div>
-            </div>
-            <div class="container-fluid">
+                    <div class="col-xs-4 text-center">
+                        <h4>
+                            {{manifestItems.length}} item(s)
+                        </h4>
+                    </div>
+                    <div class="col-xs-4">
+                        {{>mandrillConditionsButton
+                            class="btn btn-default pull-right"
+                            labelClass="hidden-xs"}}
+                    </div>
+                </div> <!-- end panel heading -->
+
+
                 <div class="list-group munki-manifest-list-group">
                     {{#each manifestItems}}
-                    <div class="list-group-item row
+                    <div class="list-group-item container-fluid
                         {{#if isOptionalInstall}}list-group-item-success{{/if}}
                         {{#if isManagedUninstall}}list-group-item-danger{{/if}}
                         {{#if isManagedUpdate}}list-group-item-info{{/if}}
@@ -194,6 +203,9 @@
                                 <ul class="dropdown-menu"
                                     role="menu"
                                     data-manifest="install-type">
+                                    <li class="dropdown-header">
+                                        ACTIONS
+                                    </li>
                                     <li class="{{#if isManagedInstall}}
                                             active{{/if}}">
                                         <a href="#managed_installs">
@@ -216,6 +228,23 @@
                                             active{{/if}}">
                                         <a href="#optional_installs">
                                             {{typeMnemonic 'optional_installs'}}
+                                        </a>
+                                    </li>
+
+                                    <li class="divider"></li>
+
+                                    <li class="{{#if conditions}}
+                                            disabled{{/if}}">
+                                        <a href="#add-condition">
+                                            <i class="fa fa-plus"></i>
+                                            Add conditions
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="#delete-install-item">
+                                            <i class="fa fa-minus"></i>
+                                            Delete this row...
                                         </a>
                                     </li>
                                 </ul>
@@ -243,7 +272,8 @@
                     </div>
                     {{/each}}
                 </div>
-            </div>
+
+            </div> <!-- end panel -->
         </div>
     </div>
 

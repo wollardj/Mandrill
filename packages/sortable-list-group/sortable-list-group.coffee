@@ -1,8 +1,49 @@
 Meteor.startup ->
 
     setupSortableGroupItems = (tpl)->
-        Meteor.setTimeout ->
+
+        # Put this in a try/catch just in case this gets called before the DOM
+        # is ready.
+        try
             container = $(tpl.find('.sortable'))
+        catch error
+            return null
+
+        data = tpl.data
+        displayKey = data?.displayKey
+        titleKey = data?.titleKey
+
+        # Remove all list item divs if there are any
+        container.find('div.list-group-item').remove()
+
+        # Add the new items in the order specified in the data.args array
+        for item in data.args
+            if displayKey?
+                display = item[displayKey]
+            else
+                display = item
+
+            if titleKey?
+                title = item[titleKey]
+            else
+                title = ''
+
+            div = $('<div>')
+                .addClass 'list-group-item'
+                .data 'sortable-value', item
+                .text display
+
+            if title?
+                div.attr 'title', title
+
+            container.append div
+
+
+        # Setup the `stop` event handler to make sure we get our custom event
+        # sent out to any observers.
+        Meteor.setTimeout ->
+
+            # Init the sortable functionality on the list.
             container.sortable {
                 placeholder: 'list-group-item ' +
                     'list-group-item-info ' +
@@ -11,59 +52,26 @@ Meteor.startup ->
                 # Allow the catalogs to be re-ordered
                 stop: (event, ui)->
                     obj = tpl.data
+                    obj.args = tpl.findAll 'div.list-group-item'
+                        .map (it)->
+                            $(it).data 'sortable-value'
 
-                    obj.args = container.sortable(
-                            'toArray',
-                            {attribute: 'data-sortable-value'}
-                        ).map (it)->
-                            JSON.parse(it)
-
-
+                    # Create the custom 'groupSorted' event
                     sortedEvent = new CustomEvent 'groupSorted', {
                         'detail': obj
                     }
+
+                    # dispatch the 'groupSorted' event to any observers.
                     event.target.dispatchEvent sortedEvent
-
-                    container.sortable 'cancel'
-#                    Meteor.setTimeout ->
-
-#                    , 1
             }
-            $('.sortable').disableSelection()
         , 50
+
+        # return null since we're doing dom manipulation and event handling,
+        # not calculations.
+        null
 
 
     Template.sortableListGroup.rendered = ->
-        console.log 'rendered'
-        setupSortableGroupItems(
-            Template.instance()
-        )
-
-    Template.sortableListGroup.helpers {
-        items: ->
-            metaData = Template.instance().data
-            displayKey = metaData?.displayKey
-            titleKey = metaData?.titleKey
-            ret = []
-
-            for item in metaData?.args
-                obj = {}
-
-                if displayKey?
-                    obj.display = item[displayKey]
-                else
-                    obj.display = item
-
-                if titleKey?
-                    obj.title = item[titleKey]
-                else
-                    obj.title = ''
-
-                ret.push obj
-            ret
-
-
-        stringify: ->
-            JSON.stringify this
-
-    }
+        @autorun ->
+            pleaseMakeThisShitReactiveThanks = Template.parentData()
+            setupSortableGroupItems Template.instance()

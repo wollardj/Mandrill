@@ -56,43 +56,45 @@
     </div><!-- /.modal -->
 
 
-    <div class="container-fluid">
-        <div class="col-sm-4">
-            <div class="btn-group btn-group-justified">
-                <a href="#" id="new_repo_item" class="btn btn-default" data-toggle="modal" data-target="#newRepoItemModal">
-                    <span class="fa fa-plus"></span>
-                    <span class="hidden-xs">New</span>
-                </a>
-                <a id="repo_edit" href="#" class="
-                    btn
-                    {{#unless session_get 'repo_edit_mode'}}
-                        btn-default
-                    {{/unless}}
-                    {{#if session_get 'repo_edit_mode'}}
-                        btn-warning
-                        active
-                    {{/if}}">
-                    <span class="fa fa-pencil"></span>
-                    <span class="hidden-xs">
-                    {{#if session_get 'repo_edit_mode'}}
-                        Done
-                    {{/if}}
-                    {{#unless session_get 'repo_edit_mode'}}
-                        Edit
-                    {{/unless}}
-                    </span>
-                </a>
-            </div>
+
+    <div class="col-sm-4">
+        <div class="btn-group btn-group-justified">
+            <a href="#" id="new_repo_item"
+                        class="btn btn-default"
+                        data-toggle="modal"
+                        data-target="#newRepoItemModal">
+                <span class="fa fa-plus"></span>
+                <span class="hidden-xs">New</span>
+            </a>
+            <a id="repo_edit" href="#" class="
+                btn
+                {{#unless session_get 'repo_edit_mode'}}
+                    btn-default
+                {{/unless}}
+                {{#if session_get 'repo_edit_mode'}}
+                    btn-warning
+                    active
+                {{/if}}">
+                <span class="fa fa-pencil"></span>
+                <span class="hidden-xs">
+                {{#if session_get 'repo_edit_mode'}}
+                    Done
+                {{/if}}
+                {{#unless session_get 'repo_edit_mode'}}
+                    Edit
+                {{/unless}}
+                </span>
+            </a>
         </div>
+    </div>
 
 
-        <div class="col-sm-8">
-            <input
-                type="search"
-                id="repo_search"
-                class="form-control search"
-                placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
-        </div>
+    <div class="col-sm-8">
+        <input
+            type="search"
+            id="repo_search"
+            class="form-control search"
+            placeholder="{{session_get 'repo_filter'}}{{#unless session_get 'repo_filter'}}Search{{/unless}}" />
     </div>
 
 </template>

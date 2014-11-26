@@ -38,7 +38,7 @@ manifest_flatten = (obj, result=[], conditions=[])->
 
 
 Template.munkiEditManifest.rendered = ->
-    data = Router.current().data()
+    data = Template.currentData()
     MunkiRepo.update {_id: data._id}, {
         '$set': {
             draft: {
@@ -61,7 +61,7 @@ Template.munkiEditManifest.helpers {
 
 
     manifestCatalogs: ->
-        data = Router.current().data()
+        data = Template.currentData()
         if data?.draft?.dom?
             manifest = new MunkiManifest data.draft.dom
             manifest.catalogs()
@@ -69,7 +69,7 @@ Template.munkiEditManifest.helpers {
             []
 
     includedManifests: ->
-        data = Router.current().data()
+        data = Template.currentData()
         if data?.draft?.dom?.included_manifests?.push?
             data.draft.dom.included_manifests
         else
@@ -77,7 +77,7 @@ Template.munkiEditManifest.helpers {
 
     availableCatalogs: ->
         ret = []
-        data = Router.current().data()
+        data = Template.currentData()
 
         if not data?.draft?.dom?
             return ret
@@ -93,7 +93,7 @@ Template.munkiEditManifest.helpers {
 
 
     manifestItems: ->
-        data = Router.current().data()
+        data = Template.currentData()
         items = []
         if data?.draft?.dom?
             items = manifest_flatten data.draft.dom
@@ -170,7 +170,7 @@ Template.munkiEditManifest.helpers {
 Template.munkiEditManifest.events {
     'click [data-manifest="install-type"] a': (event)->
         event.preventDefault()
-        data = Router.current().data()
+        data = Template.currentData()
         manifest = new MunkiManifest(data.draft.dom)
         newInstallType = $(event.target).attr('href').replace(/^#/, '')
         manifest.changeInstallType(
@@ -195,7 +195,7 @@ Template.munkiEditManifest.events {
     'click [data-memCatalogs="cat"]': (event)->
         event.stopPropagation()
         event.preventDefault()
-        data = Router.current().data()
+        data = Template.currentData()
         manifest = new MunkiManifest(data.draft.dom)
         if this.active is true
             manifest.removeCatalog(this.catalog)
@@ -221,15 +221,14 @@ Template.munkiEditManifest.events {
 
     # update the admin notes for the draft.
     'blur change [data-memEdit="adminNotes"], change [data-memEdit="adminNotes"]': (event)->
-        MunkiRepo.update {_id: Router.current().data()._id}, {
+        MunkiRepo.update {_id: Template.currentData()._id}, {
             '$set': {'draft.dom.admin_notes': $(event.target).val()}
         }
 
 
     'groupSorted [data-sort="catalogs"]': (event)->
-        data = Router.current().data()
-        catalogs = event.originalEvent.detail.args.map (it)->
-            it.display
+        data = Template.currentData()
+        catalogs = event.originalEvent.detail.args
 
         if data?.draft?.dom?
             MunkiRepo.update {_id: data._id}, {
@@ -237,9 +236,8 @@ Template.munkiEditManifest.events {
             }
 
     'groupSorted [data-sort="included_manifests"]': (event)->
-        data = Router.current().data()
-        manifests = event.originalEvent.detail.args.map (it)->
-            it.display
+        data = Template.currentData()
+        manifests = event.originalEvent.detail.args
 
         if data?.draft?.dom?
             MunkiRepo.update {_id: data._id}, {

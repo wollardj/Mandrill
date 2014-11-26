@@ -17,9 +17,9 @@ meteorhacks:npm
 
 npm-container
 daniel:auto-nprogress
-iron:router
 mandrill:ace
 mandrill
 munki
 sortable-list-group
 mizzao:jquery-ui
+iron:router
