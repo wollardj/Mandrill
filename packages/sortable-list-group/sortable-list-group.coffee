@@ -5,7 +5,7 @@ Meteor.startup ->
         # Put this in a try/catch just in case this gets called before the DOM
         # is ready.
         try
-            container = $(tpl.find('.sortable'))
+            container = $(tpl.find('.sortable-list-group'))
         catch error
             return null
 
@@ -28,10 +28,16 @@ Meteor.startup ->
             else
                 title = ''
 
-            div = $('<div>')
+            div = $('<div></div>')
                 .addClass 'list-group-item'
                 .data 'sortable-value', item
-                .text display
+                .text ' ' + display
+
+            moveHandle = $('<span></span>').addClass 'slgroup-handle'
+            moveHandle.append $('<i></i>').addClass('fa fa-bars')
+
+            div.prepend moveHandle
+
 
             if title?
                 div.attr 'title', title
@@ -45,9 +51,8 @@ Meteor.startup ->
 
             # Init the sortable functionality on the list.
             container.sortable {
-                placeholder: 'list-group-item ' +
-                    'list-group-item-info ' +
-                    'sortable-list-group-item'
+                placeholder: 'list-group-item sortable-list-group-item'
+                handle: '.slgroup-handle'
 
                 # Allow the catalogs to be re-ordered
                 stop: (event, ui)->
