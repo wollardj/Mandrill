@@ -66,7 +66,7 @@ class MandrillConditions
         @add 'machine_model BEGINSWITH "MacPro"', "it's a Mac Pro"
         @add 'machine_model BEGINSWITH "MacBookAir"', "it's a MacBook Air"
         @add 'arch != "powerpc"', "the CPU isn't PPC"
-        @add 'date > CAST("2015-01-02T00:00:00Z", "NSDate")', "2014 is history"
+        @add 'date > CAST("2015-01-02T00:00:00Z", "NSDate")', "it's after 2014"
         @add 'os_vers_minor == 9', "it's running Mavericks (10.9.x)"
         @add 'os_vers_minor == 10', "it's running Yosemite (10.10.x)"
 

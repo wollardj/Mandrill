@@ -123,7 +123,10 @@ Template.munkiEditManifest.helpers {
         conditions = []
         for condition in this.conditions
             cond = Mandrill.munki.conditions.byCondition condition
-            conditions.push cond
+            if cond
+                conditions.push cond
+            else
+                conditions.push {name: condition, condition: condition}
 
         conditions
 
