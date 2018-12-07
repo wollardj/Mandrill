@@ -1,3 +1,9 @@
+# NO LONGER MAINTAINED
+
+I'm no longer in the macintosh systems engineering game, so I no longer have a professional need for a tool such as this. If anyone is interested in providing this project with a new loving home, please reach out!
+
+---
+
 Mandrill
 ========
 
